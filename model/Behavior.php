@@ -26,7 +26,7 @@ class Behavior implements ModelInterface
 
   public function save()
   {
-    echo "inside Behavior:save\n";
+    //echo "inside Behavior:save\n";
     $nConn = new Connection();
     $arr = array('title'=>$this->title, 'description'=>$this->description, 'userID'=>$this->userID, 'isPositive'=>$this->isPositive);
     $this->behaviorID = $nConn->save(Behavior::TABLE_NAME, $arr);
@@ -35,7 +35,7 @@ class Behavior implements ModelInterface
 
   public function loadByID($behaviorID)
   {
-    echo "inside Behavior:loadByID\n";
+    //echo "inside Behavior:loadByID\n";
     $this->behaviorID = $behaviorID;
     $record = $this->getRecord();
     if(!empty($record))
@@ -47,7 +47,7 @@ class Behavior implements ModelInterface
         $this->isPositive = $record['isPositive'];
         return true;
     }
-    echo "No record for behaviorID=".$behaviorID."\n";
+    //echo "No record for behaviorID=".$behaviorID."\n";
     return false;
   }
 
@@ -61,7 +61,7 @@ class Behavior implements ModelInterface
 
   public function update()
   {
-    echo "inside Behavior:update\n";
+    //echo "inside Behavior:update\n";
     $nConn = new Connection();
     $arr = array('title'=>$this->title, 'description'=>$this->description, 'isPositive'=>$this->isPositive, 'userID'=>$this->userID);
     $nConn->update(Behavior::TABLE_NAME, $this->behaviorID, $arr);

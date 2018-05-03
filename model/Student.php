@@ -22,7 +22,7 @@ class Student implements ModelInterface
 
   public function save()
   {
-    echo "inside Student:save\n";
+    //echo "inside Student:save\n";
     $nConn = new Connection();
     $arr = array('firstName'=>$this->firstName, 'lastName'=>$this->lastName);
     $this->studentID = $nConn->save(Student::TABLE_NAME, $arr);
@@ -31,7 +31,7 @@ class Student implements ModelInterface
 
   public function loadByID($studentID)
   {
-    echo "inside Student:loadByID\n";
+    //echo "inside Student:loadByID\n";
     $this->studentID = $studentID;
     $record = $this->getRecord();
     if(!empty($record))
@@ -41,7 +41,7 @@ class Student implements ModelInterface
         $this->lastName = $record['lastName'];
         return true;
     }
-    echo "No record for studentID=".$studentID."\n";
+    //echo "No record for studentID=".$studentID."\n";
     return false;
   }
 
@@ -55,7 +55,7 @@ class Student implements ModelInterface
 
   public function update()
   {
-    echo "inside Student:update\n";
+    //echo "inside Student:update\n";
     $nConn = new Connection();
     $arr = array('firstName'=>$this->firstName, 'lastName'=>$this->lastName);
     $nConn->update(Student::TABLE_NAME, $this->studentID, $arr);

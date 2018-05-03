@@ -26,7 +26,7 @@ class Classroom implements ModelInterface
 
   public function save()
   {
-    echo "inside Classroom:save\n";
+    //echo "inside Classroom:save\n";
     $nConn = new Connection();
     $arr = array('title'=>$this->title, 'userID'=>$this->userID, 'schoolID'=>$this->schoolID);
     $this->classroomID = $nConn->save(Classroom::TABLE_NAME, $arr);
@@ -35,7 +35,7 @@ class Classroom implements ModelInterface
 
   public function loadByID($classroomID)
   {
-    echo "inside Classroom:loadByID\n";
+    //echo "inside Classroom:loadByID\n";
     $this->classroomID = $classroomID;
     $record = $this->getRecord();
     if(!empty($record))
@@ -60,7 +60,7 @@ class Classroom implements ModelInterface
         }
         return true;
     }
-    echo "No record for classroomID=".$classroomID."\n";
+    //echo "No record for classroomID=".$classroomID."\n";
     return false;
   }
 
@@ -74,7 +74,7 @@ class Classroom implements ModelInterface
 
   public function update()
   {
-    echo "inside Classroom:update\n";
+    //echo "inside Classroom:update\n";
     $nConn = new Connection();
     $arr = array('title'=>$this->title, 'schoolID'=>$this->schoolID, 'userID'=>$this->userID);
     $nConn->update(Classroom::TABLE_NAME, $this->classroomID, $arr);

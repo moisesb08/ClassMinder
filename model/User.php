@@ -18,7 +18,7 @@ class User implements ModelInterface
 
   function __construct($email, $firstName, $lastName, $password, $isTeacher)
   {
-    echo "inside User:constructor\n";
+    //echo "inside User:constructor\n";
     $this->userID = "";
     $this->email = $email;
     $this->firstName = $firstName;
@@ -30,7 +30,7 @@ class User implements ModelInterface
 
   public function save()
   {
-    echo "inside User:save\n";
+    //echo "inside User:save\n";
     $nConn = new Connection();
     $arr = array('email'=>$this->email, 'firstName'=>$this->firstName,'lastName'=>$this->lastName, 'password'=>$this->password, 'isTeacher'=>$this->isTeacher);
     $this->userID = $nConn->save(User::TABLE_NAME, $arr);
@@ -39,7 +39,7 @@ class User implements ModelInterface
 
   public function loadByID($userID)
   {
-    echo "inside User:loadByID\n";
+    //echo "inside User:loadByID\n";
     $this->userID = $userID;
     $record = $this->getRecord();
     if(!empty($record))
@@ -52,7 +52,7 @@ class User implements ModelInterface
       $this->isTeacher = $record['isTeacher'];
       return true;
     }
-    echo "No record for userID=".$userID."\n";
+    //echo "No record for userID=".$userID."\n";
     return false;
   }
 
@@ -66,7 +66,7 @@ class User implements ModelInterface
 
   public function update()
   {
-    echo "inside User:update\n";
+    //echo "inside User:update\n";
     $nConn = new Connection();
     $arr = array('email'=>$this->email, 'firstName'=>$this->firstName, 'lastName'=>$this->lastName, 'password'=>$this->password, 'isTeacher'=>$this->isTeacher);
     $nConn->update(User::TABLE_NAME, $this->userID, $arr);
@@ -83,7 +83,7 @@ class User implements ModelInterface
   public function checkUser() {
     $nConn = new Connection();
     $clause = " email = '$this->email' and password ='$this->password'";
-    echo $clause;
+    //echo $clause;
     return $nConn->getCount(User::TABLE_NAME, $clause);
   }
 

@@ -28,7 +28,7 @@ class Meeting implements ModelInterface
 
   public function save()
   {
-    echo "inside Meeting:save\n";
+    //echo "inside Meeting:save\n";
     $nConn = new Connection();
     $arr = array('description'=>$this->description, 'meetingTime'=>$this->meetingTime, 'minutes'=>$this->minutes);
     $this->meetingID = $nConn->save(Meeting::TABLE_NAME, $arr);
@@ -37,7 +37,7 @@ class Meeting implements ModelInterface
 
   public function loadByID($meetingID)
   {
-    echo "inside Meeting:loadByID\n";
+    //echo "inside Meeting:loadByID\n";
     $this->meetingID = $meetingID;
     $record = $this->getRecord();
     if(!empty($record))
@@ -63,7 +63,7 @@ class Meeting implements ModelInterface
         }
         return true;
     }
-    echo "No record for meetingID=".$meetingID."\n";
+    //echo "No record for meetingID=".$meetingID."\n";
     return false;
   }
 
@@ -77,7 +77,7 @@ class Meeting implements ModelInterface
 
   public function update()
   {
-    echo "inside Meeting:update\n";
+    //echo "inside Meeting:update\n";
     $nConn = new Connection();
     $arr = array('description'=>$this->description, 'meetingTime'=>$this->meetingTime, 'minutes'=>$this->minutes);
     $nConn->update(Meeting::TABLE_NAME, $this->meetingID, $arr);

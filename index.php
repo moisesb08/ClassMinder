@@ -10,7 +10,7 @@
     <div class="midContainer">
         <table class="middleTable">
         <tr>
-            <td class="imageCell"><img src="resources/images/templogoWhiteTransparent.png" width="300px"></td>
+            <td class="imageCell"><img src="resources/images/templogoWhiteTransparent.png" width="360px"></td>
             <td class="btnCell" rowspan="1">
             <button type="button" class="button">Log in</button><br><br>
             <button type="button" class="button">Sign up</button></td>
