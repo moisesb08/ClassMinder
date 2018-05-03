@@ -1,0 +1,1 @@
+//const middleTable = document.querySelector('.middleTable');

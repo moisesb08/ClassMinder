@@ -1,0 +1,73 @@
+:root {
+    --hover-height: 16.5rem;
+    --speed: 1000ms;
+}
+body {
+	background-color: ghostwhite;
+    color:white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url("https://i.pinimg.com/originals/08/fa/02/08fa0275674fee050c47e3b1abd86b6b.jpg");
+	background-color: #cccccc;
+    height: 100vh;
+    margin: 0;
+}
+table, th, td {
+    border-collapse:collapse;
+    text-align: center;
+}
+
+.div1{
+	height: 100vh;
+    display:flex;
+  	flex-direction:column;
+  	align-items:center;
+    justify-content:center;
+  	opacity:.95;
+    overflow: hidden;
+}
+.div1 td{
+	padding:2rem;
+}
+
+.div1 table{
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.midContainer {
+    background-color: #7E57F2;
+    height: 16rem;
+    display:flex;
+  	flex-direction:column;
+  	align-items:center;
+    justify-content:center;
+    -webkit-transition: width 2s;
+    transition: height .3s;
+    box-shadow: 5px 5px 15px black;
+}
+
+.imageCell {
+	width: 15rem;
+    background-color: #7E57F2;
+}
+.midContainer:hover {
+    height: var(--hover-height);
+}
+.btnCell {
+	background-color: #7E57F2;
+}
+.btnCell button {
+	width: 10rem;
+    height: 3rem;
+    color: #7E57F2;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    background-color: white;
+    border: none;
+}
+.btnCell button:hover {
+    color: white;
+    background-color: #6d41f1;
+}
