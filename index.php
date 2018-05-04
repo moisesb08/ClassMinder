@@ -13,7 +13,7 @@
             <td class="imageCell"><img src="resources/images/templogoWhiteTransparent.png" width="360px"></td>
             <td class="btnCell" rowspan="1">
             <button type="button" class="button">Log in</button><br><br>
-            <button type="button" class="button">Sign up</button></td>
+            <button type="button" class="button" onclick="window.location.href='php/register.php'">Sign up</button></td>
         </tr>
         </table>
     </div>

@@ -1,16 +1,17 @@
-@keyframes fadeIn {
+@keyframes slideInFromLeft {
   0% {
+    /*transform: translateX(100%);*/
     opacity:0;
   }
   100% {
+    /*transform: translateX(0);*/
     opacity:.95;
   }
 }
-:root {
-    --hover-height: 17rem;
-    --speed: 1000ms;
-}
+
 body {
+    overflow-y: hidden;
+    overflow-x: hidden;
 	background-color: ghostwhite;
     color:white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -19,6 +20,7 @@ body {
     height: 100vh;
     margin: 0;
 }
+
 table, th, td {
     border-collapse:collapse;
     text-align: center;
@@ -32,10 +34,16 @@ table, th, td {
     justify-content:center;
   	opacity:.95;
     overflow: hidden;
-    animation: 1s ease-out 0s 1 fadeIn;
+    /* This section calls the slideInFromLeft animation we defined above */
+    animation: .7s ease-out 0s 1 slideInFromLeft;
 }
+
+
 .div1 td{
-	padding:2rem;
+	padding:.5rem;
+}
+.div1 input{
+    padding:.3rem;
 }
 
 .div1 table{
@@ -44,41 +52,66 @@ table, th, td {
 }
 
 .midContainer {
+    padding: 2rem;
     background-color: #7E57F2;
-    height: 16rem;
     display:flex;
   	flex-direction:column;
   	align-items:center;
     justify-content:center;
-    /*-webkit-transition: height .4s ease-in-out;
-    -moz-transition: height .4s ease-in-out;
-    -webkit-backface-visibility: hidden;
-    transition: height .4s;*/
     box-shadow: 5px 5px 15px black;
 }
 
-.imageCell {
-	width: 15rem;
-    background-color: #7E57F2;
-}
-.midContainer:hover {
-    /*height: var(--hover-height);*/
-}
-.btnCell {
-	background-color: #7E57F2;
-}
 .btnCell button {
 	width: 10rem;
     height: 3rem;
-    color: #7E57F2;
+    color: white;
     border-top-left-radius: 1rem;
     border-bottom-left-radius: 1rem;
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
-    background-color: white;
+    background-color: #a488f6;
     border: none;
 }
 .btnCell button:hover {
     color: white;
     background-color: #6d41f1;
+}
+
+.submitBtn {
+    width: 10rem;
+    height: 3rem;
+    color: white;
+    background-color: limegreen;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    border: none;
+}
+
+.submitBtn:hover {
+    color: white;
+    background-color: #2db92d;
+}
+
+.div1 h3 {
+    font-family: Helvetica;
+    margin-bottom: 0;
+}
+
+.msgs {
+    padding: .2rem;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 400;
+    color: white;
+}
+
+.require::after {
+    color: red;
+    content: "*";
+}
+
+.leftAlign {
+    text-align: left;
 }
