@@ -82,9 +82,9 @@ class User implements ModelInterface
 
   public function checkUser() {
     $nConn = new Connection();
-    $clause = " email = '$this->email' and password ='$this->password'";
-    //echo $clause;
-    return $nConn->getCount(User::TABLE_NAME, $clause);
+    $arr = array('email'=>$this->email, 'password'=>$this->password);
+    //echo $arr;
+    return $nConn->getCount(User::TABLE_NAME, $arr);
   }
 
   // accessor methods

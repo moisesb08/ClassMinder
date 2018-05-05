@@ -1,8 +1,8 @@
 <?php
     include("../model/User.php");
-    if(isset($_POST["email"]) && isset($_POST["pass"]))
+    if(isset($_POST["email"]) && isset($_POST["password"]))
     {
-      //echo $_POST["pass"]." ,".$_POST["email"];
+      //echo $_POST["password"]." ,".$_POST["email"];
       $password_sha1 = sha1($_POST['password']);
       $usr = new User($_POST["email"], "","", $password_sha1, "");
       $res = $usr->checkUser();

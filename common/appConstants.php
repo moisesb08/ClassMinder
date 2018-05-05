@@ -1,3 +1,3 @@
 <?php
-  define("ERR101", "Check Username and Password");
+  define("ERR101", "Check username and password");
 ?>

@@ -1,5 +1,5 @@
 <?php
-    include("../common/boardconstants.php");
+    include("../common/appConstants.php");
     // If session variable is not set it will redirect to login page
     session_start();
     if(isset($_SESSION['username']))
@@ -13,17 +13,26 @@
 <!DOCTYPE html>
 <head>
     <title>Login</title>
-    <link href="../css/index.css" text="text/css" rel="stylesheet"/>
+    <link href="../css/register.css" text="text/css" rel="stylesheet"/>
 </head>
 <body>
-    <?php
-        if(isset($_GET["ERRNO"]) && $_GET["ERRNO"] == "ERR101")
-            echo "<h4 style='color:#FF0000'>".ERR101."</h4>";
-    ?>
+<div  class="div1">
+<div  class="midContainer">
     <table>
+        <tr>
+            <td class="imageCell" colspan="2"><img src="../resources/images/templogoWhiteTransparent.png" width="360px"></td>
+        </tr>
+        <tr>
+            <td class="msgs" colspan="2">
+                <?php
+                    if(isset($_GET["ERRNO"]) && $_GET["ERRNO"] == "ERR101")
+                        echo ERR101;
+                ?>
+            </td>
+        </tr>
         <form action="../controller/loginController.php" method="post">
         <tr>
-            <td>
+            <td class="leftAlign">
                 <label for "email" class="require"> Email: </label>
             </td>
             <td>
@@ -31,22 +40,24 @@
             </td>
         </tr>
         <tr>
-            <td>
-                <label for "pass" class="require"> Password: </label>
+            <td class="leftAlign">
+                <label for "password" class="require"> Password: </label>
             </td>
             <td>
-                <input type="password" size="20" name="pass" value="" required/>
+                <input type="password" size="20" name="password" value="" required/>
             </td>
         </tr>
         <tr>
-            <td class="center" colspan="1">
+            <td colspan="1">
                 <input type="submit" class="submitBtn" value="Sign In"/>
             </td>
-            <td class="center" colspan="1">
-                <input type="button" value="Create an account" onclick="window.location.href='../php/register.php'" />
+            <td class="btnCell" colspan="1">
+                <button type="button" class="button" onclick="window.location.href='../php/register.php'">Create an account</button>
             </td>
         </tr>
         </form>
     </table>
+    </div>
+    </div>
 </body>
 </html>

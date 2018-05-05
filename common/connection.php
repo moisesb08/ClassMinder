@@ -125,11 +125,13 @@ class Connection
   /**
   *
   */
-  function getCount($tableName, $whereClause) {
+  function getCount($tableName, $arr) {
 
-
-    $str="SELECT count(*) FROM " . strtoupper($tableName) . " WHERE $whereClause";
-    //echo "$str\n";//your sql
+    $columns=array_keys($arr);
+    $values=array_values($arr);
+    $str="SELECT count(*) FROM " . strtoupper($tableName) . " WHERE (".implode(',',$columns).
+    ") = ('" . implode("', '", $values) . "' );";
+    echo "$str\n";//your sql
     $res = $this->_conn->query($str);
     $row = $res->fetch_row();
     //echo $row[0]."~~";

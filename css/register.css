@@ -103,8 +103,8 @@ table, th, td {
     padding: .2rem;
     margin-top: 0;
     margin-bottom: 0;
-    font-weight: 400;
-    color: white;
+    font-weight: 900;
+    color: red;
 }
 
 .require::after {
