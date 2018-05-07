@@ -56,12 +56,40 @@ class User implements ModelInterface
     return false;
   }
 
+  public function loadByEmail($email)
+  {
+    //echo "inside User:loadByEmail\n";
+    $this->email = $email;
+    $record = $this->getRecordByEmail();
+    if(!empty($record))
+    {
+      $this->userID = $record['userID'];
+      $this->email = $record['email'];
+      $this->firstName = $record['firstName'];
+      $this->lastName = $record['lastName'];
+      $this->password = $record['password'];
+      $this->isTeacher = $record['isTeacher'];
+      return true;
+    }
+    //echo "No record for userID=".$userID."\n";
+    return false;
+  }
+
   public function getRecord()
   {
     if($this->userID === "")
       return;
     $nConn = new Connection();
     return $nConn->getRecord(User::TABLE_NAME, $this->userID);
+  }
+
+  public function getRecordByEmail()
+  {
+    if($this->email === "")
+      return;
+    $nConn = new Connection();
+    $arr = array('email'=>$this->email);
+    return $nConn->getRecordByArr(User::TABLE_NAME, $arr);
   }
 
   public function update()

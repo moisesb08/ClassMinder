@@ -2,11 +2,12 @@
     include("../common/appConstants.php");
     // If session variable is not set it will redirect to login page
     session_start();
-    if(isset($_SESSION['username']))
+    if(isset($_SESSION['user']))
     {
         header("location: ../php/home.php");
         exit;
     }
+    $temp_email = $_SESSION['email'];
     session_destroy();
 ?>
 
@@ -36,7 +37,7 @@
                 <label for "email" class="require"> Email: </label>
             </td>
             <td>
-                <input type="text" size="20" name="email" value="" required/>
+                <input type="text" size="20" name="email" value="<?php echo $temp_email;?>" required/>
             </td>
         </tr>
         <tr>
