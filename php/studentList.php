@@ -2,6 +2,7 @@
     <head>
         <title>ClassMinder - Your Students</title>
         <link href="../css/index.css" text="text/css" rel="stylesheet"/>
+        <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
         <?php
         require_once('../common/connection.php');
         include_once('../model/User.php');
@@ -36,9 +37,6 @@
                 <td class="btnCell">
                     <input type="button" class="button" value="Logout" onclick="window.location.href='./logout.php'" />
                 </td>
-                <td class="btnCell">
-                    <input type="button" class="button" value="Add Student" onclick="window.location.href='./addStudent.php'" />
-                </td>
                 <td width="97%">
                     <h3>Signed in as <b><?php echo $_SESSION['user']->getFirstName() . " ".$_SESSION['user']->getLastName()."</b>.";?></h3>
                 </td>
@@ -56,11 +54,12 @@
                 $forumTitle = "";
                 while($row = $records->fetch_array())
                 {
-                    echo "<tr>";
+                    echo "<tr><button type=\"button\" class=\"button\" onclick=\"window.location.href='studentProfile.php'\">";
                     echo $row["firstName"] . " " . $row["lastName"] . "<br>";
-                    echo "</tr>";
+                    echo "</button></tr>";
                 }
             ?>
+            <tr><td colspan='1'><span><i class="ion-plus-round" onclick="window.location.href='./addStudent.php'"></i></span></td></tr>
         </table>
         <br>
         <br>
