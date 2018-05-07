@@ -47,7 +47,7 @@
                 </a>
                 </span></li>
             <li><span class="menuItem">
-                <a href="students.php" class="underlined">
+                <a href="studentList.php" class="underlined">
                     <span><i class="ion-ios-people"></i></span>
                     <span class="iconText">Students</span>
                 </a>
@@ -84,7 +84,7 @@
         <tr><td class="item1" colspan='1'><span><i class="ion-person"></i></span></td></tr>
         <tr><td class="item5" colspan='1'><span>Welcome, <?php echo $firstName." ".$lastName;?>.</span></td></tr>
         <tr><td class="btnCell" width="100px" colspan="1">
-        <button type="button" class="button" onclick="window.location.href='students.php'">
+        <button type="button" class="button" onclick="window.location.href='studentList.php'">
         <span class="item5"><i class="ion-ios-people-outline"></i></span><span>&nbsp;Students</span></button></td></tr>
         <tr><td class="btnCell" colspan="1">
         <button type="button" class="button" onclick="window.location.href='resources.php'">
