@@ -16,7 +16,7 @@
         // Initialize the session
         session_start();
         // If session variable is not set it will redirect to login page
-        if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
+        if(!isset($_SESSION['user']) || empty($_SESSION['user'])){
             header("location: ../view/loginPage.php");
             exit;
         }
@@ -121,7 +121,7 @@
                 }
                 echo "</form>";
             ?>
-            <tr><td colspan='1' class='btnCell'><button onclick="window.location.href='./addStudent.php'"><span><i class="ion-plus-round"></i></span></button></td></tr>
+            <tr><td colspan='1' class='btnCell' style='<?php if($_SESSION['isTeacher'] == 0) echo "display:none";?>'><button onclick="window.location.href='./addStudent.php'"><span><i class="ion-plus-round"></i></span></button></td></tr>
         </table>
         </div>
     </div>

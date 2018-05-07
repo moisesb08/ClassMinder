@@ -1,3 +1,15 @@
+<?php
+    session_start();
+    if(isset($_SESSION['user']))
+    {
+        if($_SESSION['isTeacher'] == 0)
+            header("location: parentHome.php");
+    }
+    else
+    {
+        header("location: ../view/loginPage.php");
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
