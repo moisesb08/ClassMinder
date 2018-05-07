@@ -1,4 +1,4 @@
-@keyframes slideInFromLeft {
+@keyframes fadeIn {
   0% {
     /*transform: translateX(100%);*/
     opacity:0;
@@ -34,8 +34,8 @@ table, th, td {
     justify-content:center;
   	opacity:.95;
     overflow: hidden;
-    /* This section calls the slideInFromLeft animation we defined above */
-    animation: .7s ease-out 0s 1 slideInFromLeft;
+    /* This section calls the fadeIn animation we defined above */
+    animation: .7s ease-out 0s 1 fadeIn;
 }
 
 

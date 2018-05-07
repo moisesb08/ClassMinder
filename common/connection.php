@@ -112,6 +112,32 @@ class Connection
   /**
   *
   */
+  function getRecordByArr($tableName, $arr)
+  {
+    //echo "inside connection:getRecordByArr\n";
+    $columns = array_keys($arr);
+    $values = array_values($arr);
+
+    $str="SELECT * FROM " . strtoupper($tableName) . " WHERE (".implode(',',$columns).
+      ") = ('" . implode("', '", $values) . "' );";
+    //echo "$str\n";//your sql
+
+    $results = $this->_conn->query($str);
+    $record = $results->fetch_assoc();
+    if (!empty($record))
+    {
+      //echo "Record retrieved successfully\n";
+      //foreach($record as $value)
+        //echo "| ".$value;
+      //echo "|";
+      return $record;
+    } else {
+      //echo "Error: " . $str . ". No record exists.\n" . $this->_conn->error;
+    }
+  }
+  /**
+  *
+  */
   function getQuery($str)
   {
     //echo "inside connection:getAllRecords\n";
@@ -131,7 +157,7 @@ class Connection
     $values=array_values($arr);
     $str="SELECT count(*) FROM " . strtoupper($tableName) . " WHERE (".implode(',',$columns).
     ") = ('" . implode("', '", $values) . "' );";
-    echo "$str\n";//your sql
+    //echo "$str\n";//your sql
     $res = $this->_conn->query($str);
     $row = $res->fetch_row();
     //echo $row[0]."~~";
