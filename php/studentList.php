@@ -59,13 +59,13 @@
                 </a>
                 </span></li>
             <li><span class="menuItem">
-                <a href="students.php" class="underlined">
+                <a href="studentList.php" class="underlined">
                     <span><i class="ion-ios-people"></i></span>
                     <span class="iconText">Students</span>
                 </a>
                 </span></li>
             <li><span class="menuItem">
-                <a href="classes.php" class="underlined">
+                <a href="classList.php" class="underlined">
                     <span><i class="ion-university"></i></span>
                     <span class="iconText">Classes</span>
                 </a>

@@ -53,7 +53,7 @@
                 </a>
                 </span></li>
             <li><span class="menuItem">
-                <a href="classes.php" class="underlined">
+                <a href="classList.php" class="underlined">
                     <span><i class="ion-university"></i></span>
                     <span class="iconText">Classes</span>
                 </a>
@@ -93,7 +93,7 @@
         <button type="button" class="button" onclick="window.location.href='studentList.php'">
         <span class="item5"><i class="ion-ios-people-outline"></i></span><span>&nbsp;Students</span></button></td></tr>
         <tr><td class="btnCell" colspan="1">
-        <button type="button" class="button" onclick="window.location.href='classes.php'">
+        <button type="button" class="button" onclick="window.location.href='classList.php'">
         <span class="item5"><i class="ion-university"></i></span><span>&nbsp;Classes</span></button></td></tr>
         <tr><td class="btnCell" colspan="1">
         <button type="button" class="button" onclick="window.location.href='resources.php'">
