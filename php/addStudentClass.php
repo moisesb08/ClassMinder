@@ -164,6 +164,7 @@
                                 WHERE CLASSROOM.userID = $userID ORDER BY CLASSROOM.classroomID DESC) a
                                 GROUP BY studentID) b
                                 WHERE classroomID<>$classroomID";
+                                echo $nQuery;
                                 $records = $nConn->getQuery($nQuery);
                                 $title = $_POST['title'];
                                 while($row = $records->fetch_array())

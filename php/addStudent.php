@@ -39,10 +39,10 @@
                     $str = "INSERT INTO CLASSROOM (title, userID, schoolID)
                     SELECT * FROM (SELECT 'Unassigned Class', $userID, 0) AS tmp
                     WHERE NOT EXISTS (
-                        SELECT CLASSROOM.title FROM CLASSROOM WHERE CLASSROOM.title = 'Unassigned Class'
+                        SELECT CLASSROOM.title FROM CLASSROOM WHERE CLASSROOM.title = 'Unassigned Class' AND userID=$userID
                     ) LIMIT 1;";
                     $nConn->getQuery($str);
-                    $arr = array('schoolID'=>'0', 'userID'=>$userID);
+                    $arr = array('schoolID'=>'0', 'userID'=>$userID, 'title'=>'Unassigned Class');
                     $classroomSelected = $nConn->getRecordByArr('CLASSROOM', $arr);
                     $classroomID = $classroomSelected['classroomID'];
                     $student = new Student($_POST["fName"], $_POST["lName"]);

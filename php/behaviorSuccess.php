@@ -18,7 +18,7 @@
                 echo "<input type='hidden' name='title' value='$title'>";
                 echo "<input type='hidden' name='classroomID' value='$classroomID'>";
             ?>
-            <button type='submit' name='success' formmethod='post' class='button' value='true'><span>Back to Classroom</span></td></button>
+            <button type='submit' name='success' class="submitBtn" formmethod='post' class='button' value='true'><span>Back to Classroom</span></td></button>
             </form>
         </td></tr>
     </table>
