@@ -105,9 +105,9 @@
             <?php
                 $userID = $_SESSION["userID"];
                 $nQuery =
-                "SELECT classroom.title, classroom.classroomID
+                "SELECT CLASSROOM.title, CLASSROOM.classroomID
                 FROM CLASSROOM
-                WHERE classroom.userID = $userID AND classroom.title <> 'Unassigned Class'";
+                WHERE CLASSROOM.userID = $userID AND CLASSROOM.title <> 'Unassigned Class'";
                 $records = $nConn->getQuery($nQuery);
                 while($row = $records->fetch_array())
                 {

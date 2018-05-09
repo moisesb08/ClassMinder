@@ -153,12 +153,17 @@
                         <select size="20" name="studentClass" value="<?php if (isset($_POST['studentID'])) echo $_POST['studentID']?>" required/>
                             <?php
                                 $userID = $_SESSION["userID"];
+                                $classroomID = $_POST['classroomID'];
                                 $nQuery =
-                                "SELECT DISTINCT student.firstName, student.lastName, student.studentID
+                                "SELECT firstName, lastName, studentID, classroomID FROM
+                                (SELECT firstName, lastName, studentID, classroomID FROM
+                                (SELECT DISTINCT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, CLASSROOM.classroomID
                                 FROM STUDENT
-                                JOIN student_class ON student_class.studentID = student.studentID
-                                JOIN classroom ON classroom.classroomID = student_class.classroomID
-                                WHERE classroom.userID = $userID";
+                                JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
+                                JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
+                                WHERE CLASSROOM.userID = $userID ORDER BY CLASSROOM.classroomID DESC) a
+                                GROUP BY studentID) b
+                                WHERE classroomID<>$classroomID";
                                 $records = $nConn->getQuery($nQuery);
                                 $title = $_POST['title'];
                                 while($row = $records->fetch_array())
@@ -166,7 +171,6 @@
                                     $fName = $row["firstName"];
                                     $lName = $row["lastName"];
                                     $studentID = $row['studentID'];
-                                    $classroomID = $_POST['classroomID'];
                                     echo '<option name="studentClass" value=\'{"fName":"' . $fName . '","lName":"' . $lName . '","studentID":"' . $studentID . '","classroomID":"' . $classroomID . '","title":"' . $title . '"}\'>';
                                     echo $row["firstName"] . " " . $row["lastName"];
                                     echo "</option>";

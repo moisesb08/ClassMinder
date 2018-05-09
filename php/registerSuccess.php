@@ -11,7 +11,7 @@
             <td><h3> You have successfully created an account. </h3></td>
         </tr>
         <tr><td>
-            <input type="button" class="submitBtn" value="Go to login page" onclick="window.location.href='../index.php'" />
+            <input type="button" class="submitBtn" value="Go to login page" onclick="window.location.href='../view/loginPage.php'" />
         </td></tr>
     </table>
     </div>

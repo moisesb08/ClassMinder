@@ -105,11 +105,11 @@
             <?php
                 $userID = $_SESSION["userID"];
                 $nQuery =
-                "SELECT DISTINCT student.firstName, student.lastName, student.studentID
+                "SELECT DISTINCT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID
                 FROM STUDENT
-                JOIN student_class ON student_class.studentID = student.studentID
-                JOIN classroom ON classroom.classroomID = student_class.classroomID
-                WHERE classroom.userID = $userID";
+                JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
+                JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
+                WHERE CLASSROOM.userID = $userID";
                 $records = $nConn->getQuery($nQuery);
                 echo "<form method='post' action='studentProfile.php'>";
                 while($row = $records->fetch_array())

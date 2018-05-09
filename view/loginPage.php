@@ -2,9 +2,12 @@
     include("../common/appConstants.php");
     // If session variable is not set it will redirect to login page
     session_start();
-    if(isset($_SESSION['user']))
+    if(isset($_SESSION['user']) && isset($_SESSION['isTeacher']))
     {
-        header("location: ../php/home.php");
+        if($_SESSION['isTeacher'] == 1)
+          header("location: ../php/teacherHome.php");
+        else
+          header("location: ../php/parentHome.php");
         exit;
     }
     $temp_email = $_SESSION['email'];
