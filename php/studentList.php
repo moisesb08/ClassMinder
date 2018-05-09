@@ -105,13 +105,12 @@
             <?php
                 $userID = $_SESSION["userID"];
                 $nQuery =
-                "SELECT student.firstName, student.lastName, student.studentID
+                "SELECT DISTINCT student.firstName, student.lastName, student.studentID
                 FROM STUDENT
                 JOIN student_class ON student_class.studentID = student.studentID
                 JOIN classroom ON classroom.classroomID = student_class.classroomID
                 WHERE classroom.userID = $userID";
                 $records = $nConn->getQuery($nQuery);
-                $forumTitle = "";
                 echo "<form method='post' action='studentProfile.php'>";
                 while($row = $records->fetch_array())
                 {

@@ -1,10 +1,22 @@
+<?php
+    session_start();
+    if(isset($_SESSION['user']))
+    {
+        if($_SESSION['isTeacher'] == 0)
+            header("location: parentHome.php");
+    }
+    else
+    {
+        header("location: ../view/loginPage.php");
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ClassMinder - Your Classes</title>
+    <title>ClassMinder - Create Student</title>
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/teacherHome.js"></script>
     <link rel="stylesheet" href="../css/studentList.css">
@@ -12,6 +24,7 @@
     <?php
         require_once('../common/connection.php');
         include_once('../model/User.php');
+        include_once('../model/Student.php');
         include_once('../model/Classroom.php');
         // Initialize the session
         session_start();
@@ -35,8 +48,30 @@
             $_SESSION['userID'] = $_SESSION['user']->getUserID();
         }
         ?>
+    <?php
+
+        $user = "";
+        $msgs = [];
+        $success = false;
+        
+        if(isset($_POST["studentID"]))
+        {
+            if(empty($msgs))
+            {
+                
+            }
+        }
+        
+    ?>
 </head>
 <body>
+    <?php
+        if($success)
+        {   
+            header("location:./classroom.php");
+            die;
+        }  
+    ?>
     <div class="leftMenu">
         <ul>
             
@@ -99,29 +134,62 @@
     <div class="div1">
         <div class="midContainer">
         <table>
-            <tr>
-                <td><h1>Your Classes</h1></td>
-            </tr>
             <?php
-                $userID = $_SESSION["userID"];
-                $nQuery =
-                "SELECT classroom.title, classroom.classroomID
-                FROM CLASSROOM
-                WHERE classroom.userID = $userID AND classroom.title <> 'Unassigned Class'";
-                $records = $nConn->getQuery($nQuery);
-                while($row = $records->fetch_array())
-                {
-                    $title = $row['title'];
-                    echo "<form method='post' action='classroom.php'>";
-                    echo "<input type='hidden' name='title' value='$title'>";
-                    echo "<tr><td class='btnCell'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $row['classroomID'] . ">";
-                    echo $title . "<br>";
-                    echo "</td></button></tr>";
-                    echo "</form>";
+                if(!empty($msgs))
+                {   
+                    foreach($msgs as $msg)
+                        echo "<tr><td class='msgs' colspan='2'>*". $msg ."</td></tr>";
                 }
             ?>
-            <tr><td colspan='1' class='btnCell'><button onclick="window.location.href='./addClass.php'"><span><i class="ion-plus-round"></i></span></button></td></tr>
-        </table>
+            <tr>
+                <td colspan="2"><h4>Please select student</h4></td>
+            </tr>
+                <form action="addStudent.php" method="post">
+                <tr>
+                    <td class="leftAlign">
+                        <label for "studentID" class="require"> Student: </label>
+                    </td>
+                    <td>
+                        <select size="20" name="studentClass" value="<?php if (isset($_POST['studentID'])) echo $_POST['studentID']?>" required/>
+                            <?php
+                                $userID = $_SESSION["userID"];
+                                $nQuery =
+                                "SELECT DISTINCT student.firstName, student.lastName, student.studentID
+                                FROM STUDENT
+                                JOIN student_class ON student_class.studentID = student.studentID
+                                JOIN classroom ON classroom.classroomID = student_class.classroomID
+                                WHERE classroom.userID = $userID";
+                                $records = $nConn->getQuery($nQuery);
+                                $title = $_POST['title'];
+                                while($row = $records->fetch_array())
+                                {
+                                    $fName = $row["firstName"];
+                                    $lName = $row["lastName"];
+                                    $studentID = $row['studentID'];
+                                    $classroomID = $_POST['classroomID'];
+                                    echo '<option name="studentClass" value=\'{"fName":"' . $fName . '","lName":"' . $lName . '","studentID":"' . $studentID . '","classroomID":"' . $classroomID . '","title":"' . $title . '"}\'>';
+                                    echo $row["firstName"] . " " . $row["lastName"];
+                                    echo "</option>";
+                                }
+                                ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="btnCell" colspan="1">
+                        <input type="submit" class="submitBtn" value="Add New Student"/>
+                    </td>
+                </form>
+                <form action="classroom.php" method='post'>
+                    <td class="btnCell" colspan="1">
+                        <?php
+                            echo "<input type='hidden' name='title' value='$title'>";
+                            echo "<input type='hidden' name='classroomID' value='$classroomID'>";
+                        ?>
+                        <input type="submit" class="button" id="cancelBtn" value="Cancel"/>
+                    </td>
+                </tr>
+                </form>
+            </table>
         </div>
     </div>
 </body>

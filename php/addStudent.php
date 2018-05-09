@@ -28,14 +28,44 @@
         $msgs = [];
         $success = false;
         
-        if(isset($_POST["fName"]) && isset($_POST["lName"]))
+        if((isset($_POST["fName"]) && isset($_POST["lName"])) || isset($_POST['studentClass']))
         {
             if(empty($msgs))
             {
-                $student = new Student($_POST["fName"], $_POST["lName"]);
-                $studentCreated = $student->save()!=0;
-                if(!is_null($studentCreated))
+                $nConn = new Connection();
+                if(!isset($_POST['studentClass']))
+                {
+                    $userID = $_SESSION['userID'];
+                    $str = "INSERT INTO classroom (title, userID, schoolID)
+                    SELECT * FROM (SELECT 'Unassigned Class', $userID, 0) AS tmp
+                    WHERE NOT EXISTS (
+                        SELECT classroom.title FROM classroom WHERE classroom.title = 'Unassigned Class'
+                    ) LIMIT 1;";
+                    $nConn->getQuery($str);
+                    $arr = array('schoolID'=>'0', 'userID'=>$userID);
+                    $classroomSelected = $nConn->getRecordByArr('CLASSROOM', $arr);
+                    $classroomID = $classroomSelected['classroomID'];
+                    $student = new Student($_POST["fName"], $_POST["lName"]);
+                    $studentCreated = $student->save()!=0;
+                    $studentID = $student->getStudentID();
+                }
+                else
+                {
+                    $json = $_POST['studentClass'];
+                    $obj = json_decode($json);
+                    $studentID = $obj->{'studentID'};
+                    $classroomID = $obj->{'classroomID'};
+                    $title = $obj->{'title'};
+                    $gotoClassroom = true;
+                }
+
+                if(!is_null($studentCreated) || isset($_POST['studentClass']))
+                {
+                    $str = "INSERT INTO STUDENT_CLASS (studentID, classroomID)
+                    VALUES ($studentID, $classroomID)";
+                    $nConn->getQuery($str);
                     $success = true;
+                }
             }
         }
         
@@ -45,7 +75,18 @@
     <?php
         if($success)
         {   
-            header("location:./studentList.php");
+            if($gotoClassroom)
+            {
+                echo "<form name='goToForm' method='post' action='classroom.php'>";
+                echo "<input type='hidden' name='title' value='$title'>";
+                echo "<input type='hidden' name='classroomID' value='$classroomID'>";
+                echo "</form>";
+                echo "<script>document.goToForm.submit();</script>";
+            }
+            else
+            {
+                header("location:./studentList.php");
+            }
             die;
         }  
     ?>

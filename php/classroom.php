@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ClassMinder - Your Classes</title>
+    <title>ClassMinder - Classroom</title>
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/teacherHome.js"></script>
     <link rel="stylesheet" href="../css/studentList.css">
@@ -12,6 +12,7 @@
     <?php
         require_once('../common/connection.php');
         include_once('../model/User.php');
+        include_once('../model/Student.php');
         include_once('../model/Classroom.php');
         // Initialize the session
         session_start();
@@ -100,27 +101,33 @@
         <div class="midContainer">
         <table>
             <tr>
-                <td><h1>Your Classes</h1></td>
+                <td><h1><?php echo $_POST['title']; ?></h1></td>
             </tr>
             <?php
                 $userID = $_SESSION["userID"];
+                $classroomID = $_POST["classroomID"];
+                $title = $_POST["title"];
                 $nQuery =
-                "SELECT classroom.title, classroom.classroomID
-                FROM CLASSROOM
-                WHERE classroom.userID = $userID AND classroom.title <> 'Unassigned Class'";
+                "SELECT student.firstName, student.lastName, student.studentID
+                FROM STUDENT
+                JOIN student_class ON student_class.studentID = student.studentID
+                JOIN classroom ON classroom.classroomID = student_class.classroomID
+                WHERE classroom.userID = $userID AND classroom.classroomID = $classroomID";
                 $records = $nConn->getQuery($nQuery);
+                echo "<form method='post' action='studentProfile.php'>";
                 while($row = $records->fetch_array())
                 {
-                    $title = $row['title'];
-                    echo "<form method='post' action='classroom.php'>";
-                    echo "<input type='hidden' name='title' value='$title'>";
-                    echo "<tr><td class='btnCell'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $row['classroomID'] . ">";
-                    echo $title . "<br>";
+                    echo "<tr><td class='btnCell'><button type='submit' name='studentID' formmethod='post' class='button' value=" . $row['studentID'] . ">";
+                    echo $row["firstName"] . " " . $row["lastName"] . "<br>";
                     echo "</td></button></tr>";
-                    echo "</form>";
                 }
+                echo "</form>";
+                echo "<form method='post' action='addStudentClass.php'>";
+                echo "<input type='hidden' name='title' value='$title'>";
+                echo "<tr><td class='btnCell'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
+                echo "<span><i class=\"ion-plus-round\"></i></span></td></button></tr>";
+                echo "</form>";
             ?>
-            <tr><td colspan='1' class='btnCell'><button onclick="window.location.href='./addClass.php'"><span><i class="ion-plus-round"></i></span></button></td></tr>
         </table>
         </div>
     </div>

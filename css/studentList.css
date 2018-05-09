@@ -255,6 +255,18 @@
 }
 
   #cancelBtn {
-      width: 10rem;
-      height: 3rem;
-  }
+    width: 10rem;
+    height: 3rem;
+    font-size: 1rem;
+    color: white;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    background-color: #a488f6;
+    border: none;
+}
+  #cancelBtn:hover {
+    color: white;
+    background-color: #6d41f1;
+}
