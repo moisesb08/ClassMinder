@@ -130,7 +130,7 @@
                 while($row = $records->fetch_array())
                 {
                     echo "<tr><td class='btnCell'><button type='submit' name='studentID' formmethod='post' class='button' value=" . $row['studentID'] . ">";
-                    echo $row["firstName"] . " " . $row["lastName"] . "<br>";
+                    echo $row["firstName"] . " " . $row["lastName"] . "<br>ID: ".$row['studentID'];
                     echo "</td></button></tr>";
                 }
                 echo "</form>";
@@ -139,10 +139,19 @@
                 echo "<tr><td class='btnCell'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
                 echo "<span><i class=\"ion-plus-round\"></i></span></td></button></tr>";
                 echo "</form>";
+
+                // Record Behaviors
                 echo "<form method='post' action='recordBehaviors.php'>";
                 echo "<input type='hidden' name='title' value='$title'>";
                 echo "<tr><td class='btnCell'><div class='btnBehaviors'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
                 echo "<span>Record Behaviors</span></td></button></div></tr>";
+                echo "</form>";
+                
+                // Edit Seating Chart
+                echo "<form method='post' action='editSeatingChart.php'>";
+                echo "<input type='hidden' name='title' value='$title'>";
+                echo "<tr><td class='btnCell'><div class='btnBehaviors'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
+                echo "<span>Edit Seating Chart</span></td></button></div></tr>";
                 echo "</form>";
             ?>
         </table>

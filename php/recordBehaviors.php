@@ -178,9 +178,9 @@
                 while($row = $records->fetch_array())
                 {
                     echo "
-                    <label class='container'>".$row["firstName"] . " " . $row["lastName"].
+                    <label class='container'>".$row["firstName"] . " " . $row["lastName"]."<br>ID: ".$row['studentID'].
                     "<input type='checkbox' name='students[]' value='". $row['studentID'] ."'>
-                    <span class='checkmark'></span>
+                    <span class='checkmark checkmarkStudent'></span>
                     </label>";
                 }
 
@@ -197,7 +197,17 @@
                     <span class='checkmark'></span>
                     </label>";
                 }
-                // Display Positive Behaviors
+                                echo "
+                    <label class='container'>Other:".
+                    "<input type='checkbox' name='addPositive' value='1'>
+                    <span class='checkmark'></span>
+                    </label>
+                    <label class='container others'>Title:<br>".
+                    "<input type='text' placeholder='Title' id='positiveTitle' name='positiveTitle'>
+                    </label>
+                    <br>
+                    <label class='container'>Description:<br><textarea  id='positiveDescription' name='positiveDescription' rows='4' cols='50' placeholder='Enter Description Here'></textarea></label>";
+                // Display Negative Behaviors
                 $nQuery =
                 "SELECT * FROM BEHAVIOR WHERE userID=$userID OR userID=0 HAVING isPositive=0";
                 $records = $nConn->getQuery($nQuery);
@@ -207,9 +217,19 @@
                     echo "
                     <label class='container'>".$row["title"].
                     "<input type='checkbox' name='negBehaviors[]' value='". $row['behaviorID'] ."'>
-                    <span class='checkmark'></span>
+                    <span class='checkmark checkmarkRed'></span>
                     </label>";
                 }
+                echo "
+                    <label class='container'>Other:".
+                    "<input type='checkbox' name='addNegative' value='1'>
+                    <span class='checkmark checkmarkRed'></span>
+                    </label>
+                    <label class='container others'>Title:<br>".
+                    "<input type='text' placeholder='Title' id='negativeTitle' name='negativeTitle'>
+                    </label>
+                    <br>
+                    <label class='container'>Description:<br><textarea  id='negativeDescription' name='negativeDescription' rows='4' cols='50' placeholder='Enter Description Here'></textarea></label>";
                 echo "<input type='hidden' name='submitted' value='1'>";
                 echo "<tr><td class='btnCell'><button type='button' name='title' formmethod='post' class='button' value='$title'>";
                 echo "<span></td></button></tr>";

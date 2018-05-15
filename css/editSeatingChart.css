@@ -13,6 +13,7 @@
       src: url('../resources/fonts/Trocchi.otf');
   }
   body, html {
+      color:white;
       margin: 0;
       padding: 0;
       height: 100%;
@@ -167,17 +168,16 @@
       font-size: 5rem;
   }
   .btnCell button {
-      width: 25rem;
-      height: 1rem;
+      width: 15rem;
+      height: 3rem;
       font-size: 1rem;
       color: white;
-      border-top-left-radius: 8rem;
-      border-bottom-left-radius: 8rem;
-      border-top-right-radius: 8rem;
-      border-bottom-right-radius: 8rem;
+      border-top-left-radius: 1rem;
+      border-bottom-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      border-bottom-right-radius: 1rem;
       background-color: #a488f6;
       border: none;
-      opacity:0;
   }
   .btnCell button:hover {
       color: white;
@@ -192,8 +192,9 @@
       display:flex;
         flex-direction:column;
         align-items:center;
+      justify-content:center;
         opacity:.95;
-      overflow: auto;
+      overflow: hidden;
       /* This section calls the fadeIn animation we defined above */
       animation: .7s ease-out 0s 1 fadeIn;
   }
@@ -215,9 +216,10 @@
   .midContainer {
       padding: 2rem;
       background-color: #7E57F2;
+      display:flex;
         flex-direction:column;
-        align-items:left;
-      justify-content:left;
+        align-items:center;
+      justify-content:center;
       box-shadow: 5px 5px 15px black;
   }
   
@@ -269,19 +271,16 @@
     color: white;
     background-color: #6d41f1;
 }
-.btnBehaviors{
-    text-align:center;
-}
+
 .btnBehaviors button {
-    opacity:1;
     width: 10rem;
     height: 3rem;
     font-size: 1rem;
     color: white;
-    border-top-left-radius: 8rem;
-      border-bottom-left-radius: 8rem;
-      border-top-right-radius: 8rem;
-      border-bottom-right-radius: 8rem;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
     background-color: lightseagreen;
     border: none;
 }
@@ -314,116 +313,43 @@
     justify-content:center;
 }
 
-/* The container */
-.container {
-    color:white;
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 1rem;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+.divCell {
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+    border: 1px dashed #aaaaaa;
 }
 
-/* Hide the browser's default checkbox */
-.container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
+.divCell button {
+    width:100px;
+    height:100px;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    border: none;
+    background-color: white;
+    color: #6d41f1;
 }
 
-/* Hide the browser's default checkbox */
-.others input {
-    opacity: 1;
-}
-
-/* Create a custom checkbox */
-.checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    background-color: #eee;
-}
-
-/* On mouse-over, add a grey background color */
-.container:hover input ~ .checkmark {
-    background-color: #ccc;
-}
-
-/* When the checkbox is checked, add a green background */
-.container input:checked ~ .checkmark {
-    background-color: lightseagreen;
-}
-
-/* When the checkbox is checked, add a red background */
-.container input:checked ~ .checkmarkRed {
-    background-color: red;
-}
-/* When the checkbox is checked, add a purple background */
-.container input:checked ~ .checkmarkStudent {
+.divCell button:hover {
     background-color: #a488f6;
+    color: white;
 }
 
-/* Create the checkmark/indicator (hidden when not checked) */
-.checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-}
-
-/* Show the checkmark when checked */
-.container input:checked ~ .checkmark:after {
-    display: block;
-}
-
-/* Style the checkmark/indicator */
-.container .checkmark:after {
-    left: 9px;
-    top: 5px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-}
-.ss{
-    color:white;
-    font-size:1rem;
-    text-align:center;
-    width: 100%;
-    padding:0rem;
-    padding-top:.5rem;
-    padding-bottom:.5rem;
-    background: #a488f6;
-    margin-bottom: 1rem;
-}
-.positive{
-    color:white;
-    font-size:1rem;
-    text-align:center;
-    width: 100%;
-    padding:0rem;
-    padding-top:.5rem;
-    padding-bottom:.5rem;
-    background: lightseagreen;
-    margin-bottom: 1rem;
-}
-.negative{
-    color:white;
-    font-size:1rem;
-    text-align:center;
-    width: 100%;
-    padding:0rem;
-    padding-top:.5rem;
-    padding-bottom:.5rem;
-    background: #ff3333;
-    margin-bottom: 1rem;
+.btnPlus button {
+    width: 15rem;
+    height: 3rem;
+    font-size: 1rem;
+    color: white;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    background-color: #a488f6;
+    border: none;
+  }
+.btnPlus button:hover {
+    background-color: #6d41f1;
+    color: white;
 }
