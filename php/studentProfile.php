@@ -1,22 +1,10 @@
-<?php
-    session_start();
-    if(isset($_SESSION['user']))
-    {
-        if($_SESSION['isTeacher'] == 0)
-            header("location: parentHome.php");
-    }
-    else
-    {
-        header("location: ../view/loginPage.php");
-    }
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ClassMinder - Create Student</title>
+    <title>ClassMinder - Student</title>
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/teacherHome.js"></script>
     <link rel="stylesheet" href="../css/studentList.css">
@@ -25,7 +13,6 @@
         require_once('../common/connection.php');
         include_once('../model/User.php');
         include_once('../model/Student.php');
-        include_once('../model/Classroom.php');
         // Initialize the session
         session_start();
         // If session variable is not set it will redirect to login page
@@ -33,6 +20,12 @@
             header("location: ../view/loginPage.php");
             exit;
         }
+        if(isset($_POST["studentID"]))
+        {
+            $_SESSION['post'] = $_POST;
+        }
+        else
+            $_POST = $_SESSION['post'];
         $nConn = new Connection();
         // Create a $user and store it for session 
         if(!isset($_SESSION['user']) || empty($_SESSION['user']))
@@ -48,30 +41,14 @@
             $_SESSION['userID'] = $_SESSION['user']->getUserID();
         }
         ?>
-    <?php
-
-        $user = "";
-        $msgs = [];
-        $success = false;
-        
-        if(isset($_POST["studentID"]))
-        {
-            if(empty($msgs))
-            {
-                
-            }
-        }
-        
-    ?>
 </head>
 <body>
-    <?php
-        if($success)
-        {   
-            header("location:./classroom.php");
-            die;
-        }  
-    ?>
+    <div class="all">
+        <div class="modal">
+            <div class="modalBox">
+                <span>modal box</span>
+            </div>
+        </div>
     <div class="leftMenu">
         <ul>
             
@@ -134,65 +111,100 @@
     <div class="div1">
         <div class="midContainer">
         <table>
+            <tr>
+                <td><h1>
+                <?php
+                    $studentID = $_POST["studentID"];
+                    $student = new Student();
+                    $student.loadbyID($studentID);
+                    echo $student.getFirstName() . " " . $student.getLastName();
+                ?>
+                </h1></td>
+            </tr>
+            <tr>
             <?php
-                if(!empty($msgs))
-                {   
-                    foreach($msgs as $msg)
-                        echo "<tr><td class='msgs' colspan='2'>*". $msg ."</td></tr>";
+                $userID = $_SESSION["userID"];
+                $studentID = $_POST["studentID"];
+                $title = $_POST["title"];
+                $nQuery =
+                "SELECT DISTINCT CLASSROOM.classroomID, CLASSROOM.title
+                FROM STUDENT
+                JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
+                JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
+                WHERE CLASSROOM.userID = $userID AND CLASSROOM.title <> 'Unassigned Class' AND STUDENT_CLASS.studentID = $studentID;";
+                $records = $nConn->getQuery($nQuery);
+                echo "<form method='post' action='classroom.php'>";
+                while($row = $records->fetch_array())
+                {
+                    $title = $row['title'];
+                    echo "<form method='post' action='classroom.php'>";
+                    echo "<input type='hidden' name='title' value='$title'>";
+                    echo "<tr><td class='btnCell'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $row['classroomID'] . ">";
+                    echo $title . "<br>";
+                    echo "</td></button></tr>";
+                    echo "</form>";
                 }
             ?>
-            <tr>
-                <td colspan="2"><h4>Please select student</h4></td>
             </tr>
-                <form action="addStudent.php" method="post">
-                <tr>
-                    <td class="leftAlign">
-                        <label for "studentID" class="require"> Student: </label>
-                    </td>
-                    <td>
-                        <select size="20" name="studentClass" value="<?php if (isset($_POST['studentID'])) echo $_POST['studentID']?>" required/>
-                            <?php
-                                $userID = $_SESSION["userID"];
-                                $classroomID = $_POST['classroomID'];
-                                $nQuery =
-                                "SELECT DISTINCT firstName, lastName, sc.studentID
-                                FROM STUDENT_CLASS sc, STUDENT s, CLASSROOM c
-                                WHERE NOT EXISTS(
-                                    SELECT * FROM STUDENT_CLASS sc2
-                                    WHERE sc2.studentID = sc.studentID AND classroomID = $classroomID)
-                                AND s.studentID = sc.studentID AND c.classroomID = sc.classroomID AND c.userID = $userID;";
-                                echo $nQuery;
-                                $records = $nConn->getQuery($nQuery);
-                                $title = $_POST['title'];
-                                while($row = $records->fetch_array())
-                                {
-                                    $fName = $row["firstName"];
-                                    $lName = $row["lastName"];
-                                    $studentID = $row['studentID'];
-                                    echo '<option name="studentClass" value=\'{"fName":"' . $fName . '","lName":"' . $lName . '","studentID":"' . $studentID . '","classroomID":"' . $classroomID . '","title":"' . $title . '"}\'>';
-                                    echo $row["firstName"] . " " . $row["lastName"];
-                                    echo "</option>";
-                                }
-                                ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="btnCell" colspan="1">
-                        <input type="submit" class="submitBtn" value="Add New Student"/>
-                    </td>
-                </form>
-                <form action="classroom.php" method='post'>
+            <tr>
+            <h1>Most Recent Behavior</h1>
+            <?php
+                $userID = $_SESSION["userID"];
+                $studentID = $_POST["studentID"];
+                $nQuery =
+                "SELECT BEHAVIOR.title
+                FROM BEHAVIOR, STUDENT_BEHAVIOR
+                WHERE BEHAVIOR.behaviorID=STUDENT_BEHAVIOR.behaviorID AND STUDENT_BEHAVIOR.studentID=$studentID
+                ORDER BY recordedTime DESC
+                LIMIT 4;";
+                $records = $nConn->getQuery($nQuery);
+                while($row = $records->fetch_array())
+                {
+                    $title = $row['title'];
+                    echo "<tr><td>";
+                    echo $title . "<br>";
+                    echo "</td></tr>";
+                }
+            ?>
+            </tr>
+            <tr>
+            <h1>Behavior Graph</h1>
+            <form action="behaviorGraph.php" method='post'>
                     <td class="btnCell" colspan="1">
                         <?php
-                            echo "<input type='hidden' name='title' value='$title'>";
+                            $classroomID = 1;
+                            echo "<input type='hidden' name='studentID' value='$studentID'>";
                             echo "<input type='hidden' name='classroomID' value='$classroomID'>";
                         ?>
                         <input type="submit" class="button" id="cancelBtn" value="Cancel"/>
                     </td>
-                </tr>
-                </form>
-            </table>
+            </form>
+            </tr>
+            <tr>
+            <h1>Parents</h1>
+            <?php
+                $userID = $_SESSION["userID"];
+                $studentID = $_POST["studentID"];
+                $nQuery =
+                "SELECT USER.firstName, USER.lastName, USER.email
+                FROM USER, STUDENT_PARENT
+                WHERE USER.userID = STUDENT_PARENT.parentID AND STUDENT_PARENT.studentID = $studentID";
+                $records = $nConn->getQuery($nQuery);
+                while($row = $records->fetch_array())
+                {
+                    $name = $row['firstName'] . " " . $row['lastName'];
+                    $email = $row['email'];
+                    echo "<tr><td>";
+                    echo $name;
+                    echo "</td><td>";
+                    echo $email;
+                    echo "</td></tr>";
+                }
+            ?>
+            </tr>
+        </table>
         </div>
     </div>
+</div>
 </body>
 </html>
