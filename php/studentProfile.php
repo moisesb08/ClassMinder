@@ -115,13 +115,12 @@
                 <td><h1>
                 <?php
                     $studentID = $_POST["studentID"];
-                    $student = new Student();
-                    $student.loadbyID($studentID);
-                    echo $student.getFirstName() . " " . $student.getLastName();
+                    $student = new Student("","");
+                    $student->loadByID($studentID);
+                    echo $student->getFirstName() . " " . $student->getLastName();
                 ?>
                 </h1></td>
             </tr>
-            <tr>
             <?php
                 $userID = $_SESSION["userID"];
                 $studentID = $_POST["studentID"];
@@ -133,7 +132,7 @@
                 JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
                 WHERE CLASSROOM.userID = $userID AND CLASSROOM.title <> 'Unassigned Class' AND STUDENT_CLASS.studentID = $studentID;";
                 $records = $nConn->getQuery($nQuery);
-                echo "<form method='post' action='classroom.php'>";
+                echo "<tr><td><h1>Classes</h1></td></tr>";
                 while($row = $records->fetch_array())
                 {
                     $title = $row['title'];
@@ -145,9 +144,9 @@
                     echo "</form>";
                 }
             ?>
-            </tr>
-            <tr>
+            <tr><td>
             <h1>Most Recent Behavior</h1>
+            </td></tr>
             <?php
                 $userID = $_SESSION["userID"];
                 $studentID = $_POST["studentID"];
@@ -166,9 +165,9 @@
                     echo "</td></tr>";
                 }
             ?>
-            </tr>
-            <tr>
+            <tr><td>
             <h1>Behavior Graph</h1>
+            </td></tr>
             <form action="behaviorGraph.php" method='post'>
                     <td class="btnCell" colspan="1">
                         <?php
@@ -176,12 +175,12 @@
                             echo "<input type='hidden' name='studentID' value='$studentID'>";
                             echo "<input type='hidden' name='classroomID' value='$classroomID'>";
                         ?>
-                        <input type="submit" class="button" id="cancelBtn" value="Cancel"/>
+                        <input type="submit" class="button" id="cancelBtn" value="Behavior Graph"/>
                     </td>
             </form>
-            </tr>
-            <tr>
+            <tr><td>
             <h1>Parents</h1>
+            </td></tr>
             <?php
                 $userID = $_SESSION["userID"];
                 $studentID = $_POST["studentID"];
@@ -196,12 +195,11 @@
                     $email = $row['email'];
                     echo "<tr><td>";
                     echo $name;
-                    echo "</td><td>";
+                    echo "</td></tr><tr><td>";
                     echo $email;
                     echo "</td></tr>";
                 }
             ?>
-            </tr>
         </table>
         </div>
     </div>
