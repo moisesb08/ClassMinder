@@ -46,7 +46,7 @@
         init();
         </script>
 </head>
-<body>
+<body onload="getValues()">
     <div class="all">
         <div class="modal">
             <div class="modalBox">
@@ -127,12 +127,12 @@
                 WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID";
                 $result = $nConn->getQuery($nQuery);
                 $row = $result->fetch_row();
-                $xMax = (int)$row["xMax"];
-                $yMax = (int)$row["yMax"];
+                $xMax = (int)$row[0];
+                $yMax = (int)$row[1];
                 $newX = max(1, $xMax);
                 $newY = max(1, $yMax);
                 $totalStudents = max(1, $row["totalStudents"]);
-                while($newX*$newY < max(16, $totalStudents) || min($newX, $newY) >=10)
+                while($newX*$newY < max(25, $totalStudents))
                 {
                     if(min($newX, $newY)==$newX)
                     {
@@ -142,37 +142,102 @@
                     {
                         $newY++;
                     }
+                    //echo "<script>console.log('".$newX." (:x-y:)".$newY."');</script>";
+                    if(min($newX, $newY)>10)
+                        break;
                 }
                 $nQuery =
                 "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT_CLASS.x, STUDENT_CLASS.y
                 FROM STUDENT
                 JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
                 JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
-                WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID ORDER BY STUDENT_CLASS.x, STUDENT_CLASS.y";
+                WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID ORDER BY STUDENT_CLASS.y, STUDENT_CLASS.x";
                 $records = $nConn->getQuery($nQuery);
                 echo "<form method='post' action='studentProfile.php'>";
-                echo "<table>";
+                echo '<table>';
                 $count = 0;
-                for($y=0; $y<$newY; $y++)
+                $notSeatedArr = array();
+                $fetch=true;
+                $rowVal = $newY+1+$_POST["extraRows"];
+                $columnVal = $newX+1+$_POST["extraColumns"];
+                for($y=1; $y<$rowVal; $y++)
                 {
                     echo "<tr>";
-                    for($x=0; $x<$newX; $x++)
+                    for($x=1; $x<$columnVal; $x++)
                     {
                         $count++;
                         echo "<td>";
-                        if($row = $records->fetch_array())
+
+                        if(!$fetch)
                         {
-                            echo '
-                            <div id="x'.$x.'y'.$y.'" class="divCell" ondrop="drop(event)" ondragover="allowDrop(event)">
-                                <button value="'.$row['studentID'].'" type="button" ondragstart="drag(event)" draggable="true" id="btn'.$count.'"><i class="ion-android-person"></i><br>
-                                '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['studentID'].'</button>
-                            </div>
-                            ';
+                            //echo "<script>console.log('".$x."?=".$row['x']." (:x-y:)".$y."?=".$row['y']."');</script>";
+                            
+                            if($x == $row["x"] && $y == $row["y"])
+                            {
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCell" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                    <button value="'.$row['studentID'].'" type="button" ondragstart="drag(event)" draggable="true" id="btn'.$count.'"><i class="ion-android-person"></i><br>
+                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['studentID'].'</button>
+                                </div>
+                                ';
+                                $fetch = true;
+                            }
+                            elseif($row['x']==-1||$row['y']==-1)
+                            {
+                                array_push($notSeatedArr, $row);
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCell" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                </div>
+                                ';
+                                $fetch = true;
+                            }
+                            else
+                            {
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCell" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                </div>
+                                ';
+                                $fetch = false;
+                            }
+                        }
+                        elseif($row = $records->fetch_array())
+                        {
+                            //console.log("yes");
+                            //console.log($x."?=".$row["x"]);
+                            //echo "<script>console.log('".$x."?=".$row['x']." (:x-y:)".$y."?=".$row['y']."');</script>";
+                            
+                            if($x == $row["x"] && $y == $row["y"])
+                            {
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCell" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                    <button value="'.$row['studentID'].'" type="button" ondragstart="drag(event)" draggable="true" id="btn'.$count.'"><i class="ion-android-person"></i><br>
+                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['studentID'].'</button>
+                                </div>
+                                ';
+                                $fetch = true;
+                            }
+                            elseif($row['x']==-1||$row['y']==-1)
+                            {
+                                array_push($notSeatedArr, $row);
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCell" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                </div>
+                                ';
+                                $fetch = true;
+                            }
+                            else
+                            {
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCell" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                </div>
+                                ';
+                                $fetch = false;
+                            }
                         }
                         else
                         {
                             echo '
-                            <div id="x'.$x.'y'.$y.'" class="divCell" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCell" ondrop="drop(event)" ondragover="allowDrop(event)">
                             </div>
                             ';
                         }
@@ -181,6 +246,38 @@
                     echo "</tr>";
                 }
                 echo "</table></form>";
+                //not seated
+                echo '<table><tr><td colspan="'.$columnVal.'">Students not assigned seats:</td></tr>';
+                $count=0;
+                for($y=1; $y<$rowVal; $y++)
+                {
+                    echo "<tr>";
+                    for($x=1; $x<$columnVal; $x++)
+                    {
+                        $count++;
+                        echo "<td>";
+                        if($count <= count($notSeatedArr))
+                        {
+                            $currentRow = $notSeatedArr[$count-1];
+                            echo '
+                            <div id="div2Cell'.$count.'" data-value="-1:-1" class="divCell divCell2" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                <button value="'.$currentRow['studentID'].'" type="button" ondragstart="drag(event)" draggable="true" id="btn'.$count.'"><i class="ion-android-person"></i><br>
+                                '.$currentRow['firstName'].'<br>'.$currentRow['lastName'].'<br>ID: '.$currentRow['studentID'].'</button>
+                            </div>
+                            ';
+                        }
+                        else
+                        {
+                            echo '
+                            <div id="div2Cell'.$count.'" data-value="-1:-1" class="divCell divCell2" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            </div>
+                            ';
+                        }
+                        echo "</td>";
+                    }
+                    echo "</tr>";
+                }
+                echo "</table>";
                 echo "<form method='post' action=''>";
                 echo "<input type='hidden' name='title' value='$title'>";
                 echo "<tr><td class='btnCell'><div class='btnPlus'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";

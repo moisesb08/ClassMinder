@@ -7,7 +7,7 @@
     <title>ClassMinder - Classroom</title>
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/teacherHome.js"></script>
-    <link rel="stylesheet" href="../css/studentList.css">
+    <link rel="stylesheet" href="../css/editSeatingChart.css">
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <?php
         require_once('../common/connection.php');
@@ -112,43 +112,188 @@
     <div class="div1">
         <div class="midContainer">
         <table>
-            <tr>
-                <td><h1><?php echo $_POST['title']; ?></h1></td>
-            </tr>
             <?php
                 $userID = $_SESSION["userID"];
                 $classroomID = $_POST["classroomID"];
                 $title = $_POST["title"];
                 $nQuery =
-                "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID
+                "SELECT max(STUDENT_CLASS.x) AS xMax, max(STUDENT_CLASS.y) AS yMax, count(STUDENT_CLASS.studentID) AS totalStudents
                 FROM STUDENT
                 JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
                 JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
                 WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID";
+                $result = $nConn->getQuery($nQuery);
+                $row = $result->fetch_row();
+                $xMax = (int)$row[0];
+                $yMax = (int)$row[1];
+                $newX = max(1, $xMax);
+                $newY = max(1, $yMax);
+                $totalStudents = max(1, $row["totalStudents"]);
+                while($newX*$newY < max(25, $totalStudents))
+                {
+                    if(min($newX, $newY)==$newX)
+                    {
+                        $newX++;
+                    }
+                    else
+                    {
+                        $newY++;
+                    }
+                    //echo "<script>console.log('".$newX." (:x-y:)".$newY."');</script>";
+                    if(min($newX, $newY)>10)
+                        break;
+                }
+                $nQuery =
+                "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT_CLASS.x, STUDENT_CLASS.y
+                FROM STUDENT
+                JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
+                JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
+                WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID ORDER BY STUDENT_CLASS.y, STUDENT_CLASS.x";
                 $records = $nConn->getQuery($nQuery);
                 echo "<form method='post' action='studentProfile.php'>";
-                while($row = $records->fetch_array())
+                echo '<table>';
+                $count = 0;
+                $notSeatedArr = array();
+                $fetch=true;
+                $rowVal = $newY+1+$_POST["extraRows"];
+                $columnVal = $newX+1+$_POST["extraColumns"];
+                echo"<tr><td class='divCell2' colspan='".$columnVal."'><h1>".$_POST['title']."</h1></td></tr>";
+                for($y=1; $y<$rowVal; $y++)
                 {
-                    echo "<tr><td class='btnCell'><button type='submit' name='studentID' formmethod='post' class='button' value=" . $row['studentID'] . ">";
-                    echo $row["firstName"] . " " . $row["lastName"] . "<br>ID: ".$row['studentID'];
-                    echo "</td></button></tr>";
+                    echo "<tr>";
+                    for($x=1; $x<$columnVal; $x++)
+                    {
+                        $count++;
+                        echo "<td>";
+
+                        if(!$fetch)
+                        {
+                            if($x == $row["x"] && $y == $row["y"])
+                            {
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                    <button value="'.$row['studentID'].'" type="submit" name="studentID" formmethod="post" id="btn'.$count.'"><i class="ion-android-person"></i><br>
+                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['studentID'].'</button>
+                                </div>
+                                ';
+                                $fetch = true;
+                            }
+                            elseif($row['x']==-1||$row['y']==-1)
+                            {
+                                array_push($notSeatedArr, $row);
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                </div>
+                                ';
+                                $fetch = true;
+                            }
+                            else
+                            {
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                </div>
+                                ';
+                                $fetch = false;
+                            }
+                        }
+                        elseif($row = $records->fetch_array())
+                        {
+                            //console.log("yes");
+                            //console.log($x."?=".$row["x"]);
+                            //echo "<script>console.log('".$x."?=".$row['x']." (:x-y:)".$y."?=".$row['y']."');</script>";
+                            
+                            if($x == $row["x"] && $y == $row["y"])
+                            {
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                    <button value="'.$row['studentID'].'" type="submit" name="studentID" formmethod="post" id="btn'.$count.'"><i class="ion-android-person"></i><br>
+                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['studentID'].'</button>
+                                </div>
+                                ';
+                                $fetch = true;
+                            }
+                            elseif($row['x']==-1||$row['y']==-1)
+                            {
+                                array_push($notSeatedArr, $row);
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                </div>
+                                ';
+                                $fetch = true;
+                            }
+                            else
+                            {
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                </div>
+                                ';
+                                $fetch = false;
+                            }
+                        }
+                        else
+                        {
+                            echo '
+                            <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            </div>
+                            ';
+                        }
+                        echo "</td>";
+                    }
+                    echo "</tr>";
                 }
+                echo "</table>";
+                //not seated
+                echo '<table><tr><td colspan="'.$columnVal.'">Students not assigned seats:</td></tr>';
+                $count=0;
+                $breakRow = false;
+                for($y=1; $y<$rowVal; $y++)
+                {
+                    echo "<tr>";
+                    for($x=1; $x<$columnVal; $x++)
+                    {
+                        $count++;
+                        echo "<td>";
+                        if($count <= count($notSeatedArr))
+                        {
+                            $currentRow = $notSeatedArr[$count-1];
+                            echo '
+                            <div id="div2Cell'.$count.'" data-value="-1:-1" class="divCellNone divCell2" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                <button value="'.$currentRow['studentID'].'" type="submit" name="studentID" formmethod="post" id="btn'.$count.'"><i class="ion-android-person"></i><br>
+                                '.$currentRow['firstName'].'<br>'.$currentRow['lastName'].'<br>ID: '.$currentRow['studentID'].'</button>
+                            </div>
+                            ';
+                        }
+                        else
+                        {
+                            $breakRow = true;
+                            echo '
+                            <div id="div2Cell'.$count.'" data-value="-1:-1" class="divCellNone divCell2" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            </div>
+                            ';
+                        }
+                        echo "</td>";
+                    }
+                    echo "</tr>";
+                    if($breakRow)
+                        break;
+                }
+                echo "</table></form>";
                 echo "</form>";
-                echo "<form method='post' action='addStudentClass.php'>";
+                echo "<br><form method='post' action='addStudentClass.php'>";
                 echo "<input type='hidden' name='title' value='$title'>";
-                echo "<tr><td class='btnCell'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
-                echo "<span><i class=\"ion-plus-round\"></i></span></td></button></tr>";
+                echo "<tr><td class='btnCell'><div class='btnPlus'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
+                echo "<span><i class=\"ion-plus-round\"></i></span></div></td></button></tr>";
                 echo "</form>";
 
                 // Record Behaviors
-                echo "<form method='post' action='recordBehaviors.php'>";
+                echo "<br><form method='post' action='recordBehaviors.php'>";
                 echo "<input type='hidden' name='title' value='$title'>";
                 echo "<tr><td class='btnCell'><div class='btnBehaviors'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
                 echo "<span>Record Behaviors</span></td></button></div></tr>";
                 echo "</form>";
                 
                 // Edit Seating Chart
-                echo "<form method='post' action='editSeatingChart.php'>";
+                echo "<br><form method='post' action='editSeatingChart.php'>";
                 echo "<input type='hidden' name='title' value='$title'>";
                 echo "<tr><td class='btnCell'><div class='btnBehaviors'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
                 echo "<span>Edit Seating Chart</span></td></button></div></tr>";

@@ -13,7 +13,6 @@
       src: url('../resources/fonts/Trocchi.otf');
   }
   body, html {
-      color:white;
       margin: 0;
       padding: 0;
       height: 100%;
@@ -146,7 +145,7 @@
   
   .menuItem {
       white-space:nowrap;
-      overflow: auto;
+      overflow: hidden;
   }
   
   .centerMenu {
@@ -156,7 +155,6 @@
         flex-direction:column;
         align-items:center;
       vertical-align: middle;
-      overflow:auto;
   }
   .centerMenu table {
       color: #6d41f1;
@@ -190,10 +188,12 @@
   
   .div1{
       height: 100vh;
-      align-items:center;
+      display:flex;
+        flex-direction:column;
+        align-items:center;
       justify-content:center;
-      opacity:.95;
-      overflow: auto;
+        opacity:.95;
+      overflow: hidden;
       /* This section calls the fadeIn animation we defined above */
       animation: .7s ease-out 0s 1 fadeIn;
   }
@@ -215,7 +215,7 @@
   .midContainer {
       padding: 2rem;
       background-color: #7E57F2;
-      display:inline-flex;
+      display:flex;
         flex-direction:column;
         align-items:center;
       justify-content:center;
@@ -310,80 +310,4 @@
     flex-direction:column;
     align-items:center;
     justify-content:center;
-}
-
-.divCell {
-    width: 100px;
-    height: 100px;
-    padding: 10px;
-    border: 1px dashed #aaaaaa;
-}
-
-.divCell button {
-    width:100px;
-    height:100px;
-    border-top-left-radius: 1rem;
-    border-bottom-left-radius: 1rem;
-    border-top-right-radius: 1rem;
-    border-bottom-right-radius: 1rem;
-    border: none;
-    background-color: white;
-    color: #6d41f1;
-}
-
-.divCell button:hover {
-    background-color: #a488f6;
-    color: white;
-}
-.divCell2 {
-    background-color: rgba(255, 255, 255, .1);
-}
-.divCell2 button {
-    color: white;
-    background-color: #a488f6;
-}
-
-.divCell2 button:hover {
-    color: #6d41f1;
-    background-color: white;
-}
-
-.btnPlus button {
-    width: 15rem;
-    height: 3rem;
-    font-size: 1rem;
-    color: white;
-    border-top-left-radius: 1rem;
-    border-bottom-left-radius: 1rem;
-    border-top-right-radius: 1rem;
-    border-bottom-right-radius: 1rem;
-    background-color: #a488f6;
-    border: none;
-  }
-.btnPlus button:hover {
-    background-color: #6d41f1;
-    color: white;
-}
-
-.divCellNone {
-    width: 100px;
-    height: 100px;
-    padding: 10px;
-}
-
-.divCellNone button {
-    width:100px;
-    height:100px;
-    border-top-left-radius: 1rem;
-    border-bottom-left-radius: 1rem;
-    border-top-right-radius: 1rem;
-    border-bottom-right-radius: 1rem;
-    border: none;
-    background-color: white;
-    color: #6d41f1;
-}
-
-.divCellNone button:hover {
-    background-color: #a488f6;
-    color: white;
 }
