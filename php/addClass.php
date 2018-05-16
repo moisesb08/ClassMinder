@@ -32,8 +32,6 @@
         {
             if(empty($msgs))
             {
-                $classroom1 = new Classroom('Unassigned Class', $_SESSION['userID'], 0);
-                $classroom1->save()!=0;
                 $classroom = new Classroom($_POST["title"], $_SESSION['userID'], 0);
                 $classroomCreated = $classroom->save()!=0;
                 if(!is_null($classroomCreated))

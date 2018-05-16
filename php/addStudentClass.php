@@ -155,15 +155,12 @@
                                 $userID = $_SESSION["userID"];
                                 $classroomID = $_POST['classroomID'];
                                 $nQuery =
-                                "SELECT firstName, lastName, studentID, classroomID FROM
-                                (SELECT firstName, lastName, studentID, classroomID FROM
-                                (SELECT DISTINCT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, CLASSROOM.classroomID
-                                FROM STUDENT
-                                JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
-                                JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
-                                WHERE CLASSROOM.userID = $userID ORDER BY CLASSROOM.classroomID DESC) a
-                                GROUP BY studentID) b
-                                WHERE classroomID<>$classroomID";
+                                "SELECT DISTINCT firstName, lastName, sc.studentID
+                                FROM STUDENT_CLASS sc, STUDENT s, CLASSROOM c
+                                WHERE NOT EXISTS(
+                                    SELECT * FROM STUDENT_CLASS sc2
+                                    WHERE sc2.studentID = sc.studentID AND classroomID = $classroomID)
+                                AND s.studentID = sc.studentID AND c.classroomID = sc.classroomID AND c.userID = $userID;";
                                 echo $nQuery;
                                 $records = $nConn->getQuery($nQuery);
                                 $title = $_POST['title'];
