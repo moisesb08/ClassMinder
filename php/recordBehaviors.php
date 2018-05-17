@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ClassMinder - Record Behaviors</title>
     <script src="../js/jquery-3.3.1.min.js"></script>
-    <script src="../js/teacherHome.js"></script>
+    <script src="../js/recordBehaviors.js"></script>
     <link rel="stylesheet" href="../css/recordBehaviors.css">
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <?php
@@ -47,7 +47,10 @@
             $_SESSION['user'] = $user;
             $_SESSION['userID'] = $_SESSION['user']->getUserID();
         }
-        if(isset($_POST["submitted"])&&(isset($_POST["posBehaviors"])||isset($_POST["negBehaviors"])))
+        $userID=$_SESSION['userID'];
+        if(isset($_POST["submitted"])&&(isset($_POST["posBehaviors"])
+            ||isset($_POST["negBehaviors"])||isset($_POST["addPositive"])
+            ||isset($_POST["addNegative"])))
         {
             $behaviors = array();
             if(isset($_POST["posBehaviors"]))
@@ -63,6 +66,30 @@
                 {
                     array_push($behaviors, $negBehavior);
                 }
+            }
+            
+            if(isset($_POST["addPositive"]))
+            {
+                echo'<script>';
+                    echo'function myFunction() {
+                        alert("pos");
+                    }
+                    myFunction();
+                    </script>';
+                $behavTitle = $_POST["positiveTitle"];
+                $behavDescription = $_POST["positiveDescription"];
+                $arr = array('title'=>$behavTitle, 'description'=>$behavDescription,'userID'=>$userID, 'isPositive'=>'1');
+                $behaviorID = $nConn->save("BEHAVIOR", $arr);
+                array_push($behaviors, $behaviorID);
+            }
+
+            if(isset($_POST["addNegative"]))
+            {
+                $behavTitle = $_POST["negativeTitle"];
+                $behavDescription = $_POST["negativeDescription"];
+                $arr = array('title'=>$behavTitle, 'description'=>$behavDescription,'userID'=>$userID, 'isPositive'=>'0');
+                $behaviorID = $nConn->save("BEHAVIOR", $arr);
+                array_push($behaviors, $behaviorID);
             }
 
             foreach($_POST["students"] as $student_ID)
@@ -91,7 +118,7 @@
         }
         ?>
 </head>
-<body>
+<body onload="start()">
     <div class="all">
         <div class="modal">
             <div class="modalBox">
@@ -161,8 +188,6 @@
         <div class="midContainer">
         <table>
             <?php
-                
-                $userID = $_SESSION["userID"];
                 $classroomID = $_POST["classroomID"];
                 $title = $_POST["title"];
                 // Dimensions of table
@@ -182,17 +207,19 @@
                 while($newX*$newY < max(25, $totalStudents))
                 {
                     if(min($newX, $newY)==$newX)
-                    {
                         $newX++;
-                    }
                     else
-                    {
                         $newY++;
-                    }
                     //echo "<script>console.log('".$newX." (:x-y:)".$newY."');</script>";
                     if(min($newX, $newY)>10)
                         break;
                 }
+                $rowVal = $newY+1+$_POST["extraRows"];
+                $columnVal = $newX+1+$_POST["extraColumns"];
+                if($yMax<0)
+                    $yMax=($count/$columnVal)+1;
+
+                // Display students
                 $nQuery =
                 "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT_CLASS.x, STUDENT_CLASS.y
                 FROM STUDENT
@@ -205,24 +232,16 @@
                 $count = 0;
                 $notSeatedArr = array();
                 $fetch=true;
-                $rowVal = $newY+1+$_POST["extraRows"];
-                $columnVal = $newX+1+$_POST["extraColumns"];
-                if($yMax<0)
-                    $yMax=($count/$columnVal)+1;
                 echo"<tr><td class='divCell2' colspan='".$columnVal."'><h1>".$_POST['title']."</h1></td></tr>";
                 for($y=1; $y<=$columnVal; $y++)
                 {
                     if($y<=$yMax)
-                    {
                         echo "<tr>";
-                    }
                     for($x=1; $x<$columnVal; $x++)
                     {
                         $count++;
                         if($y<=$yMax)
-                        {
                             echo "<td>";
-                        }
                         if(!$fetch)
                         {
                             if($x == $row["x"] && $y == $row["y"])
@@ -251,24 +270,17 @@
                                 }
                                 
                             }
-                            else
+                            elseif($y<=$yMax)
                             {
-                                if($y<=$yMax)
-                                {
-                                    echo '
-                                    <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
-                                    </div>
-                                    ';
-                                    $fetch = false;
-                                }
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                </div>
+                                ';
+                                $fetch = false;
                             }
                         }
                         elseif($row = $records->fetch_array())
-                        {
-                            //console.log("yes");
-                            //console.log($x."?=".$row["x"]);
-                            //echo "<script>console.log('".$x."?=".$row['x']." (:x-y:)".$y."?=".$row['y']."');</script>";
-                            
+                        {              
                             if($x == $row["x"] && $y == $row["y"])
                             {
                                 echo '
@@ -295,39 +307,30 @@
                                     $fetch = true;
                                 }
                             }
-                            else
-                            {
-                                if($y<=$yMax)
-                                {
-                                    echo '
-                                    <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
-                                    </div>
-                                    ';
-                                    $fetch = false;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if($y<=$yMax)
+                            elseif($y<=$yMax)
                             {
                                 echo '
                                 <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
                                 </div>
                                 ';
+                                $fetch = false;
                             }
                         }
-                        if($y<=$yMax)
+                        elseif($y<=$yMax)
                         {
-                            echo "</td>";
+                            echo '
+                            <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            </div>
+                            ';
                         }
+                        if($y<=$yMax)
+                            echo "</td>";
                     }
                     if($y<=$yMax)
-                    {
                         echo "</tr>";
-                    }
                 }
                 echo "</table><br>";
+
                 //not seated
                 echo '<table><tr><td colspan="'.$columnVal.'">Students not assigned seats:</td></tr>';
                 $count=0;
@@ -367,25 +370,6 @@
                         break;
                 }
                 echo "</table>";
-                /* Display students
-                $nQuery =
-                "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT_CLASS.x, STUDENT_CLASS.y
-                FROM STUDENT
-                JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
-                JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
-                WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID ORDER BY STUDENT_CLASS.y=-1, STUDENT_CLASS.y, STUDENT_CLASS.x";
-                $records = $nConn->getQuery($nQuery);
-                echo "<div class='ss'><span>SELECT STUDENTS</span></div>";-----------------------------------*/
-                //echo "</form><form method='post' action=''>";
-
-                /*while($row = $records->fetch_array())
-                {
-                    echo "
-                    <label class='container'>".$row["firstName"] . " " . $row["lastName"]."<br>ID: ".$row['studentID'].
-                    "<input type='checkbox' name='students[]' value='". $row['studentID'] ."'>
-                    <span class='checkmark checkmarkStudent'></span>
-                    </label>";
-                }*/
 
                 // Display Positive Behaviors
                 $nQuery =
@@ -402,10 +386,10 @@
                 }
                                 echo "
                     <label class='container'>Other:".
-                    "<input type='checkbox' name='addPositive' value='1'>
+                    "<input type='checkbox' name='addPositive[]' id='addPositive' value='1'>
                     <span class='checkmark'></span>
                     </label>
-                    <label class='container others'>Title:<br>".
+                    <label class='container others'>Good Behavior:<br>".
                     "<input type='text' placeholder='Title' id='positiveTitle' name='positiveTitle'>
                     </label>
                     <br>
@@ -425,10 +409,10 @@
                 }
                 echo "
                     <label class='container'>Other:".
-                    "<input type='checkbox' name='addNegative' value='1'>
+                    "<input type='checkbox' name='addNegative[]' id='addNegative' value='1'>
                     <span class='checkmark checkmarkRed'></span>
                     </label>
-                    <label class='container others'>Title:<br>".
+                    <label class='container others'>Bad Behavior:<br>".
                     "<input type='text' placeholder='Title' id='negativeTitle' name='negativeTitle'>
                     </label>
                     <br>
