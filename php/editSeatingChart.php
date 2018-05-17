@@ -132,7 +132,7 @@
                 $newX = max(1, $xMax);
                 $newY = max(1, $yMax);
                 $totalStudents = max(1, $row["totalStudents"]);
-                while($newX*$newY < max(25, $totalStudents))
+                while($newX*$newY < max(36, $totalStudents))
                 {
                     if(min($newX, $newY)==$newX)
                     {
@@ -151,7 +151,7 @@
                 FROM STUDENT
                 JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
                 JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
-                WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID ORDER BY STUDENT_CLASS.y, STUDENT_CLASS.x";
+                WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID ORDER BY STUDENT_CLASS.y=-1, STUDENT_CLASS.y, STUDENT_CLASS.x";
                 $records = $nConn->getQuery($nQuery);
                 echo "<form method='post' action='studentProfile.php'>";
                 echo '<table>';
@@ -261,7 +261,7 @@
                             $currentRow = $notSeatedArr[$count-1];
                             echo '
                             <div id="div2Cell'.$count.'" data-value="-1:-1" class="divCell divCell2" ondrop="drop(event)" ondragover="allowDrop(event)">
-                                <button value="'.$currentRow['studentID'].'" type="button" ondragstart="drag(event)" draggable="true" id="btn'.$count.'"><i class="ion-android-person"></i><br>
+                                <button value="'.$currentRow['studentID'].'" type="button" ondragstart="drag(event)" draggable="true" id="btnB'.$count.'"><i class="ion-android-person"></i><br>
                                 '.$currentRow['firstName'].'<br>'.$currentRow['lastName'].'<br>ID: '.$currentRow['studentID'].'</button>
                             </div>
                             ';
@@ -278,15 +278,13 @@
                     echo "</tr>";
                 }
                 echo "</table>";
-                echo "<form method='post' action=''>";
-                echo "<input type='hidden' name='title' value='$title'>";
-                echo "<tr><td class='btnCell'><div class='btnPlus'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
+                echo "<tr><td class='btnCell'><div class='btnPlus'><button type='button' onclick='updateSeating()' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
                 echo "<span>Save</span></td></button></div></tr>";
-                echo "</form><br>";
+                echo "<br>";
                 echo "<form method='post' action='classroom.php'>";
                 echo "<input type='hidden' name='title' value='$title'>";
-                echo "<tr><td class='btnCell'><div class='btnBehaviors'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
-                echo "<span>Cancel</span></td></button></div></tr>";
+                echo "<tr><td class='btnCell'><div class='btnBehaviors'><button type='submit' id='classroomID' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
+                echo "<span>Back to Classroom</span></td></button></div></tr>";
                 echo "</form>";
             ?>
         </div>

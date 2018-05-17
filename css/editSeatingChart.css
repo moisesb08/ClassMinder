@@ -329,6 +329,11 @@
     border: none;
     background-color: white;
     color: #6d41f1;
+    text-overflow: ellipsis;
+
+    /* Required for text-overflow to do anything */
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .divCell button:hover {
@@ -381,6 +386,11 @@
     border: none;
     background-color: white;
     color: #6d41f1;
+    text-overflow: ellipsis;
+
+    /* Required for text-overflow to do anything */
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .divCellNone button:hover {

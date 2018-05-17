@@ -18,8 +18,26 @@ let getValue = function(divCell)//item
     
 }
 
+function addToArr(item, index)
+{
+    let result = ',"'+index+'":"'+item+'"';
+    return result;
+}
+
+function createArr(tempArr)
+{
+    let arr = '{"classroomID":"' + classroomID + '"';
+    tempArr.forEach(function(item, index)
+    {
+        arr += addToArr(item, index);
+    });
+    arr+='}';
+    return arr;
+}
+
 function getValues()
 {
+    classroomID = document.getElementById("classroomID").value;
     let seatDivs = document.getElementsByClassName("divCell");
     [].forEach.call(seatDivs, getValue);
 }
@@ -44,21 +62,17 @@ function drag(ev)
 function drop(ev)
 {
     var data = ev.dataTransfer.getData("text");
-    //alert(ev.target.innerHTML + "\n\ntargetTagName:"+ev.target.tagName+"\n\n"+document.getElementById(data).innerHTML)
-    //alert("tag: "+ev.target.tagName+"val:"+document.getElementById(data).id);
 	if(ev.target.innerHTML.includes("<")||ev.target.tagName=="I")
     	return;
     ev.preventDefault();
     var partsOfStr = ev.target.getAttribute('data-value').split(':');
     let id = document.getElementById(data).value;
     addValues(id, ev.target.getAttribute('data-value'));
-    //alert("ID="+id+" X="+partsOfStr[0]+" and Y="+partsOfStr[1]
-    //    +"\nAll:\n");//alert(document.getElementById(ev.target.id).parentNode.id);
-    values.forEach(keyValueFunc);
     ev.target.appendChild(document.getElementById(data));
 }
 
-function touchHandler(event) {
+function touchHandler(event)
+{
     var touch = event.changedTouches[0];
 
     var simulatedEvent = document.createEvent("MouseEvent");
@@ -74,11 +88,31 @@ function touchHandler(event) {
     touch.target.dispatchEvent(simulatedEvent);
 }
 
-function init() {
+function init()
+{
     document.addEventListener("touchstart", touchHandler, true);
     document.addEventListener("touchmove", touchHandler, true);
     document.addEventListener("touchend", touchHandler, true);
     document.addEventListener("touchcancel", touchHandler, true);
 }
+
+function updateSeating()
+{
+    //values.forEach(updateStudentClass);
+    resultArr = createArr(values);
+    var obj = JSON.parse(resultArr);
+    post("arr", obj, "../php/updateStudentClass.php");
+}
+
+let getResults = function(data)
+{
+    alert(data);
+}
+function post(postName, postValue, actionPage)
+{
+    let arr = JSON.stringify(postValue);
+    $.post(actionPage, {"arr":arr}, getResults)
+}
 init();
 let values = [];
+let classroomID;

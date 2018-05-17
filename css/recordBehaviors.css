@@ -199,7 +199,7 @@
   }
   
   .div1 td{
-      padding:.5rem;
+      padding:0rem;
   }
   .div1 input{
       padding:.3rem;
@@ -328,6 +328,19 @@
     -ms-user-select: none;
     user-select: none;
 }
+.textCheck {
+  margin-top:-.9rem;
+  font-size:1rem;
+  font-weight:500;
+  position:relative;
+  color:darkslateblue;
+  z-index:1;
+  text-overflow: ellipsis;
+
+  /* Required for text-overflow to do anything */
+  white-space: nowrap;
+  overflow: hidden;
+}
 
 /* Hide the browser's default checkbox */
 .container input {
@@ -350,6 +363,19 @@
     width: 25px;
     background-color: #eee;
 }
+/* Create a custom checkbox */
+.checkmarkStudent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100px;
+    width: 100px;
+    background-color: white;
+    border-top-left-radius: 1.5rem;
+      border-bottom-left-radius: 1.5rem;
+      border-top-right-radius: 1.5rem;
+      border-bottom-right-radius: 1.5rem;
+}
 
 /* On mouse-over, add a grey background color */
 .container:hover input ~ .checkmark {
@@ -367,7 +393,7 @@
 }
 /* When the checkbox is checked, add a purple background */
 .container input:checked ~ .checkmarkStudent {
-    background-color: #a488f6;
+    background-color: lightgreen;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -389,6 +415,17 @@
     width: 5px;
     height: 10px;
     border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.divCellNone .container .checkmark:after {
+    left: 12px;
+    top: 6px;
+    width: 6px;
+    height: 12px;
+    border: solid green;
     border-width: 0 3px 3px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -426,4 +463,40 @@
     padding-bottom:.5rem;
     background: #ff3333;
     margin-bottom: 1rem;
+}
+
+.divCell2 {
+    background-color: rgba(255, 255, 255, .1);
+}
+.divCell2 button {
+    color: white;
+    background-color: #a488f6;
+}
+
+.divCell2 button:hover {
+    color: #6d41f1;
+    background-color: white;
+}
+
+.divCellNone {
+    width: 100px;
+    height: 100px;
+    padding: 0px;
+}
+
+.divCellNone button {
+    width:100px;
+    height:100px;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    border: none;
+    background-color: white;
+    color: #6d41f1;
+}
+
+.divCellNone button:hover {
+    background-color: #a488f6;
+    color: white;
 }

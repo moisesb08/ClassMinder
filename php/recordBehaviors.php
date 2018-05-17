@@ -75,19 +75,19 @@
                     //echo $str;
                     $nConn->getQuery($str);
                     //testing dialog
-                    /*echo'<script>';
+                    echo'<script>';
                     echo'function myFunction() {
-                        alert("'.$title.":".$classroomID.'");
+                        alert("'.$str.'");
                     }
                     myFunction();
-                    </script>';*/
-                    echo "<form name='goToForm' method='post' action='behaviorSuccess.php'>";
-                    echo "<input type='hidden' name='title' value='$title'>";
-                    echo "<input type='hidden' name='classroomID' value='$classroomID'>";
-                    echo "</form>";
-                    echo "<script>document.goToForm.submit();</script>";
+                    </script>';
                 }
             }
+            echo "<form name='goToForm' method='post' action='behaviorSuccess.php'>";
+            echo "<input type='hidden' name='title' value='$title'>";
+            echo "<input type='hidden' name='classroomID' value='$classroomID'>";
+            echo "</form>";
+            echo "<script>document.goToForm.submit();</script>";
         }
         ?>
 </head>
@@ -165,24 +165,227 @@
                 $userID = $_SESSION["userID"];
                 $classroomID = $_POST["classroomID"];
                 $title = $_POST["title"];
-                // Display students
+                // Dimensions of table
                 $nQuery =
-                "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID
+                "SELECT max(STUDENT_CLASS.x) AS xMax, max(STUDENT_CLASS.y) AS yMax, count(STUDENT_CLASS.studentID) AS totalStudents
                 FROM STUDENT
                 JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
                 JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
                 WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID";
+                $result = $nConn->getQuery($nQuery);
+                $row = $result->fetch_row();
+                $xMax = (int)$row[0];
+                $yMax = (int)$row[1];
+                $newX = max(1, $xMax);
+                $newY = max(1, $yMax);
+                $totalStudents = max(1, $row["totalStudents"]);
+                while($newX*$newY < max(25, $totalStudents))
+                {
+                    if(min($newX, $newY)==$newX)
+                    {
+                        $newX++;
+                    }
+                    else
+                    {
+                        $newY++;
+                    }
+                    //echo "<script>console.log('".$newX." (:x-y:)".$newY."');</script>";
+                    if(min($newX, $newY)>10)
+                        break;
+                }
+                $nQuery =
+                "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT_CLASS.x, STUDENT_CLASS.y
+                FROM STUDENT
+                JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
+                JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
+                WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID ORDER BY STUDENT_CLASS.y=-1, STUDENT_CLASS.y, STUDENT_CLASS.x";
                 $records = $nConn->getQuery($nQuery);
-                echo "<div class='ss'><span>SELECT STUDENTS</span></div>";
                 echo "<form method='post' action=''>";
-                while($row = $records->fetch_array())
+                echo '<table>';
+                $count = 0;
+                $notSeatedArr = array();
+                $fetch=true;
+                $rowVal = $newY+1+$_POST["extraRows"];
+                $columnVal = $newX+1+$_POST["extraColumns"];
+                if($yMax<0)
+                    $yMax=($count/$columnVal)+1;
+                echo"<tr><td class='divCell2' colspan='".$columnVal."'><h1>".$_POST['title']."</h1></td></tr>";
+                for($y=1; $y<=$columnVal; $y++)
+                {
+                    if($y<=$yMax)
+                    {
+                        echo "<tr>";
+                    }
+                    for($x=1; $x<$columnVal; $x++)
+                    {
+                        $count++;
+                        if($y<=$yMax)
+                        {
+                            echo "<td>";
+                        }
+                        if(!$fetch)
+                        {
+                            if($x == $row["x"] && $y == $row["y"])
+                            {
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">'.
+                                    "<label class='container'>".
+                                    "<input type='checkbox' name='students[]' value='". $row['studentID'] ."'>
+                                    <br><span class='checkmark checkmarkStudent'></span>
+                                    </label><div class='textCheck'><span class='checkmark2 checkmarkStudent2'>"
+                                    .$row["firstName"] . "<br>" . $row["lastName"]."<br>ID: ".$row['studentID'].
+                                "</span></div></div>
+                                ";
+                                $fetch = true;
+                            }
+                            elseif($row['x']==-1||$row['y']==-1)
+                            {
+                                array_push($notSeatedArr, $row);
+                                if($y<=$yMax)
+                                {
+                                    echo '
+                                    <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                    </div>
+                                    ';
+                                    $fetch = true;
+                                }
+                                
+                            }
+                            else
+                            {
+                                if($y<=$yMax)
+                                {
+                                    echo '
+                                    <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                    </div>
+                                    ';
+                                    $fetch = false;
+                                }
+                            }
+                        }
+                        elseif($row = $records->fetch_array())
+                        {
+                            //console.log("yes");
+                            //console.log($x."?=".$row["x"]);
+                            //echo "<script>console.log('".$x."?=".$row['x']." (:x-y:)".$y."?=".$row['y']."');</script>";
+                            
+                            if($x == $row["x"] && $y == $row["y"])
+                            {
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">'.
+                                    "<label class='container'>".
+                                    "<input type='checkbox' name='students[]' value='". $row['studentID'] ."'>
+                                    <br><span class='checkmark checkmarkStudent'></span>
+                                    </label><div class='textCheck'><span class='checkmark2 checkmarkStudent2'>"
+                                    .$row["firstName"] . "<br>" . $row["lastName"]."<br>ID: ".$row['studentID'].
+                                "</span></div></div>
+                                ";
+                                $fetch = true;
+                            }
+                            elseif($row['x']==-1||$row['y']==-1)
+                            {
+                                array_push($notSeatedArr, $row);
+                                
+                                if($y<=$yMax)
+                                {
+                                    echo '
+                                    <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                    </div>
+                                    ';
+                                    $fetch = true;
+                                }
+                            }
+                            else
+                            {
+                                if($y<=$yMax)
+                                {
+                                    echo '
+                                    <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                    </div>
+                                    ';
+                                    $fetch = false;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if($y<=$yMax)
+                            {
+                                echo '
+                                <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                </div>
+                                ';
+                            }
+                        }
+                        if($y<=$yMax)
+                        {
+                            echo "</td>";
+                        }
+                    }
+                    if($y<=$yMax)
+                    {
+                        echo "</tr>";
+                    }
+                }
+                echo "</table><br>";
+                //not seated
+                echo '<table><tr><td colspan="'.$columnVal.'">Students not assigned seats:</td></tr>';
+                $count=0;
+                $breakRow = false;
+                for($y=1; $y<$rowVal; $y++)
+                {
+                    echo "<tr>";
+                    for($x=1; $x<$columnVal; $x++)
+                    {
+                        $count++;
+                        echo "<td>";
+                        if($count <= count($notSeatedArr))
+                        {
+                            $currentRow = $notSeatedArr[$count-1];
+                            echo '
+                            <div id="div2Cell'.$count.'" data-value="-1:-1" class="divCellNone divCell2" ondrop="drop(event)" ondragover="allowDrop(event)">'.
+                                "<label class='container studentContainer'>".
+                                "<input type='checkbox' name='students[]' value='". $currentRow['studentID'] ."'>
+                                <br><span class='checkmark checkmarkStudent'></span>
+                                </label><div class='textCheck'><span class='checkmark2 checkmarkStudent2'>"
+                                .$currentRow["firstName"] . "<br>" . $currentRow["lastName"]."<br>ID: ".$currentRow['studentID'].
+                            "</span></div></div>
+                            ";
+                        }
+                        else
+                        {
+                            $breakRow = true;
+                            echo '
+                            <div id="div2Cell'.$count.'" data-value="-1:-1" class="divCellNone divCell2" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            </div>
+                            ';
+                        }
+                        echo "</td>";
+                    }
+                    echo "</tr>";
+                    if($breakRow)
+                        break;
+                }
+                echo "</table>";
+                /* Display students
+                $nQuery =
+                "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT_CLASS.x, STUDENT_CLASS.y
+                FROM STUDENT
+                JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
+                JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
+                WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID ORDER BY STUDENT_CLASS.y=-1, STUDENT_CLASS.y, STUDENT_CLASS.x";
+                $records = $nConn->getQuery($nQuery);
+                echo "<div class='ss'><span>SELECT STUDENTS</span></div>";-----------------------------------*/
+                //echo "</form><form method='post' action=''>";
+
+                /*while($row = $records->fetch_array())
                 {
                     echo "
                     <label class='container'>".$row["firstName"] . " " . $row["lastName"]."<br>ID: ".$row['studentID'].
                     "<input type='checkbox' name='students[]' value='". $row['studentID'] ."'>
                     <span class='checkmark checkmarkStudent'></span>
                     </label>";
-                }
+                }*/
 
                 // Display Positive Behaviors
                 $nQuery =
@@ -231,8 +434,6 @@
                     <br>
                     <label class='container'>Description:<br><textarea  id='negativeDescription' name='negativeDescription' rows='4' cols='50' placeholder='Enter Description Here'></textarea></label>";
                 echo "<input type='hidden' name='submitted' value='1'>";
-                echo "<tr><td class='btnCell'><button type='button' name='title' formmethod='post' class='button' value='$title'>";
-                echo "<span></td></button></tr>";
                 echo "<input type='hidden' name='title' value='$title'>";
                 echo "<tr><td class='btnCell'><div class='btnBehaviors'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
                 echo "<span>Submit</span></td></button></div></tr>";
