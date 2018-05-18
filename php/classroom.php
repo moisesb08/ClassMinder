@@ -113,7 +113,7 @@
         <div class="midContainer">
         <table>
             <tr>
-                <td><h1><?php echo $_POST['title']; ?></h1></td>
+                <td colspan='2'><h1><?php echo $_POST['title']; ?></h1></td>
             </tr>
             <?php
                 $userID = $_SESSION["userID"];
@@ -129,22 +129,34 @@
                 echo "<form method='post' action='studentProfile.php'>";
                 while($row = $records->fetch_array())
                 {
-                    echo "<tr><td class='btnCell'><button type='submit' name='studentID' formmethod='post' class='button' value=" . $row['studentID'] . ">";
+                    echo "<tr><td class='btnCell' colspan='2'><button type='submit' name='studentID' formmethod='post' class='button' value=" . $row['studentID'] . ">";
                     echo $row["firstName"] . " " . $row["lastName"] . "<br>";
                     echo "</td></button></tr>";
                 }
                 echo "</form>";
                 echo "<form method='post' action='addStudentClass.php'>";
                 echo "<input type='hidden' name='title' value='$title'>";
-                echo "<tr><td class='btnCell'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
+                echo "<tr><td colspan='2' class='btnCell'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
                 echo "<span><i class=\"ion-plus-round\"></i></span></td></button></tr>";
                 echo "</form>";
                 echo "<form method='post' action='recordBehaviors.php'>";
                 echo "<input type='hidden' name='title' value='$title'>";
-                echo "<tr><td class='btnCell'><div class='btnBehaviors'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
+                echo "<tr><td class='btnCell' colspan='2'><div class='btnBehaviors'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
                 echo "<span>Record Behaviors</span></td></button></div></tr>";
                 echo "</form>";
             ?>
+            <form action="excelInput.php" method="post" enctype="multipart/form-data">
+                <tr>
+                    <td colspan="0.5">
+                        <input type="hidden" name="classroomID" value="<?php echo $classroomID; ?>">
+                        <input type="hidden" name="title" value="<?php echo $title; ?>">
+                        <input type="file" name="excelFile" id="excelFile">
+                    </td>
+                    <td class="btnCell" colspan="0.5">
+                        <input type="submit" class="submitBtn" name="submit" value="Add Class By Excel"/>
+                    </td>
+                </tr>
+            </form>
         </table>
         </div>
     </div>

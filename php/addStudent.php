@@ -188,6 +188,16 @@
                     </td>
                 </tr>
                 </form>
+                <form action="excelInput.php" method="post" enctype="multipart/form-data">
+                <tr>
+                    <td colspan="0.5">
+                        <input type="file" name="excelFile" id="excelFile">
+                    </td>
+                    <td class="btnCell" colspan="0.5">
+                        <input type="submit" class="submitBtn" name="submit" value="Add All By CSV"/>
+                    </td>
+                </tr>
+                </form>
             </table>
         </div>
     </div>
