@@ -70,12 +70,6 @@
             
             if(isset($_POST["addPositive"]))
             {
-                echo'<script>';
-                    echo'function myFunction() {
-                        alert("pos");
-                    }
-                    myFunction();
-                    </script>';
                 $behavTitle = $_POST["positiveTitle"];
                 $behavDescription = $_POST["positiveDescription"];
                 $arr = array('title'=>$behavTitle, 'description'=>$behavDescription,'userID'=>$userID, 'isPositive'=>'1');
@@ -85,32 +79,39 @@
 
             if(isset($_POST["addNegative"]))
             {
-                $behavTitle = $_POST["negativeTitle"];
-                $behavDescription = $_POST["negativeDescription"];
+                $behavTitle = $nConn->sanitize($_POST["negativeTitle"]);
+                $behavDescription = $nConn->sanitize($_POST["negativeDescription"]);
                 $arr = array('title'=>$behavTitle, 'description'=>$behavDescription,'userID'=>$userID, 'isPositive'=>'0');
                 $behaviorID = $nConn->save("BEHAVIOR", $arr);
                 array_push($behaviors, $behaviorID);
             }
-
+            $message = 'CHANGES:';
             foreach($_POST["students"] as $student_ID)
             {
                 foreach($behaviors as $behavior_ID)
                 {
                     $classroomID = $_POST["classroomID"];
                     $title = $_POST["title"];
-                    $str="INSERT INTO STUDENT_BEHAVIOR (studentID, behaviorID) values ($student_ID,$behavior_ID)";
+                    $arr = array('studentID'=>$student_ID, 'behaviorID'=>$behavior_ID);
+                    $nConn->save("STUDENT_BEHAVIOR", $arr);
+                    $str="SELECT * FROM BEHAVIOR
+                        JOIN STUDENT_BEHAVIOR on BEHAVIOR.behaviorID=STUDENT_BEHAVIOR.behaviorID
+                        JOIN STUDENT on STUDENT.studentID=STUDENT_BEHAVIOR.studentID
+                        WHERE STUDENT_BEHAVIOR.studentID=$student_ID AND STUDENT_BEHAVIOR.behaviorID=$behavior_ID";
                     //echo $str;
-                    $nConn->getQuery($str);
-                    //testing dialog
+                    $results = $nConn->getQuery($str);
+                    $record = $results->fetch_assoc();
+                    $message .= '\nAdded behavior \"'.$record["title"].'\" to '.$record["firstName"].' '.$record["lastName"]; 
+                }
+            }
+            //testing dialog
                     echo'<script>';
                     echo'function myFunction() {
-                        alert("'.$str.'");
+                        alert("'.$message.'");
                     }
                     myFunction();
                     </script>';
-                }
-            }
-            echo "<form name='goToForm' method='post' action='behaviorSuccess.php'>";
+            echo "<form name='goToForm' method='post' action=''>";
             echo "<input type='hidden' name='title' value='$title'>";
             echo "<input type='hidden' name='classroomID' value='$classroomID'>";
             echo "</form>";
@@ -421,6 +422,11 @@
                 echo "<input type='hidden' name='title' value='$title'>";
                 echo "<tr><td class='btnCell'><div class='btnBehaviors'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
                 echo "<span>Submit</span></td></button></div></tr>";
+                echo "</form><br>";
+                echo "<form action='classroom.php' method='post'>";
+                echo "<input type='hidden' name='title' value='$title'>";
+                echo "<tr><td class='btnCell'><div class='btnBehaviors'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
+                echo "<span>Back to classroom</span></td></button></div></tr>";
                 echo "</form>";
             ?>
         </table>
