@@ -288,7 +288,7 @@
                 // Record Behaviors
                 echo "<br><form method='post' action='recordBehaviors.php'>";
                 echo "<input type='hidden' name='title' value='$title'>";
-                echo "<tr><td class='btnCell'><div class='btnBehaviors'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
+                echo "<tr><td class='btnCell' colspan='2'><div class='btnBehaviors'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
                 echo "<span>Record Behaviors</span></td></button></div></tr>";
                 echo "</form>";
                 
@@ -299,6 +299,18 @@
                 echo "<span>Edit Seating Chart</span></td></button></div></tr>";
                 echo "</form>";
             ?>
+            <form action="excelInput.php" method="post" enctype="multipart/form-data">
+                <tr>
+                    <td colspan="0.5">
+                        <input type="hidden" name="classroomID" value="<?php echo $classroomID; ?>">
+                        <input type="hidden" name="title" value="<?php echo $title; ?>">
+                        <input type="file" name="excelFile" id="excelFile">
+                    </td>
+                    <td class="btnCell" colspan="0.5">
+                        <input type="submit" class="submitBtn" name="submit" value="Add Class By Excel"/>
+                    </td>
+                </tr>
+            </form>
         </table>
         </div>
     </div>
