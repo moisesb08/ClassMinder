@@ -115,7 +115,7 @@
                 while($row = $records->fetch_array())
                 {
                     echo "<tr><td class='btnCell'><button type='submit' name='studentID' formmethod='post' class='button' value=" . $row['studentID'] . ">";
-                    echo $row["firstName"] . " " . $row["lastName"] . "<br>";
+                    echo $row["firstName"] . " " . $row["lastName"] . "<br>ID: ".$row['studentID'];
                     echo "</td></button></tr>";
                 }
                 echo "</form>";

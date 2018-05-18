@@ -170,7 +170,7 @@
                                     $lName = $row["lastName"];
                                     $studentID = $row['studentID'];
                                     echo '<option name="studentClass" value=\'{"fName":"' . $fName . '","lName":"' . $lName . '","studentID":"' . $studentID . '","classroomID":"' . $classroomID . '","title":"' . $title . '"}\'>';
-                                    echo $row["firstName"] . " " . $row["lastName"];
+                                    echo $row["firstName"] . " " . $row["lastName"]." [ID: ".$row['studentID']."]";
                                     echo "</option>";
                                 }
                                 ?>

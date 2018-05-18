@@ -170,6 +170,11 @@ class Connection
     return $row[0];
   }
 
+  function sanitize($value)
+  {
+    return mysqli_real_escape_string($this->_conn, $value);
+  }
+
 }
 
 ?>
