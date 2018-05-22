@@ -148,7 +148,8 @@
                 FROM STUDENT
                 JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
                 JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
-                WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID ORDER BY STUDENT_CLASS.y=-1, STUDENT_CLASS.y, STUDENT_CLASS.x";
+                WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID AND STUDENT.isActive = 1
+                ORDER BY STUDENT_CLASS.y=-1, STUDENT_CLASS.y, STUDENT_CLASS.x";
                 $records = $nConn->getQuery($nQuery);
                 echo "<form method='post' action='studentProfile.php'>";
                 echo '<table>';
@@ -310,6 +311,16 @@
                         <input type="submit" class="submitBtn" name="submit" value="Add Class By Excel"/>
                     </td>
                 </tr>
+            </form>
+            <form action="delete.php" method='post'>
+                    <td class="btnCell" colspan="1">
+                        <?php
+                            echo "<input type='hidden' name='classroomID' value='$classroomID'>";
+                        ?>
+                        <div>
+                            <input STYLE="background-color: red;" type="submit" id="cancelBtn" value="Delete Class"/>
+                        </div>
+                    </td>
             </form>
         </table>
         </div>

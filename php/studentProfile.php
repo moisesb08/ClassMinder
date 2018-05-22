@@ -200,6 +200,16 @@
                     echo "</td></tr>";
                 }
             ?>
+            <form action="delete.php" method='post'>
+                    <td class="btnCell" colspan="1">
+                        <?php
+                            echo "<input type='hidden' name='studentID' value='$studentID'>";
+                        ?>
+                        <div>
+                            <input STYLE="background-color: red;" type="submit" id="cancelBtn" value="Delete Student"/>
+                        </div>
+                    </td>
+            </form>
         </table>
         </div>
     </div>

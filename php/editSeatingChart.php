@@ -124,7 +124,7 @@
                 FROM STUDENT
                 JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
                 JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
-                WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID";
+                WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID AND STUDENT.isActive = 1";
                 $result = $nConn->getQuery($nQuery);
                 $row = $result->fetch_row();
                 $xMax = (int)$row[0];
