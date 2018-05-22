@@ -311,6 +311,16 @@
                     </td>
                 </tr>
             </form>
+            <form action="delete.php" method='post'>
+                    <td class="btnCell" colspan="1">
+                        <?php
+                            echo "<input type='hidden' name='classroomID' value='$classroomID'>";
+                        ?>
+                        <div>
+                            <input STYLE="background-color: red;" type="submit" id="cancelBtn" value="Delete Class"/>
+                        </div>
+                    </td>
+            </form>
         </table>
         </div>
     </div>
