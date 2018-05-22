@@ -109,7 +109,7 @@
                 FROM STUDENT
                 JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
                 JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
-                WHERE CLASSROOM.userID = $userID";
+                WHERE CLASSROOM.userID = $userID AND STUDENT.isActive = 1";
                 $records = $nConn->getQuery($nQuery);
                 echo "<form method='post' action='studentProfile.php'>";
                 while($row = $records->fetch_array())

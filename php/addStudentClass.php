@@ -160,7 +160,7 @@
                                 WHERE NOT EXISTS(
                                     SELECT * FROM STUDENT_CLASS sc2
                                     WHERE sc2.studentID = sc.studentID AND classroomID = $classroomID)
-                                AND s.studentID = sc.studentID AND c.classroomID = sc.classroomID AND c.userID = $userID;";
+                                AND s.studentID = sc.studentID AND c.classroomID = sc.classroomID AND c.userID = $userID AND s.isActive = 1;";
                                 echo $nQuery;
                                 $records = $nConn->getQuery($nQuery);
                                 $title = $_POST['title'];

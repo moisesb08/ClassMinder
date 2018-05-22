@@ -43,13 +43,7 @@
     {
         if($studentID == "")
             return;
-        $nQuery = "DELETE FROM STUDENT_CLASS WHERE studentID = $studentID";
-        $nConn->getQuery($nQuery);
-        $nQuery = "DELETE FROM STUDENT_BEHAVIOR WHERE studentID = $studentID";
-        $nConn->getQuery($nQuery);
-        $nQuery = "DELETE FROM STUDENT_PARENT WHERE studentID = $studentID";
-        $nConn->getQuery($nQuery);
-        $nQuery = "DELETE FROM STUDENT WHERE studentID = $studentID";
+        $nQuery = "UPDATE STUDENT SET isActive = 0 WHERE studentID = $studentID";
         $nConn->getQuery($nQuery);
     }
 
