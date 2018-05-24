@@ -200,6 +200,19 @@
                     echo "</td></tr>";
                 }
             ?>
+            <tr>
+            <form action="linkParent.php" method='post'>
+                    <td class="btnCell" colspan="1">
+                        <?php
+                            echo "<input type='hidden' name='studentID' value='$studentID'>";
+                        ?>
+                        <div>
+                            <input type="submit" class="submitBtn" name="submit" value="Link A Parent Account"/>
+                        </div>
+                    </td>
+            </form>
+            </tr>
+            <tr>
             <form action="delete.php" method='post'>
                     <td class="btnCell" colspan="1">
                         <?php
@@ -210,6 +223,7 @@
                         </div>
                     </td>
             </form>
+        </tr>
         </table>
         </div>
     </div>
