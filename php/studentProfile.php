@@ -7,8 +7,11 @@
     <title>ClassMinder - Student</title>
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/teacherHome.js"></script>
-    <link rel="stylesheet" href="../css/studentList.css">
-    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="../css/studentProfile.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="../js/createGraph.js"></script>
+    <script src="../js/Chart.PieceLabel.min.js"></script>
+    <link rel="stylesheet" href="../resources/ionicons-2.0.1/css/ionicons.min.css">
     <?php
         require_once('../common/connection.php');
         include_once('../model/User.php');
@@ -110,21 +113,48 @@
     </div>
     <div class="div1">
         <div class="midContainer">
-        <table>
+            <table>
+                <tr>
+                    <td>
+
+ <table>
             <tr>
-                <td><h1>
+                <td class="name">
                 <?php
+                    //get start and end dates
+                    $d=strtotime("3 WEEKS ago");
+                    $startDate = date("Y-m-d", $d);
+                    if(isset($_POST['weeks']))
+                        $weeks = $_POST['weeks'];
+                    else
+                        $weeks = 3;
+                    $days = 7*$weeks;
+                    $endDate = date( 'Y-m-d', strtotime( $startDate . ' +'.($days-1).' day' ) );
+
+                    //get student info
                     $studentID = $_POST["studentID"];
                     $student = new Student("","");
                     $student->loadByID($studentID);
+                    echo '<div class="personIcon"><i class="ion-person"></i></div>';
                     echo $student->getFirstName() . " " . $student->getLastName();
                 ?>
-                </h1></td>
+                </td>
             </tr>
+        </table>
+                    </td>
+                    <td colspan='2' class='rightCol'><div class="graph">
+                            <canvas id="chart1" height="140" width="140" style="margin: 15px 10px 10px 0"></canvas>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+<table>
             <?php
                 $userID = $_SESSION["userID"];
                 $studentID = $_POST["studentID"];
                 $title = $_POST["title"];
+                $classroomID = $_POST["classroomID"];
                 $nQuery =
                 "SELECT DISTINCT CLASSROOM.classroomID, CLASSROOM.title
                 FROM STUDENT
@@ -132,7 +162,7 @@
                 JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
                 WHERE CLASSROOM.userID = $userID AND CLASSROOM.title <> 'Unassigned Class' AND STUDENT_CLASS.studentID = $studentID;";
                 $records = $nConn->getQuery($nQuery);
-                echo "<tr><td><h1>Classes</h1></td></tr>";
+                echo "<tr><td class='heading'><h1>Classes</h1></td></tr>";
                 while($row = $records->fetch_array())
                 {
                     $title = $row['title'];
@@ -144,7 +174,57 @@
                     echo "</form>";
                 }
             ?>
-            <tr><td>
+            <tr><td class="heading">
+            <h1>Parents</h1>
+            </td></tr>
+            <?php
+                $userID = $_SESSION["userID"];
+                $studentID = $_POST["studentID"];
+                $nQuery =
+                "SELECT USER.firstName, USER.lastName, USER.email
+                FROM USER, STUDENT_PARENT
+                WHERE USER.userID = STUDENT_PARENT.parentID AND STUDENT_PARENT.studentID = $studentID";
+                $records = $nConn->getQuery($nQuery);
+                if(!empty($records))
+                {
+                    while($row = $records->fetch_array())
+                    {
+                        $name = $row['firstName'] . " " . $row['lastName'];
+                        $email = $row['email'];
+                        echo "<tr><td class='leftCol'>";
+                        echo $name;
+                        echo "</td></tr><tr><td class='leftCol'>";
+                        echo $email;
+                        echo "</td></tr>";
+                    }
+                }
+            ?>
+        </table>
+                    </td>
+                    <td class="rightCol">
+            <table>
+ <?php
+                echo "<form method='post' action='studentBehaviorAnalysis.php'>";
+                echo "<input type='hidden' name='startDate' value='$startDate'>";
+                echo "<input type='hidden' name='endDate' value='$endDate'>";
+                echo "<tr><td class='btnCell'><button type='submit' name='studentID' formmethod='post' class='button' value=" . $studentID . ">";
+                echo "See Full Analysis<br>";
+                echo "</td></button></tr>";
+                echo "</form>";
+                if(isset($_POST["classroomID"]))
+                {
+                    echo "<form method='post' action='studentBehaviorAnalysis.php'>";
+                    echo "<input type='hidden' name='startDate' value='$startDate'>";
+                    echo "<input type='hidden' name='endDate' value='$endDate'>";
+                    echo "<input type='hidden' name='classroomID' value='$classroomID'>";
+                    echo "<tr><td class='btnCell'><button type='submit' name='studentID' formmethod='post' class='button' value=" . $studentID . ">";
+                    echo "Student Class Analysis<br>";
+                    echo "</td></button></tr>";
+                    echo "</form>";
+                }
+            ?>
+            <tr>
+            <td class="heading rightCol">
             <h1>Most Recent Behavior</h1>
             </td></tr>
             <?php
@@ -160,49 +240,18 @@
                 while($row = $records->fetch_array())
                 {
                     $title = $row['title'];
-                    echo "<tr><td>";
+                    echo "<tr><td class='rightCol'>";
                     echo $title . "<br>";
                     echo "</td></tr>";
                 }
-            ?>
-            <tr><td>
-            <h1>Behavior Graph</h1>
-            </td></tr>
-            <form action="behaviorGraph.php" method='post'>
-                    <td class="btnCell" colspan="1">
-                        <?php
-                            $classroomID = 1;
-                            echo "<input type='hidden' name='studentID' value='$studentID'>";
-                            echo "<input type='hidden' name='classroomID' value='$classroomID'>";
-                        ?>
-                        <input type="submit" class="button" id="cancelBtn" value="Behavior Graph"/>
+            ?><table>
                     </td>
-            </form>
-            <tr><td>
-            <h1>Parents</h1>
-            </td></tr>
-            <?php
-                $userID = $_SESSION["userID"];
-                $studentID = $_POST["studentID"];
-                $nQuery =
-                "SELECT USER.firstName, USER.lastName, USER.email
-                FROM USER, STUDENT_PARENT
-                WHERE USER.userID = STUDENT_PARENT.parentID AND STUDENT_PARENT.studentID = $studentID";
-                $records = $nConn->getQuery($nQuery);
-                while($row = $records->fetch_array())
-                {
-                    $name = $row['firstName'] . " " . $row['lastName'];
-                    $email = $row['email'];
-                    echo "<tr><td>";
-                    echo $name;
-                    echo "</td></tr><tr><td>";
-                    echo $email;
-                    echo "</td></tr>";
-                }
-            ?>
-        </table>
+                </tr>
+            </table>
+       
         </div>
     </div>
 </div>
 </body>
+<script>beginSingleChart(<?php echo "'$studentID', '$classroomID', '$startDate', '$endDate'";?>);</script>
 </html>

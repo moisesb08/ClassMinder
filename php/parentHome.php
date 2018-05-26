@@ -22,7 +22,7 @@
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/parentHome.js"></script>
     <link rel="stylesheet" href="../css/teacherHome.css">
-    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="../resources/ionicons-2.0.1/css/ionicons.min.css">
 </head>
 <body>
     <div class="leftMenu">

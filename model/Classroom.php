@@ -44,7 +44,7 @@ class Classroom implements ModelInterface
         $this->title = $record['title'];
         $this->userID = $record['userID'];
         $this->schoolID = $record['schoolID'];
-        $nQuery = "SELECT STUDENT.studentID FROM STUDENT
+        /*$nQuery = "SELECT STUDENT.studentID FROM STUDENT
           JOIN STUDENT_CLASS ON STUDENT.studentID = STUDENT_CLASS.studentID
           JOIN CLASSROOM ON STUDENT_CLASS.classroomID = CLASSROOM.classroomID
           WHERE CLASSROOM.classroomID = $classroomID";
@@ -57,7 +57,7 @@ class Classroom implements ModelInterface
           $student->loadByID($row["userID"]);
           if($student->getUserID() != 0)
             $this->students[$student->getUserID()] = $student;
-        }
+        }*/
         return true;
     }
     //echo "No record for classroomID=".$classroomID."\n";
