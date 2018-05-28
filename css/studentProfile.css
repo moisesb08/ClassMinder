@@ -1,0 +1,416 @@
+@keyframes fadeIn {
+    0% {
+      /*transform: translateX(100%);*/
+      opacity:0;
+    }
+    100% {
+      /*transform: translateX(0);*/
+      opacity:.95;
+    }
+  }
+  @font-face{
+      font-family: 'trocchi';
+      src: url('../resources/fonts/Trocchi.otf');
+  }
+  body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: url("https://i.pinimg.com/originals/08/fa/02/08fa0275674fee050c47e3b1abd86b6b.jpg");
+  }
+  
+  .leftMenu ul {
+      margin:0;
+      padding: 0;
+  }
+  
+  .leftMenu ul li {
+      margin:0;
+      list-style: none;
+      width: 100%;
+      display: block;
+      text-align: left;
+  }
+  
+  .leftMenu a {
+      display: block;
+      line-height: 40px;
+      color: lightgray;
+      text-decoration: none;
+      font-size: 1rem;
+      padding-left: 40px; 
+  }
+  
+  .underlined {
+      position: relative;
+      color: #fff;
+      text-decoration: none;
+      font-size: 24px;
+      display:inline-block;
+  }
+  
+  .underlined:hover {
+      color: #fff;
+  }
+  
+  .logout .underlined:before {
+      background-color: red;
+  }
+  
+  .underlined:before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #fff;
+      visibility: hidden;
+      -webkit-transition: all 0.3s ease-in-out 0s;
+      -moz-transition: all 0.3s ease-in-out 0s;
+      -o-transition: all 0.3s ease-in-out 0s;
+      transition: all 0.3s ease-in-out 0s;
+      -webkit-transform: scaleX(0);
+      -moz-transform: scaleX(0);
+      -o-transform: scaleX(0);
+      transform: scaleX(0);
+  }
+  
+  .underlined:hover:before {
+      visibility: visible;
+      -webkit-transform: scaleX(1);
+      -moz-transform: scaleX(1);
+      -o-transform: scaleX(1);
+      transform: scaleX(1);
+  }
+  
+  .leftMenu a:hover {
+      color:white;
+      font-weight: 700;
+  }
+  
+  /*@media only screen and (max-width:768px)*/
+  .logo {
+      display: inline-block;
+      overflow: hidden;
+      display:none;
+      transition: 1s opacity;
+  }
+  
+  .logoMid img {
+      width: auto;
+      display: inline-block;
+  }
+  
+  .leftMenu {
+      float: left;
+      width: 100px;
+      height: 100vh;
+      background: #9271f4;
+      overflow: hidden;
+      color: #fff;
+      transition: 1s all;
+  }
+  
+  .topItem {
+      display: block;
+      text-align: center;
+      background: #7E57F2;
+      height: 100px;
+      font-size: 14px;
+      font-family: 'trocchi';
+  }
+  
+  menuitem {
+      display: inline;
+  }
+  
+  .leftMenu:hover {
+      width: 200px;
+  }
+  
+  .leftMenu:hover .topItem {
+      text-align: center;
+  }
+  
+  .leftMenu:hover .iconText {
+      display: inline-block;
+  }
+  
+  .iconText {
+      display: none;
+  }
+  
+  .menuItem {
+      white-space:nowrap;
+      overflow: hidden;
+  }
+  
+  .centerMenu {
+      width: 100%;
+      height: 100%;
+      align-items: center;
+        flex-direction:column;
+        align-items:center;
+      vertical-align: middle;
+  }
+  .centerMenu table {
+      color: #6d41f1;
+      text-align: center;
+      margin: 0 auto;
+      font-size: 2rem;
+  }
+  .item1 {
+      padding-top: 20vh;
+      font-size: 5rem;
+  }
+  .btnCell button {
+      width: 15rem;
+      height: 3rem;
+      font-size: 1rem;
+      color: white;
+      border-top-left-radius: 1rem;
+      border-bottom-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      border-bottom-right-radius: 1rem;
+      background-color: #6d41f1;
+      border: none;
+  }
+  .btnCell button:hover {
+      color: white;
+      background-color: #7E57F2;
+  }
+  .center {
+      background: gray;
+  }
+  
+  .div1{
+      height: 100vh;
+      display:grid;
+        flex-direction:column;
+        align-items:center;
+      justify-content:center;
+        opacity:.95;
+      overflow: auto;
+      /* This section calls the fadeIn animation we defined above */
+      animation: .7s ease-out 0s 1 fadeIn;
+  }
+  
+  .div1 td:not(.rightCol):not(.btnCell):not(.heading):not(.name){
+    padding:10px;
+    border: 1px solid #aaaaaa;
+    background-color:#a488f6;
+  }
+  .div1 td:not(.rightCol):not(.heading){
+    padding:10px;
+  }
+  .div1 input{
+      padding:.3rem;
+  }
+  
+  .div1 table{
+      border-collapse: collapse;
+      margin: auto;
+      vertical-align: middle;
+      align-items:center;
+  }
+  .div1 table table td:not(.rightCol){
+      width:30vw;
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+  }
+  
+  .midContainer {
+      padding: 2rem;
+      background-color: #7E57F2;
+      display:flex;
+        flex-direction:column;
+        align-items:center;
+      justify-content:center;
+      box-shadow: 5px 5px 15px black;
+  }
+  
+  .logout {
+      background: ghostwhite;
+      box-shadow: 0px 2px 0px #7E57F2;
+  }
+  
+  .logout a{
+      color: red;
+      font-weight: 100;
+  }
+  
+  .logout a:hover {
+      color:red;
+      font-weight: 100;
+  }
+
+  .submitBtn {
+    width: 10rem;
+    height: 3rem;
+    color: white;
+    background-color: limegreen;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    border: none;
+}
+
+  .submitBtn:hover {
+    color: white;
+    background-color: #2db92d;
+}
+
+  #cancelBtn {
+    width: 10rem;
+    height: 3rem;
+    font-size: 1rem;
+    color: white;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    background-color: #a488f6;
+    border: none;
+}
+  #cancelBtn:hover {
+    color: white;
+    background-color: #6d41f1;
+}
+
+.btnBehaviors button {
+    width: 10rem;
+    height: 3rem;
+    font-size: 1rem;
+    color: white;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    background-color: lightseagreen;
+    border: none;
+}
+.btnBehaviors button:hover {
+    color: white;
+    background-color: #53d2aa;
+}
+.modal {
+    position: absolute;
+    z-index: 2;
+    background: rgba(0, 0, 0, .6);
+    top:0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    display:none;
+}
+.modalBox {
+    background: white;
+    height: 50vh;
+    width: 50vw;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+.personIcon {
+  font-size: 4rem;
+}
+
+.name {
+  font-size: 1rem;
+  color:white;
+}
+
+h1{
+  font-size:1rem;
+}
+
+.graph{
+    width:25vw;
+    height:50%;
+    min-width:250px;
+    max-width:250px;
+    margin-top:-40px;
+    padding:40px;
+}
+.graph3{
+    width:100vw;
+    height:50%;
+    min-width:700px;
+    max-width:700px;
+    padding:40px;
+}
+
+.charts td{
+    padding:10px;
+    background:white;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    color: black;
+}
+
+.charts th{
+    padding: 10px;
+    font-size:1.2rem;
+}
+
+.right{
+    width:200px;
+    font-weight:700;
+    text-align:right;
+}
+
+.left{
+    text-align:left;
+}
+
+.charts h2{
+    padding: 0px;
+}
+
+.rightCol{
+  background-color:rgba(255,255,255);
+  color:#7E57F2;
+  text-align:center;
+  padding:10px;
+}
+
+.heading{
+  background-color:white;
+  color:#6d41f1;
+}
+
+.div1 td .heading{
+  background-color:white;
+  color:#6d41f1;
+  padding:0px;
+  border-top-left-radius: .3rem;
+  border-bottom-left-radius: .3rem;
+  border-top-right-radius: .3rem;
+  border-bottom-right-radius: .3rem;
+  text-transform: uppercase;
+}
+
+.div1 td .name{
+  background-color:white;
+  color:#6d41f1;
+  padding:10px;
+  border-top-left-radius: .3rem;
+  border-bottom-left-radius: .3rem;
+  border-top-right-radius: .3rem;
+  border-bottom-right-radius: .3rem;
+  text-transform: uppercase;
+}

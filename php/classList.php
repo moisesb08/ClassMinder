@@ -8,7 +8,7 @@
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/teacherHome.js"></script>
     <link rel="stylesheet" href="../css/studentList.css">
-    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="../resources/ionicons-2.0.1/css/ionicons.min.css">
     <?php
         require_once('../common/connection.php');
         include_once('../model/User.php');

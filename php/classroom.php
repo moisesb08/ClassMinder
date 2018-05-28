@@ -8,7 +8,7 @@
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/teacherHome.js"></script>
     <link rel="stylesheet" href="../css/editSeatingChart.css">
-    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="../resources/ionicons-2.0.1/css/ionicons.min.css">
     <?php
         require_once('../common/connection.php');
         include_once('../model/User.php');
@@ -171,6 +171,7 @@
                         {
                             if($x == $row["x"] && $y == $row["y"])
                             {
+                                echo "<input type='hidden' name='classroomID' value='$classroomID'>";
                                 echo '
                                 <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
                                     <button value="'.$row['studentID'].'" type="submit" name="studentID" formmethod="post" id="btn'.$count.'"><i class="ion-android-person"></i><br>
@@ -205,6 +206,7 @@
                             
                             if($x == $row["x"] && $y == $row["y"])
                             {
+                                echo "<input type='hidden' name='classroomID' value='$classroomID'>";
                                 echo '
                                 <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
                                     <button value="'.$row['studentID'].'" type="submit" name="studentID" formmethod="post" id="btn'.$count.'"><i class="ion-android-person"></i><br>
@@ -257,6 +259,7 @@
                         if($count <= count($notSeatedArr))
                         {
                             $currentRow = $notSeatedArr[$count-1];
+                            echo "<input type='hidden' name='classroomID' value='$classroomID'>";
                             echo '
                             <div id="div2Cell'.$count.'" data-value="-1:-1" class="divCellNone divCell2" ondrop="drop(event)" ondragover="allowDrop(event)">
                                 <button value="'.$currentRow['studentID'].'" type="submit" name="studentID" formmethod="post" id="btn'.$count.'"><i class="ion-android-person"></i><br>
@@ -300,6 +303,7 @@
                 echo "<span>Edit Seating Chart</span></td></button></div></tr>";
                 echo "</form>";
             ?>
+            <br>
             <form action="excelInput.php" method="post" enctype="multipart/form-data">
                 <tr>
                     <td colspan="0.5">

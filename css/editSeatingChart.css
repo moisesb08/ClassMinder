@@ -199,7 +199,7 @@
   }
   
   .div1 td{
-      padding:.5rem;
+      padding:.1rem;
   }
   .div1 input{
       padding:.3rem;
@@ -315,8 +315,12 @@
 .divCell {
     width: 100px;
     height: 100px;
-    padding: 10px;
+    padding: 5px;
     border: 1px dashed #aaaaaa;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
 }
 
 .divCell button {
@@ -373,7 +377,7 @@
 .divCellNone {
     width: 100px;
     height: 100px;
-    padding: 10px;
+    padding: 0px;
 }
 
 .divCellNone button {

@@ -8,7 +8,7 @@
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/recordBehaviors.js"></script>
     <link rel="stylesheet" href="../css/recordBehaviors.css">
-    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="../resources/ionicons-2.0.1/css/ionicons.min.css">
     <?php
         require_once('../common/connection.php');
         include_once('../model/User.php');
@@ -92,7 +92,7 @@
                 {
                     $classroomID = $_POST["classroomID"];
                     $title = $_POST["title"];
-                    $arr = array('studentID'=>$student_ID, 'behaviorID'=>$behavior_ID);
+                    $arr = array('studentID'=>$student_ID, 'behaviorID'=>$behavior_ID, 'classroomID'=>$classroomID);
                     $nConn->save("STUDENT_BEHAVIOR", $arr);
                     $str="SELECT * FROM BEHAVIOR
                         JOIN STUDENT_BEHAVIOR on BEHAVIOR.behaviorID=STUDENT_BEHAVIOR.behaviorID
