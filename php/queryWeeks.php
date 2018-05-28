@@ -24,12 +24,12 @@ function byWeek()
 	from
 	(
 	SELECT DATE_ADD('".$startDate."/', INTERVAL @rn:=@rn+1 DAY) as date from (select @rn:=-1)t, STUDENT_BEHAVIOR limit $days
-	) d left join (SELECT STUDENT_BEHAVIOR.recordedTime, BEHAVIOR.isPositive FROM STUDENT_BEHAVIOR 
+	) d left join (SELECT DISTINCT STUDENT_BEHAVIOR.recordedTime, BEHAVIOR.isPositive, STUDENT_BEHAVIOR.BehaviorID FROM STUDENT_BEHAVIOR 
 	JOIN STUDENT ON STUDENT.studentID=STUDENT_BEHAVIOR.studentID AND STUDENT.studentID = $studentID
 	JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
 	JOIN CLASSROOM ON CLASSROOM.classroomID=STUDENT_CLASS.classroomID";
 	if($classroomID!='')
-		$nQuery .= " AND CLASSROOM.classroomID = $classroomID";
+		$nQuery .= " AND STUDENT_BEHAVIOR.classroomID = $classroomID";
 	$nQuery .= " JOIN BEHAVIOR ON BEHAVIOR.behaviorID=STUDENT_BEHAVIOR.behaviorID) x
 	on date(recordedTime)=date
 	WHERE dayofweek(date) between 2 and 6
@@ -65,7 +65,7 @@ function byNoClass()
 	from
 	(
 	SELECT DATE_ADD('".$startDate."/', INTERVAL @rn:=@rn+1 DAY) as date from (select @rn:=-1)t, STUDENT_BEHAVIOR limit $days
-	) d left join (SELECT STUDENT_BEHAVIOR.recordedTime, BEHAVIOR.isPositive FROM STUDENT_BEHAVIOR 
+	) d left join (SELECT DISTINCT STUDENT_BEHAVIOR.recordedTime, BEHAVIOR.isPositive, STUDENT_BEHAVIOR.behaviorID FROM STUDENT_BEHAVIOR 
 	JOIN STUDENT ON STUDENT.studentID=STUDENT_BEHAVIOR.studentID AND STUDENT.studentID = $studentID
 	JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
 	JOIN CLASSROOM ON CLASSROOM.classroomID=STUDENT_CLASS.classroomID
@@ -98,32 +98,28 @@ function topBehaviors()
 	$studentID = $_POST['studentID'];
 	$classroomID = $_POST['classroomID'];
 	$isPositive = $_POST['isPositive'];
+	$endDate = date( 'Y-m-d', strtotime( $endDate . ' + 1 day' ) );
 	if($_POST['isPositive'] == 2)
 	{
-		$nQuery = "SELECT BEHAVIOR.title, STUDENT_BEHAVIOR.recordedTime, BEHAVIOR.isPositive, count(*) as total FROM STUDENT_BEHAVIOR 
-		JOIN STUDENT ON STUDENT.studentID=STUDENT_BEHAVIOR.studentID AND STUDENT.studentID = $studentID
-		JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
-		JOIN CLASSROOM ON CLASSROOM.classroomID=STUDENT_CLASS.classroomID";
+		$nQuery = "SELECT b.title, sb.studentID, sb.behaviorID, sb.recordedTime, b.isPositive, count(*) as total
+		FROM STUDENT_BEHAVIOR sb JOIN BEHAVIOR b ON sb.behaviorID=b.behaviorID
+		WHERE sb.recordedTime between '$startDate' and '$endDate'
+		AND sb.studentID = $studentID";
 		if($classroomID!='')
-			$nQuery .= " AND CLASSROOM.classroomID = $classroomID";
-		$nQuery .= " JOIN BEHAVIOR ON BEHAVIOR.behaviorID=STUDENT_BEHAVIOR.behaviorID
-		AND STUDENT_BEHAVIOR.recordedTime between '$startDate' and '$endDate'
-		group by BEHAVIOR.title
-		order by total desc, recordedTime desc limit 5;";
+			$nQuery .= " AND sb.classroomID = $classroomID";
+		$nQuery .= " GROUP BY b.title
+		ORDER BY total DESC, b.isPositive, recordedTime DESC limit 5;";
 	}
 	else
 	{
-		$nQuery = "SELECT BEHAVIOR.title, STUDENT_BEHAVIOR.recordedTime, BEHAVIOR.isPositive, count(*) as total FROM STUDENT_BEHAVIOR 
-		JOIN STUDENT ON STUDENT.studentID=STUDENT_BEHAVIOR.studentID AND STUDENT.studentID = $studentID
-		JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
-		JOIN CLASSROOM ON CLASSROOM.classroomID=STUDENT_CLASS.classroomID";
+		$nQuery = "SELECT b.title, sb.studentID, sb.behaviorID, sb.recordedTime, b.isPositive, count(*) as total
+		FROM STUDENT_BEHAVIOR sb JOIN BEHAVIOR b ON sb.behaviorID=b.behaviorID
+		WHERE sb.recordedTime between '$startDate' and '$endDate'
+		AND sb.studentID = $studentID AND isPositive=$isPositive";
 		if($classroomID!='')
-			$nQuery .= " AND CLASSROOM.classroomID = $classroomID";
-		$nQuery .= " JOIN BEHAVIOR ON BEHAVIOR.behaviorID=STUDENT_BEHAVIOR.behaviorID
-		AND isPositive=$isPositive
-		AND STUDENT_BEHAVIOR.recordedTime between '$startDate' and '$endDate'
-		group by BEHAVIOR.title
-		order by total desc, recordedTime desc limit 5;";
+			$nQuery .= " AND sb.classroomID = $classroomID";
+		$nQuery .= " GROUP BY b.title
+		ORDER BY total DESC, b.isPositive, recordedTime DESC limit 5;";
 	}
 	$records = $nConn->getQuery($nQuery);
 	$data = array();
@@ -158,7 +154,7 @@ function last2Weeks()
 	from
 	(
 	SELECT DATE_ADD('".$startDate."/', INTERVAL @rn:=@rn+1 DAY) as date from (select @rn:=-1)t, STUDENT_BEHAVIOR limit $days
-	) d left join (SELECT STUDENT_BEHAVIOR.recordedTime, BEHAVIOR.isPositive FROM STUDENT_BEHAVIOR 
+	) d left join (SELECT DISTINCT STUDENT_BEHAVIOR.recordedTime, BEHAVIOR.isPositive, STUDENT_BEHAVIOR.behaviorID FROM STUDENT_BEHAVIOR 
 	JOIN STUDENT ON STUDENT.studentID=STUDENT_BEHAVIOR.studentID AND STUDENT.studentID = $studentID
 	JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
 	JOIN CLASSROOM ON CLASSROOM.classroomID=STUDENT_CLASS.classroomID

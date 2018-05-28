@@ -19,7 +19,7 @@ $(document).ready(function(){
 });
 };*/
 
-function begin(startDate, endDate, studentID, classroomID, firstName, lastName)
+function begin(startDate, endDate, studentID, classroomID, firstName, lastName, classTitle)
 {
     if(studentID==null)
         studentID=1;
@@ -33,7 +33,7 @@ function begin(startDate, endDate, studentID, classroomID, firstName, lastName)
     const CHART6 = document.getElementById("chart6");
     const CHART7 = document.getElementById("chart7");
     getData(CHART1, 'line', 3, -3, studentID, classroomID, firstName, lastName, true, true, startDate, endDate);
-    createPieChart(CHART2, 3, studentID, classroomID, startDate, endDate);
+    createPieChart(CHART2, 3, studentID, classroomID, startDate, endDate, classTitle);
     getData(CHART3, 'bar', 3, -3, studentID, classroomID, firstName, lastName, true, true, startDate, endDate);
     commonBehaviorsChart(CHART4, 'both', 3, studentID, classroomID, startDate, endDate);
     commonBehaviorsChart(CHART5, 'positive', 3, studentID, classroomID, startDate, endDate);
@@ -42,13 +42,13 @@ function begin(startDate, endDate, studentID, classroomID, firstName, lastName)
     getData(CHART7, 'bar', 3, 0, studentID, classroomID, firstName, lastName, true, false, startDate, endDate);
 }
 
-function beginSingleChart(studentID, classroomID, startDate, endDate)
+function beginSingleChart(studentID, classroomID, startDate, endDate, classTitle)
 {
     const CHART1 = document.getElementById("chart1");
     if(classroomID=='')
         createPieChartNoClass(CHART1, studentID, startDate, endDate);
     else
-        createPieChart(CHART1, 3, studentID, classroomID, startDate, endDate);
+        createPieChart(CHART1, 3, studentID, classroomID, startDate, endDate, classTitle);
 }
 
 function createChart(constCHART, chartType, chartTitle, minVal, label1, label2, dataArr1, dataArr2, labelsArr, colorsArr,
@@ -130,7 +130,7 @@ function createLineChart(constCHART, chartType, chartTitle, minVal, maxVal, labe
                 data: dataArr1,
                 hoverBackgroundColor: hoverColorsArr,
                 backgroundColor: ['rgba(0,0,0,0)'],
-                borderColor: ['rgba(0,0,0,1)'],
+                borderColor: ['rgba(77,77,77,1)'],
                 pointBackgroundColor: [colorsArr],
                 borderWidth: borderW,
                 hoverBorderWidth:hoverBorderW,
@@ -240,7 +240,7 @@ function getData(constCHART, chartType, numOfWeeks, minVal, studentID, classroom
             if(constCHART==document.getElementById("chart1"))
             {
                 createLineChart(constCHART, chartType, "Overall Student Score", Math.min(-2, minValCombined)-1, Math.max(2, maxValCombined)+1, 'Behavior Score', dataArrCombined, labelsArr, bgColors,
-                hColors, colors, 1, 2, "points", isResponsive);
+                hColors, colors, 1, 2, "Behavior Points", isResponsive);
             }
             else if(constCHART==document.getElementById("chart3"))
             {
@@ -262,9 +262,9 @@ function getData(constCHART, chartType, numOfWeeks, minVal, studentID, classroom
     });
 }
 
-function createPieChart(constCHART, numOfWeeks, studentID, classroomID, startDate, endDate)
+function createPieChart(constCHART, numOfWeeks, studentID, classroomID, startDate, endDate, classTitle)
 {
-    console.log(studentID +" ~ "+ classroomID +" ~ "+ numOfWeeks +" ~ "+ startDate +" ~ "+ endDate);
+    //console.log(studentID +" ~ "+ classroomID +" ~ "+ numOfWeeks +" ~ "+ startDate +" ~ "+ endDate);
     $.ajax({
         url:"./queryWeeks.php",
         data: { 
@@ -324,7 +324,7 @@ function createPieChart(constCHART, numOfWeeks, studentID, classroomID, startDat
                     options: {
                         title: {
                             display: true,
-                            text: "Percentage Days with Types of Behavior",
+                            text: "Percentage Days with Types of Behavior ("+classTitle+")",
                             fontColor: "black",
                             fontSize: 18
                         },

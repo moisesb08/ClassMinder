@@ -132,5 +132,5 @@
         </table>
     </div>
 </body>
-<script>begin(<?php echo "'$startDate', '$endDate', '$studentID', '$classroomID', '$firstName', '$lastName'";?>);</script>
+<script>begin(<?php echo "'$startDate', '$endDate', '$studentID', '$classroomID', '$firstName', '$lastName', '$classTitle'";?>);</script>
 </html>

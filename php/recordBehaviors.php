@@ -92,7 +92,7 @@
                 {
                     $classroomID = $_POST["classroomID"];
                     $title = $_POST["title"];
-                    $arr = array('studentID'=>$student_ID, 'behaviorID'=>$behavior_ID);
+                    $arr = array('studentID'=>$student_ID, 'behaviorID'=>$behavior_ID, 'classroomID'=>$classroomID);
                     $nConn->save("STUDENT_BEHAVIOR", $arr);
                     $str="SELECT * FROM BEHAVIOR
                         JOIN STUDENT_BEHAVIOR on BEHAVIOR.behaviorID=STUDENT_BEHAVIOR.behaviorID

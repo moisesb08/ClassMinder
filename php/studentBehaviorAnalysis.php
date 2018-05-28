@@ -89,6 +89,7 @@
             {
                 //pass n weeks
                 $byWeeks = true;
+                
                 $d=strtotime("today");
                 $startDate = date("Y-m-d", $d);
                 if(isset($_POST['weeks']))
@@ -272,5 +273,5 @@
         </div>
     </div>
 </body>
-<script>begin(<?php echo "'$startDate', '$endDate', '$studentID', '$classroomID', '$firstName', '$lastName'";?>);</script>
+<script>begin(<?php echo "'$startDate', '$endDate', '$studentID', '$classroomID', '$firstName', '$lastName', '$classTitle'";?>);</script>
 </html>

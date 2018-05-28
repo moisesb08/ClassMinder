@@ -16,6 +16,7 @@
         require_once('../common/connection.php');
         include_once('../model/User.php');
         include_once('../model/Student.php');
+        include_once('../model/Classroom.php');
         // Initialize the session
         session_start();
         // If session variable is not set it will redirect to login page
@@ -122,7 +123,7 @@
                 <td class="name">
                 <?php
                     //get start and end dates
-                    $d=strtotime("3 WEEKS ago");
+                    $d=strtotime("20 DAYS ago");
                     $startDate = date("Y-m-d", $d);
                     if(isset($_POST['weeks']))
                         $weeks = $_POST['weeks'];
@@ -130,7 +131,7 @@
                         $weeks = 3;
                     $days = 7*$weeks;
                     $endDate = date( 'Y-m-d', strtotime( $startDate . ' +'.($days-1).' day' ) );
-
+                    
                     //get student info
                     $studentID = $_POST["studentID"];
                     $student = new Student("","");
@@ -244,6 +245,9 @@
                     echo $title . "<br>";
                     echo "</td></tr>";
                 }
+                $classroom = new Classroom("","","");
+                $classroom->loadByID($classroomID);
+                $classTitle = $classroom->getTitle();
             ?><table>
                     </td>
                 </tr>
@@ -253,5 +257,5 @@
     </div>
 </div>
 </body>
-<script>beginSingleChart(<?php echo "'$studentID', '$classroomID', '$startDate', '$endDate'";?>);</script>
+<script>beginSingleChart(<?php echo "'$studentID', '$classroomID', '$startDate', '$endDate', '$classTitle'";?>);</script>
 </html>
