@@ -324,7 +324,7 @@ function createPieChart(constCHART, numOfWeeks, studentID, classroomID, startDat
                     options: {
                         title: {
                             display: true,
-                            text: "Percentage Days with Types of Behavior ("+classTitle+")",
+                            text: "% Days with Types of Behavior ("+classTitle+")",
                             fontColor: "black",
                             fontSize: 18
                         },
@@ -399,7 +399,7 @@ function createPieChartNoClass(constCHART,studentID, startDate, endDate)
                     options: {
                         title: {
                             display: true,
-                            text: "Percentage Days with Types of Behavior",
+                            text: "% Days with Types of Behavior",
                             fontColor: "black",
                             fontSize: 18
                         },

@@ -245,9 +245,16 @@
                     echo $title . "<br>";
                     echo "</td></tr>";
                 }
-                $classroom = new Classroom("","","");
-                $classroom->loadByID($classroomID);
-                $classTitle = $classroom->getTitle();
+                if(isset($_POST["classroomID"]))
+                {
+                    $classroom = new Classroom("","","");
+                    $classroom->loadByID($classroomID);
+                    $classTitle = $classroom->getTitle();
+                }
+                else
+                {
+                    $classTitle = '';
+                }
             ?><table>
                     </td>
                 </tr>
