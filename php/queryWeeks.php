@@ -107,7 +107,7 @@ function topBehaviors()
 		AND sb.studentID = $studentID";
 		if($classroomID!='')
 			$nQuery .= " AND sb.classroomID = $classroomID";
-		$nQuery .= " GROUP BY b.title
+		$nQuery .= " GROUP BY b.title, sb.behaviorID, sb.recordedTime
 		ORDER BY total DESC, b.isPositive, recordedTime DESC limit 5;";
 	}
 	else
@@ -118,7 +118,7 @@ function topBehaviors()
 		AND sb.studentID = $studentID AND isPositive=$isPositive";
 		if($classroomID!='')
 			$nQuery .= " AND sb.classroomID = $classroomID";
-		$nQuery .= " GROUP BY b.title
+		$nQuery .= " GROUP BY b.title, sb.behaviorID, sb.recordedTime
 		ORDER BY total DESC, b.isPositive, recordedTime DESC limit 5;";
 	}
 	$records = $nConn->getQuery($nQuery);
