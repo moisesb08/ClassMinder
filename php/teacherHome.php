@@ -89,12 +89,18 @@
         <table>
         <tr><td class="item1" colspan='1'><span><i class="ion-person"></i></span></td></tr>
         <tr><td class="item5" colspan='1'><span>Welcome, <?php echo $firstName." ".$lastName;?>.</span></td></tr>
+        <?php
+            
+        ?>
         <tr><td class="btnCell" width="100px" colspan="1">
         <button type="button" class="button" onclick="window.location.href='studentList.php'">
         <span class="item5"><i class="ion-ios-people-outline"></i></span><span>&nbsp;Students</span></button></td></tr>
         <tr><td class="btnCell" colspan="1">
         <button type="button" class="button" onclick="window.location.href='classList.php'">
         <span class="item5"><i class="ion-university"></i></span><span>&nbsp;Classes</span></button></td></tr>
+        <tr><td class="btnCell" colspan="1">
+        <button type="button" class="button" onclick="window.location.href='meetings.php'">
+        <span class="item5"><i class="ion-android-calendar"></i></span><span>&nbsp;Meetings</span></button></td></tr>
         <tr><td class="btnCell" colspan="1">
         <button type="button" class="button" onclick="window.location.href='resources.php'">
         <span class="item5"><i class="ion-ios-bookmarks-outline"></i></span><span>&nbsp;Resources</span></button></td></tr>

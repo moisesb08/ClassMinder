@@ -38,6 +38,14 @@
         header("location: classList.php");
         exit;
     }
+    if(isset($_POST["meetingSlotID"]))
+    {
+        $meetingSlotID = $_POST["meetingSlotID"];
+        echo'<script> alert("meetingSlotID passed, going to delete function.") </script>';
+        deleteMeeting($meetingSlotID, $nConn);
+        header("location: meetings.php");
+        exit;
+    }
 
     function deleteStudent($studentID, $nConn)
     {
@@ -54,6 +62,26 @@
         $nQuery = "DELETE FROM STUDENT_CLASS WHERE classroomID = $classroomID";
         $nConn->getQuery($nQuery);
         $nQuery = "DELETE FROM CLASSROOM WHERE classroomID = $classroomID";
+        $nConn->getQuery($nQuery);
+    }
+
+    function deleteMeeting($meetingSlotID, $nConn)
+    {
+        if($meetingSlotID == "")
+            return;
+        $userID = $_SESSION['userID'];
+        $nQuery = "SELECT MEETING_SLOT.meetingTime
+        FROM MEETING_SLOT, MEETING
+        WHERE MEETING_SLOT.meetingTime=MEETING.meetingTime AND MEETING_SLOT.teacherID=$userID AND meetingSlotID=$meetingSlotID";
+        $records = $nConn->getQuery($nQuery);
+        $row = $records->fetch_array();
+        $meetingTime = $row['meetingTime'];
+        if ($meetingTime != "")
+        {
+            $nQuery = "DELETE FROM MEETING WHERE meetingTime = '$meetingTime' AND teacherID=$userID";
+            $nConn->getQuery($nQuery);
+        }
+        $nQuery = "DELETE FROM MEETING_SLOT WHERE meetingSlotID = $meetingSlotID AND teacherID=$userID";
         $nConn->getQuery($nQuery);
     }
 
