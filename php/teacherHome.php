@@ -1,17 +1,30 @@
 <?php
-    session_start();
-    if(isset($_SESSION['user']))
-    {
-        if($_SESSION['isTeacher'] == 0)
-            header("location: parentHome.php");
-        $firstName = $_SESSION['firstName'];
-        $lastName = $_SESSION['lastName'];
-    }
-    else
-    {
-        header("location: ../view/loginPage.php");
-    }
-?>
+        require_once('../common/connection.php');
+        include_once('../model/User.php');
+        // Initialize the session
+        session_start();
+        // If session variable is not set it will redirect to login page
+        if(!isset($_SESSION['user']) || empty($_SESSION['user'])){
+            header("location: ../view/loginPage.php");
+            exit;
+        }
+        $nConn = new Connection();
+        // Create a $user and store it for session 
+        if(!isset($_SESSION['user']) || empty($_SESSION['user']))
+        {
+            if($_SESSION['isTeacher'] == 0)
+                header("location: parentHome.php");
+            $email = $_SESSION['username'];
+            $nQuery = "SELECT userID FROM USER WHERE email='$email'";
+            $records = $nConn->getQuery($nQuery);
+            $row = $records->fetch_array();
+            $user = new User("", "", "", "", "");
+            $id = $row["userID"];
+            $user->loadByID($id);
+            $_SESSION['user'] = $user;
+            $_SESSION['userID'] = $_SESSION['user']->getUserID();
+        }
+        ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,9 +101,26 @@
         <div class="midContainer">
         <table>
         <tr><td class="item1" colspan='1'><span><i class="ion-person"></i></span></td></tr>
-        <tr><td class="item5" colspan='1'><span>Welcome, <?php echo $firstName." ".$lastName;?>.</span></td></tr>
+        <tr><td class="item5" colspan='1'><span>Welcome, <?php echo $_SESSION['firstName']." ".$_SESSION['lastName'];?>.</span></td></tr>
         <?php
-            
+            $userID = $_SESSION["userID"];
+            $nQuery =
+            "SELECT COUNT(DATE(meetingTime)) todayMeeting
+            FROM MEETING
+            WHERE teacherID = $userID AND DATE(meetingTime) = CURDATE()
+            GROUP BY DATE(meetingTime);";
+            $records = $nConn->getQuery($nQuery);
+            if (mysqli_num_rows($records)==0)
+                    echo "<tr><td class=\"item5\" colspan=\'1\'><span>You have no parent meetings today.</span></td></tr>";
+            else
+            {
+                $row = $records->fetch_array();
+                $todayMeeting = $row['todayMeeting'];
+                echo "<tr><td class=\"item5\" colspan=\'1\'><span>You have $todayMeeting meeting";
+                if ($todayMeeting > 1)
+                    echo "s";
+                echo " today.</span></td></tr>";
+            }
         ?>
         <tr><td class="btnCell" width="100px" colspan="1">
         <button type="button" class="button" onclick="window.location.href='studentList.php'">
