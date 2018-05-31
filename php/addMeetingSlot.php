@@ -105,11 +105,19 @@
                 $formatDate = $formatDate->add($weeklyInterval);
                 $meetingTime = $formatDate->format('Y-m-d H:i:s');
             }
+            $success = true;
         }
         
     ?>
 </head>
 <body>
+<?php
+        if($success)
+        {   
+            header("location:./meetings.php");
+            die;
+        }  
+    ?>
 <div class="div1">
         <div class="midContainer">
     <table>
@@ -176,7 +184,7 @@
                     <input type="submit" class="submitBtn" value="Create Meeting Slot"/>
                 </td>
                 <td class="btnCell" colspan="1">
-                    <button type="button" class="button" onclick="window.location.href='teacherHome.php'">Cancel</button>
+                    <button type="button" class="button" onclick="window.location.href='meetings.php'">Cancel</button>
                 </td>
             </tr>
             </form>
