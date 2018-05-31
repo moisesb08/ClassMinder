@@ -2,8 +2,6 @@
     session_start();
     if(isset($_SESSION['user']))
     {
-        if($_SESSION['isTeacher'] == 0)
-            header("location: parentHome.php");
         $firstName = $_SESSION['firstName'];
         $lastName = $_SESSION['lastName'];
     }
