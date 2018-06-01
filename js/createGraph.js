@@ -33,7 +33,11 @@ function begin(startDate, endDate, studentID, classroomID, firstName, lastName, 
     const CHART6 = document.getElementById("chart6");
     const CHART7 = document.getElementById("chart7");
     getData(CHART1, 'line', 3, -3, studentID, classroomID, firstName, lastName, true, true, startDate, endDate);
-    createPieChart(CHART2, 3, studentID, classroomID, startDate, endDate, classTitle);
+    console.log("~~"+classTitle);
+    if(classTitle=='')
+        createPieChartNoClass(CHART2, studentID, startDate, endDate);
+    else
+        createPieChart(CHART2, 3, studentID, classroomID, startDate, endDate, classTitle);
     getData(CHART3, 'bar', 3, -3, studentID, classroomID, firstName, lastName, true, true, startDate, endDate);
     commonBehaviorsChart(CHART4, 'both', 3, studentID, classroomID, startDate, endDate);
     commonBehaviorsChart(CHART5, 'positive', 3, studentID, classroomID, startDate, endDate);

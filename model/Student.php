@@ -12,19 +12,21 @@ class Student implements ModelInterface
   private $studentID;
   private $firstName;
   private $lastName;
+  private $sID;
 
-  function __construct($firstName, $lastName)
+  function __construct($firstName, $lastName, $sID)
   {
     $this->studentID = "";
     $this->firstName = $firstName;
     $this->lastName = $lastName;
+    $this->sID = $sID;
   }
 
   public function save()
   {
     //echo "inside Student:save\n";
     $nConn = new Connection();
-    $arr = array('firstName'=>$this->firstName, 'lastName'=>$this->lastName);
+    $arr = array('firstName'=>$this->firstName, 'lastName'=>$this->lastName, 'sID'=>$this->sID);
     $this->studentID = $nConn->save(Student::TABLE_NAME, $arr);
     return $this->studentID;
   }
@@ -39,6 +41,7 @@ class Student implements ModelInterface
         $this->studentID = $record['studentID'];
         $this->firstName = $record['firstName'];
         $this->lastName = $record['lastName'];
+        $this->sID = $record['sID'];
         return true;
     }
     //echo "No record for studentID=".$studentID."\n";
@@ -57,7 +60,7 @@ class Student implements ModelInterface
   {
     //echo "inside Student:update\n";
     $nConn = new Connection();
-    $arr = array('firstName'=>$this->firstName, 'lastName'=>$this->lastName);
+    $arr = array('firstName'=>$this->firstName, 'lastName'=>$this->lastName,  'sID'=>$this->sID);
     $nConn->update(Student::TABLE_NAME, $this->studentID, $arr);
   }
 
@@ -81,6 +84,10 @@ class Student implements ModelInterface
   public function getLastName()
   {
     return $this->lastName;
+  }
+  public function sID()
+  {
+    return $this->sID;
   }
 
 }
