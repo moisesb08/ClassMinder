@@ -13,6 +13,7 @@
         require_once('../common/connection.php');
         include_once('../model/User.php');
         include_once('../model/Student.php');
+        include_once('sidebar.php');
         // Initialize the session
         session_start();
         // If session variable is not set it will redirect to login page
@@ -21,81 +22,17 @@
             exit;
         }
         $nConn = new Connection();
-        // Create a $user and store it for session 
-        if(!isset($_SESSION['user']) || empty($_SESSION['user']))
-        {
-            $email = $_SESSION['username'];
-            $nQuery = "SELECT userID FROM USER WHERE email='$email'";
-            $records = $nConn->getQuery($nQuery);
-            $row = $records->fetch_array();
-            $user = new User("", "", "", "", "");
-            $id = $row["userID"];
-            $user->loadByID($id);
-            $_SESSION['user'] = $user;
-            $_SESSION['userID'] = $_SESSION['user']->getUserID();
-        }
+        if($_SESSION['isTeacher'] == 0)
+            header("location: studentListParent.php");
         ?>
 </head>
 <body>
-    <div class="leftMenu">
-        <ul>
-            
-            <li><span class="topItem">
-                <br>
-                <div class="logoMid"><img src="../resources/images/templogoWhiteTransparent-box.png" height="30px"></div>
-                <span>ClassMinder</span>
-                </span>
-            </li>
-            <li class="logout"><span class="menuItem">
-                <a href="logout.php" class="underlined">
-                    <span><i class="ion-log-out"></i></span>
-                    <span class="iconText">Logout</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="teacherHome.php" class="underlined">
-                    <span><i class="ion-ios-home-outline"></i></span>
-                    <span class="iconText">Home</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="studentList.php" class="underlined">
-                    <span><i class="ion-ios-people"></i></span>
-                    <span class="iconText">Students</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="classList.php" class="underlined">
-                    <span><i class="ion-university"></i></span>
-                    <span class="iconText">Classes</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="resources.php" class="underlined">
-                    <span><i class="ion-ios-bookmarks-outline"></i></span>
-                    <span class="iconText">Resources</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="preferences.php" class="underlined">
-                    <span><i class="ion-ios-settings"></i></span>
-                    <span class="iconText">Preferences</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="settings.php" class="underlined">
-                    <span><i class="ion-ios-gear-outline"></i></span>
-                    <span class="iconText">Account Settings</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="help.php" class="underlined">
-                    <span><i class="ion-help"></i></span>
-                    <span class="iconText">Help</span>
-                </a>
-                </span></li>
-        </ul>
-    </div>
+    <?php
+        if($_SESSION["isTeacher"])
+            echo teacherSidebar();
+        else
+            echo parentSidebar();
+    ?>
     <div class="div1">
         <div class="midContainer">
         <table>

@@ -1,11 +1,6 @@
 <?php
     session_start();
-    if(isset($_SESSION['user']))
-    {
-        if($_SESSION['isTeacher'] == 0)
-            header("location: parentHome.php");
-    }
-    else
+    if(!isset($_SESSION['user']))
     {
         header("location: ../view/loginPage.php");
     }

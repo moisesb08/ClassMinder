@@ -5,6 +5,7 @@
     <?php
         require_once('../common/connection.php');
         include_once('../model/User.php');
+        include_once('sidebar.php');
 
         // Initialize the session
         session_start();

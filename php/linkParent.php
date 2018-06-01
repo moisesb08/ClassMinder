@@ -27,6 +27,7 @@
     <?php
         require_once('../common/connection.php');
         include_once('../model/User.php');
+        include_once('sidebar.php');
         
         // Import PHPMailer classes into the global namespace
         // These must be at the top of your script, not inside a function
@@ -132,65 +133,12 @@
             die;
         }*/
     ?>
-    <div class="leftMenu">
-        <ul>
-            
-            <li><span class="topItem">
-                <br>
-                <div class="logoMid"><img src="../resources/images/templogoWhiteTransparent-box.png" height="30px"></div>
-                <span>ClassMinder</span>
-                </span>
-            </li>
-            <li class="logout"><span class="menuItem">
-                <a href="logout.php" class="underlined">
-                    <span><i class="ion-log-out"></i></span>
-                    <span class="iconText">Logout</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="teacherHome.php" class="underlined">
-                    <span><i class="ion-ios-home-outline"></i></span>
-                    <span class="iconText">Home</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="studentList.php" class="underlined">
-                    <span><i class="ion-ios-people"></i></span>
-                    <span class="iconText">Students</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="classList.php" class="underlined">
-                    <span><i class="ion-university"></i></span>
-                    <span class="iconText">Classes</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="resources.php" class="underlined">
-                    <span><i class="ion-ios-bookmarks-outline"></i></span>
-                    <span class="iconText">Resources</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="preferences.php" class="underlined">
-                    <span><i class="ion-ios-settings"></i></span>
-                    <span class="iconText">Preferences</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="settings.php" class="underlined">
-                    <span><i class="ion-ios-gear-outline"></i></span>
-                    <span class="iconText">Account Settings</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="help.php" class="underlined">
-                    <span><i class="ion-help"></i></span>
-                    <span class="iconText">Help</span>
-                </a>
-                </span></li>
-        </ul>
-    </div>
+    <?php
+        if($_SESSION["isTeacher"])
+            echo teacherSidebar();
+        else
+            echo parentSidebar();
+    ?>
     <div class="div1">
         <div class="midContainer">
         <table>
