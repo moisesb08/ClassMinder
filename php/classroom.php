@@ -288,6 +288,11 @@
                 echo "<tr><td class='btnCell'><div class='btnPlus'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
                 echo "<span><i class=\"ion-plus-round\"></i></span></div></td></button></tr>";
                 echo "</form>";
+                echo "<br><form method='post' action='removeStudentClass.php'>";
+                echo "<input type='hidden' name='title' value='$title'>";
+                echo "<tr><td class='btnCell'><div class='btnPlus'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
+                echo "<span><i class=\"ion-android-remove\"></i></span></div></td></button></tr>";
+                echo "</form>";
 
                 // Record Behaviors
                 echo "<br><form method='post' action='recordBehaviors.php'>";
