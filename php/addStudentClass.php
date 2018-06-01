@@ -101,7 +101,7 @@
                                 $userID = $_SESSION["userID"];
                                 $classroomID = $_POST['classroomID'];
                                 $nQuery =
-                                "SELECT DISTINCT firstName, lastName, sc.studentID
+                                "SELECT DISTINCT firstName, lastName, sc.studentID, sID
                                 FROM STUDENT_CLASS sc, STUDENT s, CLASSROOM c
                                 WHERE NOT EXISTS(
                                     SELECT * FROM STUDENT_CLASS sc2
@@ -116,7 +116,7 @@
                                     $lName = $row["lastName"];
                                     $studentID = $row['studentID'];
                                     echo '<option name="studentClass" value=\'{"fName":"' . $fName . '","lName":"' . $lName . '","studentID":"' . $studentID . '","classroomID":"' . $classroomID . '","title":"' . $title . '"}\'>';
-                                    echo $row["firstName"] . " " . $row["lastName"]." [ID: ".$row['studentID']."]";
+                                    echo $row["firstName"] . " " . $row["lastName"]." [ID: ".$row['sID']."]";
                                     echo "</option>";
                                 }
                                 ?>

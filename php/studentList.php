@@ -42,7 +42,7 @@
             <?php
                 $userID = $_SESSION["userID"];
                 $nQuery =
-                "SELECT DISTINCT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID
+                "SELECT DISTINCT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT.sID
                 FROM STUDENT
                 JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
                 JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
@@ -51,8 +51,10 @@
                 echo "<form method='post' action='studentProfile.php'>";
                 while($row = $records->fetch_array())
                 {
+                    $sID = $row["sID"];
+                    echo "<input type='hidden' name='sID' value='$sID'>";
                     echo "<tr><td class='btnCell'><button type='submit' name='studentID' formmethod='post' class='button' value=" . $row['studentID'] . ">";
-                    echo $row["firstName"] . " " . $row["lastName"] . "<br>ID: ".$row['studentID'];
+                    echo $row["firstName"] . " " . $row["lastName"] . "<br>ID: ".$row['sID'];
                     echo "</td></button></tr>";
                 }
                 echo "</form>";

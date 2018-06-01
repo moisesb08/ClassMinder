@@ -82,7 +82,7 @@
                     
                     //get student info
                     $studentID = $_POST["studentID"];
-                    $student = new Student("","");
+                    $student = new Student("","","");
                     $student->loadByID($studentID);
                     echo '<div class="personIcon"><i class="ion-person"></i></div>';
                     echo $student->getFirstName() . " " . $student->getLastName();

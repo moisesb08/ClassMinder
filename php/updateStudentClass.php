@@ -1,5 +1,8 @@
 <?php
     require_once('../common/connection.php');
+    // If user is a parent he/she will be redirected to the parent homepage
+    if($_SESSION['isTeacher'] == 0)
+        header("location: parentHome.php");
     if(isset($_POST["arr"]))
     {
         $nConn = new Connection();

@@ -54,7 +54,7 @@
                 $studentID = $_POST["studentID"];
                 $classroomID = '';
                 $classTitle = '';
-                $student = new Student("","");
+                $student = new Student("","","");
                 $student->loadByID($studentID);
                 $firstName = ucwords($student->getFirstName());
                 $lastName = ucwords($student->getLastName());
@@ -73,7 +73,7 @@
                 $classroom = new Classroom("","","");
                 $classroom->loadByID($classroomID);
                 $classTitle = ucwords($classroom->getTitle());
-                $student = new Student("","");
+                $student = new Student("","","");
                 $student->loadByID($studentID);
                 $firstName = ucwords($student->getFirstName());
                 $lastName = ucwords($student->getLastName());
@@ -99,7 +99,7 @@
                 $classroom = new Classroom("","","");
                 $classroom->loadByID($classroomID);
                 $classTitle = ucwords($classroom->getTitle());
-                $student = new Student("","");
+                $student = new Student("","","");
                 $student->loadByID($studentID);
                 $firstName = ucwords($student->getFirstName());
                 $lastName = ucwords($student->getLastName());

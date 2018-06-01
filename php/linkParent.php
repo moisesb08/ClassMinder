@@ -43,6 +43,9 @@
             header("location: ../view/loginPage.php");
             exit;
         }
+        // If user is a parent he/she will be redirected to the parent homepage
+        if($_SESSION['isTeacher'] == 0)
+            header("location: parentHome.php");
         $nConn = new Connection();
         // Create a $user and store it for session 
         if(!isset($_SESSION['user']) || empty($_SESSION['user']))
@@ -117,8 +120,10 @@
                     $email = $_POST["email"];
                     $nQuery = "INSERT INTO STUDENT_PARENT VALUES($studentID, $parentID)";
                     $parentLinked = $nConn->getQuery($nQuery);
-                    if(!is_null($parentLinked))
+                    if(!is_null($parentLinked) && $parentLinked!=0)
                         $success = true;
+                    else
+                        echo "<script>alert('This parent is already linked to student.');</script>";
                 }
             }
         }
@@ -127,11 +132,11 @@
 </head>
 <body>
     <?php
-        /*if($success)
+        if($success)
         {   
             header("location:./studentProfile.php");
             die;
-        }*/
+        }
     ?>
     <?php
         if($_SESSION["isTeacher"])

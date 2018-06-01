@@ -45,7 +45,11 @@
                     $arr = array('schoolID'=>'0', 'userID'=>$userID, 'title'=>'Unassigned Class');
                     $classroomSelected = $nConn->getRecordByArr('CLASSROOM', $arr);
                     $classroomID = $classroomSelected['classroomID'];
-                    $student = new Student($_POST["fName"], $_POST["lName"]);
+                    if(isset($_POST['sID']))
+                        $sID = $_POST['sID'];
+                    else 
+                        $sID = "";
+                    $student = new Student($_POST["fName"], $_POST["lName"], $sID);
                     $studentCreated = $student->save()!=0;
                     $studentID = $student->getStudentID();
                 }
@@ -122,6 +126,14 @@
                     </td>
                     <td>
                         <input type="text" size="20" name="lName" value="<?php if (isset($_POST['lName'])) echo $_POST['lName']?>" required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="leftAlign">
+                        <label for "sID"> Student ID: </label>
+                    </td>
+                    <td>
+                        <input type="number" min="0" name="sID" value="<?php if (isset($_POST['sID'])) echo $_POST['sID'];?>"/>
                     </td>
                 </tr>
                 <tr>
