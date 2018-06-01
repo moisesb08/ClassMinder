@@ -33,7 +33,7 @@ function begin(startDate, endDate, studentID, classroomID, firstName, lastName, 
     const CHART6 = document.getElementById("chart6");
     const CHART7 = document.getElementById("chart7");
     getData(CHART1, 'line', 3, -3, studentID, classroomID, firstName, lastName, true, true, startDate, endDate);
-    console.log("~~"+classTitle);
+    //console.log("~~"+classTitle);
     if(classTitle=='')
         createPieChartNoClass(CHART2, studentID, startDate, endDate);
     else
@@ -204,7 +204,7 @@ function getData(constCHART, chartType, numOfWeeks, minVal, studentID, classroom
         method:"POST",
         success: function(data){
             let allData = jQuery.parseJSON(data);
-            console.log(allData);
+            //console.log(allData);
             let dataArr1 = [];
             let dataArr2 = [];
             let dataArrCombined = [];
@@ -281,7 +281,7 @@ function createPieChart(constCHART, numOfWeeks, studentID, classroomID, startDat
         method:"POST",
         success: function(data){
             let allData = jQuery.parseJSON(data);
-            console.log(allData);
+            //console.log(allData);
             let totalDays = 0;
             let totalPos = 0;
             let totalNeg = 0;
@@ -356,7 +356,7 @@ function createPieChartNoClass(constCHART,studentID, startDate, endDate)
         method:"POST",
         success: function(data){
             let allData = jQuery.parseJSON(data);
-            console.log(allData);
+            //console.log(allData);
             let totalDays = 0;
             let totalPos = 0;
             let totalNeg = 0;
@@ -498,7 +498,7 @@ function commonBehaviorsChart(constCHART, behaviorType, numOfWeeks, studentID, c
         method:"POST",
         success: function(data){
             let allData = jQuery.parseJSON(data);
-            console.log(allData);
+            //console.log(allData);
             let dataArr1 = [];
             let labelsArr = [];
             let minVal = 0;
