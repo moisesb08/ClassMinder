@@ -46,9 +46,14 @@
                     $classroomSelected = $nConn->getRecordByArr('CLASSROOM', $arr);
                     $classroomID = $classroomSelected['classroomID'];
                     if(isset($_POST['sID']))
-                        $sID = $_POST['sID'];
+                    {
+                        if($_POST['sID']!='')
+                            $sID = $_POST['sID'];
+                        else
+                            $sID = "0";
+                    }
                     else 
-                        $sID = "";
+                        $sID = "0";
                     $student = new Student($_POST["fName"], $_POST["lName"], $sID);
                     $studentCreated = $student->save()!=0;
                     $studentID = $student->getStudentID();
