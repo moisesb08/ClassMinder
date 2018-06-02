@@ -22,8 +22,9 @@
             exit;
         }
         $nConn = new Connection();
-        if($_SESSION['isTeacher'] == 0)
-            header("location: studentListParent.php");
+        
+        if($_SESSION['isTeacher'] == 1)
+            header("location: studentList.php");
         ?>
 </head>
 <body>
@@ -42,24 +43,20 @@
             <?php
                 $userID = $_SESSION["userID"];
                 $nQuery =
-                "SELECT DISTINCT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT.sID
+                "SELECT DISTINCT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID
                 FROM STUDENT
-                JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
-                JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
-                WHERE CLASSROOM.userID = $userID AND STUDENT.isActive = 1";
+                JOIN STUDENT_PARENT ON STUDENT_PARENT.studentID = STUDENT.studentID
+                WHERE STUDENT_PARENT.parentID = $userID";
                 $records = $nConn->getQuery($nQuery);
                 echo "<form method='post' action='studentProfile.php'>";
                 while($row = $records->fetch_array())
                 {
-                    $sID = $row["sID"];
-                    echo "<input type='hidden' name='sID' value='$sID'>";
                     echo "<tr><td class='btnCell'><button type='submit' name='studentID' formmethod='post' class='button' value=" . $row['studentID'] . ">";
-                    echo $row["firstName"] . " " . $row["lastName"] . "<br>ID: ".$row['sID'];
+                    echo $row["firstName"] . " " . $row["lastName"] . "<br>ID: ".$row['studentID'];
                     echo "</td></button></tr>";
                 }
                 echo "</form>";
             ?>
-            <tr><td colspan='1' class='btnCell' style='<?php if($_SESSION['isTeacher'] == 0) echo "display:none";?>'><button onclick="window.location.href='./addStudent.php'"><span><i class="ion-plus-round"></i></span></button></td></tr>
         </table>
         </div>
     </div>

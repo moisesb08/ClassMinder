@@ -198,9 +198,8 @@
       animation: .7s ease-out 0s 1 fadeIn;
   }
   
-  .div1 td:not(.rightCol):not(.btnCell):not(.heading):not(.name){
+  .div1 th, td:not(.rightCol):not(.btnCell):not(.heading):not(.name){
     padding:10px;
-    border: 1px solid #aaaaaa;
     background-color:#a488f6;
   }
   .div1 td:not(.rightCol):not(.heading){
@@ -224,8 +223,8 @@
   }
   
   .midContainer {
-      padding: 2rem;
-      background-color: #7E57F2;
+      padding: 0rem;
+      background-color: ghostwhite;
       display:flex;
         flex-direction:column;
         align-items:center;
