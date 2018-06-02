@@ -35,19 +35,19 @@
         <table>
         <tr><td><h1>Behavior Resources</h1></td></tr>
         <tr><td class="btnCell" width="100px" colspan="1">
-        <button type="button" class="button" onclick="window.location.href='https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4432234/'">
+        <button type="button" class="button" onclick="window.open('https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4432234/','_blank')">
         <span>NCBI - Good Behavior</span></button></td></tr>
         <tr><td class="btnCell" colspan="1">
-        <button type="button" class="button" onclick="window.location.href='https://sc.edu/about/offices_and_divisions/cte/teaching_resources/goodteaching/handling_classroom_distractions/index.php'">
+        <button type="button" class="button" onclick="window.open('https://sc.edu/about/offices_and_divisions/cte/teaching_resources/goodteaching/handling_classroom_distractions/index.php', '_blank')">
         <span>USC - Classroom Distractions</span></button></td></tr>
         <tr><td class="btnCell" colspan="1">
-        <button type="button" class="button" onclick="window.location.href='https://www.cmu.edu/teaching/designteach/teach/problemstudent.html'">
+        <button type="button" class="button" onclick="window.open('https://www.cmu.edu/teaching/designteach/teach/problemstudent.html', '_blank')">
         <span>CMU - Addressing Problems</span></button></td></tr>
         <tr><td class="btnCell" colspan="1">
-        <button type="button" class="button" onclick="window.location.href='https://iris.peabody.vanderbilt.edu/module/beh1/cresource/q1/p01/'">
+        <button type="button" class="button" onclick="window.open('https://iris.peabody.vanderbilt.edu/module/beh1/cresource/q1/p01/', '_blank')">
         <span>PC - Academic Impact</span></button></td></tr>
         <tr><td class="btnCell" colspan="1">
-        <button type="button" class="button" onclick="window.location.href='https://www.cte.cornell.edu/teaching-ideas/building-inclusive-classrooms/connecting-with-your-students.html'">
+        <button type="button" class="button" onclick="window.open('https://www.cte.cornell.edu/teaching-ideas/building-inclusive-classrooms/connecting-with-your-students.html', '_blank')">
         <span>CU - Student Connections</span></button></td></tr>
         </table>
         </div>
