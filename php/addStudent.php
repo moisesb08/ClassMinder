@@ -150,8 +150,13 @@
                     </td>
                 </tr>
                 </form>
+            </table>
+            <table>
                 <form action="excelInput.php" method="post" enctype="multipart/form-data">
                 <tr>
+                    <td><a href="../resources/files/roster.csv" download>
+                        <button type="button">Download Roster Template</button>
+                    </a></td>
                     <td colspan="0.5">
                         <input type="file" name="excelFile" id="excelFile">
                     </td>

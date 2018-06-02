@@ -262,6 +262,9 @@
             <br>
             <form action="excelInput.php" method="post" enctype="multipart/form-data">
                 <tr>
+                    <td><a href="../resources/files/roster.csv" download>
+                        <button type="button">Download Roster Template</button>
+                    </a></td>
                     <td colspan="0.5">
                         <input type="hidden" name="classroomID" value="<?php echo $classroomID; ?>">
                         <input type="hidden" name="title" value="<?php echo $title; ?>">

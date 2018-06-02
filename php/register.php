@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-    <title>Register</title>
+    <title>ClassMinder - Register</title>
     <link href="../css/register.css" text="text/css" rel="stylesheet"/>
     <?php
         include("../model/User.php");
