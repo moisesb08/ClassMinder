@@ -19,7 +19,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ClassMinder - Create Class</title>
+    <title>ClassMinder - Link Parent</title>
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/teacherHome.js"></script>
     <link rel="stylesheet" href="../css/studentList.css">
@@ -27,6 +27,7 @@
     <?php
         require_once('../common/connection.php');
         include_once('../model/User.php');
+        include_once('sidebar.php');
         
         // Import PHPMailer classes into the global namespace
         // These must be at the top of your script, not inside a function
@@ -42,6 +43,9 @@
             header("location: ../view/loginPage.php");
             exit;
         }
+        // If user is a parent he/she will be redirected to the parent homepage
+        if($_SESSION['isTeacher'] == 0)
+            header("location: parentHome.php");
         $nConn = new Connection();
         // Create a $user and store it for session 
         if(!isset($_SESSION['user']) || empty($_SESSION['user']))
@@ -82,8 +86,8 @@
                             $mail->isSMTP();                                      // Set mailer to use SMTP
                             $mail->Host = 'smtp.sendgrid.net';  // Specify main and backup SMTP servers
                             $mail->SMTPAuth = true;                               // Enable SMTP authentication
-                            $mail->Username = 'username';                 // Set SMTP username
-                            $mail->Password = 'password';                           // set SMTP password
+                            $mail->Username = 'USERNAME';                 // Set SMTP username
+                            $mail->Password = 'PASSWORD';                           // set SMTP password
                             $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
                             $mail->Port = 587;                                    // TCP port to connect to
                         
@@ -116,8 +120,10 @@
                     $email = $_POST["email"];
                     $nQuery = "INSERT INTO STUDENT_PARENT VALUES($studentID, $parentID)";
                     $parentLinked = $nConn->getQuery($nQuery);
-                    if(!is_null($parentLinked))
+                    if(!is_null($parentLinked) && $parentLinked!=0)
                         $success = true;
+                    else
+                        echo "<script>alert('This parent is already linked to student.');</script>";
                 }
             }
         }
@@ -126,71 +132,18 @@
 </head>
 <body>
     <?php
-        /*if($success)
+        if($success)
         {   
             header("location:./studentProfile.php");
             die;
-        }*/
+        }
     ?>
-    <div class="leftMenu">
-        <ul>
-            
-            <li><span class="topItem">
-                <br>
-                <div class="logoMid"><img src="../resources/images/templogoWhiteTransparent-box.png" height="30px"></div>
-                <span>ClassMinder</span>
-                </span>
-            </li>
-            <li class="logout"><span class="menuItem">
-                <a href="logout.php" class="underlined">
-                    <span><i class="ion-log-out"></i></span>
-                    <span class="iconText">Logout</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="teacherHome.php" class="underlined">
-                    <span><i class="ion-ios-home-outline"></i></span>
-                    <span class="iconText">Home</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="studentList.php" class="underlined">
-                    <span><i class="ion-ios-people"></i></span>
-                    <span class="iconText">Students</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="classList.php" class="underlined">
-                    <span><i class="ion-university"></i></span>
-                    <span class="iconText">Classes</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="resources.php" class="underlined">
-                    <span><i class="ion-ios-bookmarks-outline"></i></span>
-                    <span class="iconText">Resources</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="preferences.php" class="underlined">
-                    <span><i class="ion-ios-settings"></i></span>
-                    <span class="iconText">Preferences</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="settings.php" class="underlined">
-                    <span><i class="ion-ios-gear-outline"></i></span>
-                    <span class="iconText">Account Settings</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="help.php" class="underlined">
-                    <span><i class="ion-help"></i></span>
-                    <span class="iconText">Help</span>
-                </a>
-                </span></li>
-        </ul>
-    </div>
+    <?php
+        if($_SESSION["isTeacher"])
+            echo teacherSidebar();
+        else
+            echo parentSidebar();
+    ?>
     <div class="div1">
         <div class="midContainer">
         <table>

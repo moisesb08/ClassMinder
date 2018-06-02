@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ClassMinder - Student</title>
+    <title>ClassMinder - Student Profile</title>
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/teacherHome.js"></script>
     <link rel="stylesheet" href="../css/studentProfile.css">
@@ -17,6 +17,7 @@
         include_once('../model/User.php');
         include_once('../model/Student.php');
         include_once('../model/Classroom.php');
+        include_once('sidebar.php');
         // Initialize the session
         session_start();
         // If session variable is not set it will redirect to login page
@@ -53,65 +54,12 @@
                 <span>modal box</span>
             </div>
         </div>
-    <div class="leftMenu">
-        <ul>
-            
-            <li><span class="topItem">
-                <br>
-                <div class="logoMid"><img src="../resources/images/templogoWhiteTransparent-box.png" height="30px"></div>
-                <span>ClassMinder</span>
-                </span>
-            </li>
-            <li class="logout"><span class="menuItem">
-                <a href="logout.php" class="underlined">
-                    <span><i class="ion-log-out"></i></span>
-                    <span class="iconText">Logout</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="teacherHome.php" class="underlined">
-                    <span><i class="ion-ios-home-outline"></i></span>
-                    <span class="iconText">Home</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="studentList.php" class="underlined">
-                    <span><i class="ion-ios-people"></i></span>
-                    <span class="iconText">Students</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="classList.php" class="underlined">
-                    <span><i class="ion-university"></i></span>
-                    <span class="iconText">Classes</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="resources.php" class="underlined">
-                    <span><i class="ion-ios-bookmarks-outline"></i></span>
-                    <span class="iconText">Resources</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="preferences.php" class="underlined">
-                    <span><i class="ion-ios-settings"></i></span>
-                    <span class="iconText">Preferences</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="settings.php" class="underlined">
-                    <span><i class="ion-ios-gear-outline"></i></span>
-                    <span class="iconText">Account Settings</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="help.php" class="underlined">
-                    <span><i class="ion-help"></i></span>
-                    <span class="iconText">Help</span>
-                </a>
-                </span></li>
-        </ul>
-    </div>
+    <?php
+        if($_SESSION["isTeacher"])
+            echo teacherSidebar();
+        else
+            echo parentSidebar();
+    ?>
     <div class="div1">
         <div class="midContainer">
             <table>
@@ -134,7 +82,7 @@
                     
                     //get student info
                     $studentID = $_POST["studentID"];
-                    $student = new Student("","");
+                    $student = new Student("","","");
                     $student->loadByID($studentID);
                     echo '<div class="personIcon"><i class="ion-person"></i></div>';
                     echo $student->getFirstName() . " " . $student->getLastName();
@@ -156,23 +104,56 @@
                 $studentID = $_POST["studentID"];
                 $title = $_POST["title"];
                 $classroomID = $_POST["classroomID"];
-                $nQuery =
-                "SELECT DISTINCT CLASSROOM.classroomID, CLASSROOM.title
-                FROM STUDENT
-                JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
-                JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
-                WHERE CLASSROOM.userID = $userID AND CLASSROOM.title <> 'Unassigned Class' AND STUDENT_CLASS.studentID = $studentID;";
+                $isTeacher = $_SESSION["isTeacher"];
+                if($isTeacher)
+                {
+                    $classesTitle = 'CLASSES';
+                    $formAction = 'studentBehaviorAnalysis.php';
+                    $nQuery =
+                        "SELECT DISTINCT CLASSROOM.classroomID, CLASSROOM.title
+                        FROM STUDENT
+                        JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
+                        JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
+                        WHERE CLASSROOM.userID = $userID AND CLASSROOM.title <> 'Unassigned Class' AND STUDENT_CLASS.studentID = $studentID;";
+                }
+                else
+                {
+                    $classesTitle = 'ANALYSIS BY CLASS';
+                    $formAction = 'studentBehaviorAnalysis.php';
+                    $nQuery =
+                        "SELECT DISTINCT CLASSROOM.classroomID, CLASSROOM.title
+                        FROM STUDENT
+                        JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
+                        JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
+                        WHERE CLASSROOM.title <> 'Unassigned Class' AND STUDENT_CLASS.studentID = $studentID;";
+                }
                 $records = $nConn->getQuery($nQuery);
-                echo "<tr><td class='heading'><h1>Classes</h1></td></tr>";
+                echo "<tr><td class='heading'><h1>$classesTitle</h1></td></tr>";
                 while($row = $records->fetch_array())
                 {
+                    $classID = $row['classroomID'];
                     $title = $row['title'];
-                    echo "<form method='post' action='classroom.php'>";
-                    echo "<input type='hidden' name='title' value='$title'>";
-                    echo "<tr><td class='btnCell'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $row['classroomID'] . ">";
-                    echo $title . "<br>";
-                    echo "</td></button></tr>";
-                    echo "</form>";
+                    if($isTeacher)
+                    {
+                        echo "<form method='post' action='classroom.php'>";
+                        echo "<input type='hidden' name='title' value='$title'>";
+                        echo "<tr><td class='btnCell'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classID . ">";
+                        echo $title . "<br>";
+                        echo "</td></button></tr>";
+                        echo "</form>";
+                    }
+                    else
+                    {
+                        echo "<form method='post' action='studentBehaviorAnalysis.php'>";
+                        echo "<input type='hidden' name='startDate' value='$startDate'>";
+                        echo "<input type='hidden' name='teacherID' value='$teacherID'>";
+                        echo "<input type='hidden' name='endDate' value='$endDate'>";
+                        echo "<input type='hidden' name='classroomID' value='$classID'>";
+                        echo "<tr><td class='btnCell'><button type='submit' name='studentID' formmethod='post' class='button' value=" . $studentID . ">";
+                        echo "$title<br>";
+                        echo "</td></button></tr>";
+                        echo "</form>";
+                    }
                 }
             ?>
             <tr><td class="heading">
@@ -192,9 +173,9 @@
                     {
                         $name = $row['firstName'] . " " . $row['lastName'];
                         $email = $row['email'];
-                        echo "<tr><td class='leftCol'>";
+                        echo "<tr><th class='leftCol'>";
                         echo $name;
-                        echo "</td></tr><tr><td class='leftCol'>";
+                        echo "</th></tr><tr><td class='leftCol'>";
                         echo $email;
                         echo "</td></tr>";
                     }
@@ -212,7 +193,7 @@
                 echo "See Full Analysis<br>";
                 echo "</td></button></tr>";
                 echo "</form>";
-                if(isset($_POST["classroomID"]))
+                if(isset($_POST["classroomID"])&&$isTeacher)
                 {
                     echo "<form method='post' action='studentBehaviorAnalysis.php'>";
                     echo "<input type='hidden' name='startDate' value='$startDate'>";
@@ -226,17 +207,33 @@
             ?>
             <tr>
             <td class="heading rightCol">
-            <h1>Most Recent Behavior</h1>
+            <h1>Most Recent Behaviors</h1>
             </td></tr>
             <?php
                 $userID = $_SESSION["userID"];
                 $studentID = $_POST["studentID"];
-                $nQuery =
-                "SELECT BEHAVIOR.title
-                FROM BEHAVIOR, STUDENT_BEHAVIOR
-                WHERE BEHAVIOR.behaviorID=STUDENT_BEHAVIOR.behaviorID AND STUDENT_BEHAVIOR.studentID=$studentID
-                ORDER BY recordedTime DESC
-                LIMIT 4;";
+                if(isset($_POST["classroomID"])&&$isTeacher)
+                {
+                    $nQuery =
+                        "SELECT BEHAVIOR.title
+                        FROM BEHAVIOR
+                        JOIN STUDENT_BEHAVIOR ON BEHAVIOR.behaviorID=STUDENT_BEHAVIOR.behaviorID
+                        AND STUDENT_BEHAVIOR.studentID=$studentID
+                        AND STUDENT_BEHAVIOR.classroomID=$classroomID
+                        ORDER BY recordedTime DESC
+                        LIMIT 4;";
+                }
+                else
+                {
+                    $nQuery =
+                        "SELECT BEHAVIOR.title
+                        FROM BEHAVIOR
+                        JOIN STUDENT_BEHAVIOR ON BEHAVIOR.behaviorID=STUDENT_BEHAVIOR.behaviorID
+                        AND STUDENT_BEHAVIOR.studentID=$studentID
+                        ORDER BY recordedTime DESC
+                        LIMIT 4;";
+                }
+
                 $records = $nConn->getQuery($nQuery);
                 while($row = $records->fetch_array())
                 {
@@ -245,31 +242,28 @@
                     echo $title . "<br>";
                     echo "</td></tr>";
                 }
+                if($isTeacher)
+                {
+                    echo '<tr>
+                        <form action="linkParent.php" method="post">
+                        <td class="btnCell" colspan="1">';
+                        echo "<input type='hidden' name='studentID' value='$studentID'>";
+                    echo '<div>
+                        <input type="submit" class="submitBtn" name="submit" value="Link A Parent Account"/>
+                                    </div>
+                                </td>
+                        </form>
+                        </tr>
+                        <tr>
+                        <form action="delete.php" method="post">
+                                <td class="btnCell" colspan="1">';
+                    echo "<input type='hidden' name='studentID' value='$studentID'>";
+                    echo '<div><input STYLE="background-color: red;" type="submit" id="cancelBtn" value="Delete Student"/></div>
+                                </td>
+                        </form>
+                        </tr>';
+                }
             ?>
-            <tr>
-            <form action="linkParent.php" method='post'>
-                    <td class="btnCell" colspan="1">
-                        <?php
-                            echo "<input type='hidden' name='studentID' value='$studentID'>";
-                        ?>
-                        <div>
-                            <input type="submit" class="submitBtn" name="submit" value="Link A Parent Account"/>
-                        </div>
-                    </td>
-            </form>
-            </tr>
-            <tr>
-            <form action="delete.php" method='post'>
-                    <td class="btnCell" colspan="1">
-                        <?php
-                            echo "<input type='hidden' name='studentID' value='$studentID'>";
-                        ?>
-                        <div>
-                            <input STYLE="background-color: red;" type="submit" id="cancelBtn" value="Delete Student"/>
-                        </div>
-                    </td>
-            </form>
-        </tr>
         </table>
         <?php
                 if(isset($_POST["classroomID"]))
@@ -287,5 +281,11 @@
     </div>
 </div>
 </body>
-<script>beginSingleChart(<?php echo "'$studentID', '$classroomID', '$startDate', '$endDate', '$classTitle'";?>);</script>
+<?php
+    if($isTeacher)
+        $params = "'$studentID', '$classroomID', '$startDate', '$endDate', '$classTitle'";
+    else
+        $params = "'$studentID', '', '$startDate', '$endDate', '$classTitle'";
+?>
+<script>beginSingleChart(<?php echo $params;?>);</script>
 </html>

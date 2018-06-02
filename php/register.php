@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-    <title>Register</title>
+    <title>ClassMinder - Register</title>
     <link href="../css/register.css" text="text/css" rel="stylesheet"/>
     <?php
         include("../model/User.php");
@@ -24,6 +24,14 @@
                 $userFactory = new UserFactory();
                 $userType = $userFactory->getUserType($_POST["userType"]);
                 $user = $userType->getUser($_POST["email"], $_POST["fName"], $_POST["lName"], sha1($_POST["password"]));
+                if(isset($_GET['studentID']))
+                {
+                    $parentID = $user->getUserID();
+                    $studentID = $_GET['studentID'];
+                    $nConn = new Connection();
+                    $arr = array('studentID'=>$studentID, 'parentID'=>$parentID);
+                    $nConn->save("STUDENT_PARENT", $arr);
+                }
                 if(!is_null($user))
                     $success = true;
             }
@@ -100,13 +108,16 @@
                 </td>
             </tr>
             <tr>
-                <td>
+                <?php if(!isset($_GET['studentID']))
+                echo '<td>
                     <label><i>Teacher </i>
                     <input type="radio" name="userType" value="Teacher" checked>
                     </label>
-                </td><td>
+                </td>';
+                ?>
+                <td <?php if(isset($_GET['studentID'])) echo "colspan='2'"; ?>>
                     <label><i>Parent </i>
-                    <input type="radio" name="userType" value="Parent">
+                    <input type="radio" name="userType" value="Parent" <?php if(isset($_GET['studentID'])) echo "checked='checked'"; ?>>
                     </label>
                 </td>
             </tr>

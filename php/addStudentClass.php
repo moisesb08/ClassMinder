@@ -16,7 +16,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ClassMinder - Create Student</title>
+    <title>ClassMinder - Enroll Student</title>
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/teacherHome.js"></script>
     <link rel="stylesheet" href="../css/studentList.css">
@@ -26,6 +26,7 @@
         include_once('../model/User.php');
         include_once('../model/Student.php');
         include_once('../model/Classroom.php');
+        include_once('sidebar.php');
         // Initialize the session
         session_start();
         // If session variable is not set it will redirect to login page
@@ -70,67 +71,12 @@
         {   
             header("location:./classroom.php");
             die;
-        }  
+        }
+        if($_SESSION["isTeacher"])
+            echo teacherSidebar();
+        else
+            echo parentSidebar();
     ?>
-    <div class="leftMenu">
-        <ul>
-            
-            <li><span class="topItem">
-                <br>
-                <div class="logoMid"><img src="../resources/images/templogoWhiteTransparent-box.png" height="30px"></div>
-                <span>ClassMinder</span>
-                </span>
-            </li>
-            <li class="logout"><span class="menuItem">
-                <a href="logout.php" class="underlined">
-                    <span><i class="ion-log-out"></i></span>
-                    <span class="iconText">Logout</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="teacherHome.php" class="underlined">
-                    <span><i class="ion-ios-home-outline"></i></span>
-                    <span class="iconText">Home</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="studentList.php" class="underlined">
-                    <span><i class="ion-ios-people"></i></span>
-                    <span class="iconText">Students</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="classList.php" class="underlined">
-                    <span><i class="ion-university"></i></span>
-                    <span class="iconText">Classes</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="resources.php" class="underlined">
-                    <span><i class="ion-ios-bookmarks-outline"></i></span>
-                    <span class="iconText">Resources</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="preferences.php" class="underlined">
-                    <span><i class="ion-ios-settings"></i></span>
-                    <span class="iconText">Preferences</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="settings.php" class="underlined">
-                    <span><i class="ion-ios-gear-outline"></i></span>
-                    <span class="iconText">Account Settings</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="help.php" class="underlined">
-                    <span><i class="ion-help"></i></span>
-                    <span class="iconText">Help</span>
-                </a>
-                </span></li>
-        </ul>
-    </div>
     <div class="div1">
         <div class="midContainer">
         <table>
@@ -155,7 +101,7 @@
                                 $userID = $_SESSION["userID"];
                                 $classroomID = $_POST['classroomID'];
                                 $nQuery =
-                                "SELECT DISTINCT firstName, lastName, sc.studentID
+                                "SELECT DISTINCT firstName, lastName, sc.studentID, sID
                                 FROM STUDENT_CLASS sc, STUDENT s, CLASSROOM c
                                 WHERE NOT EXISTS(
                                     SELECT * FROM STUDENT_CLASS sc2
@@ -170,7 +116,7 @@
                                     $lName = $row["lastName"];
                                     $studentID = $row['studentID'];
                                     echo '<option name="studentClass" value=\'{"fName":"' . $fName . '","lName":"' . $lName . '","studentID":"' . $studentID . '","classroomID":"' . $classroomID . '","title":"' . $title . '"}\'>';
-                                    echo $row["firstName"] . " " . $row["lastName"]." [ID: ".$row['studentID']."]";
+                                    echo $row["firstName"] . " " . $row["lastName"]." [ID: ".$row['sID']."]";
                                     echo "</option>";
                                 }
                                 ?>

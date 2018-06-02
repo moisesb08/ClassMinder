@@ -14,6 +14,7 @@
         include_once('../model/User.php');
         include_once('../model/Student.php');
         include_once('../model/Classroom.php');
+        include_once('sidebar.php');
         // Initialize the session
         session_start();
         // If session variable is not set it will redirect to login page
@@ -21,6 +22,9 @@
             header("location: ../view/loginPage.php");
             exit;
         }
+        // If user is a parent he/she will be redirected to the parent homepage
+        if($_SESSION['isTeacher'] == 0)
+            header("location: parentHome.php");
         if(isset($_POST["classroomID"]))
         {
             $_SESSION['post'] = $_POST;
@@ -50,65 +54,12 @@
                 <span>modal box</span>
             </div>
         </div>
-    <div class="leftMenu">
-        <ul>
-            
-            <li><span class="topItem">
-                <br>
-                <div class="logoMid"><img src="../resources/images/templogoWhiteTransparent-box.png" height="30px"></div>
-                <span>ClassMinder</span>
-                </span>
-            </li>
-            <li class="logout"><span class="menuItem">
-                <a href="logout.php" class="underlined">
-                    <span><i class="ion-log-out"></i></span>
-                    <span class="iconText">Logout</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="teacherHome.php" class="underlined">
-                    <span><i class="ion-ios-home-outline"></i></span>
-                    <span class="iconText">Home</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="studentList.php" class="underlined">
-                    <span><i class="ion-ios-people"></i></span>
-                    <span class="iconText">Students</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="classList.php" class="underlined">
-                    <span><i class="ion-university"></i></span>
-                    <span class="iconText">Classes</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="resources.php" class="underlined">
-                    <span><i class="ion-ios-bookmarks-outline"></i></span>
-                    <span class="iconText">Resources</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="preferences.php" class="underlined">
-                    <span><i class="ion-ios-settings"></i></span>
-                    <span class="iconText">Preferences</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="settings.php" class="underlined">
-                    <span><i class="ion-ios-gear-outline"></i></span>
-                    <span class="iconText">Account Settings</span>
-                </a>
-                </span></li>
-            <li><span class="menuItem">
-                <a href="help.php" class="underlined">
-                    <span><i class="ion-help"></i></span>
-                    <span class="iconText">Help</span>
-                </a>
-                </span></li>
-        </ul>
-    </div>
+    <?php
+        if($_SESSION["isTeacher"])
+            echo teacherSidebar();
+        else
+            echo parentSidebar();
+    ?>
     <div class="div1">
         <div class="midContainer">
         <table>
@@ -144,7 +95,7 @@
                         break;
                 }
                 $nQuery =
-                "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT_CLASS.x, STUDENT_CLASS.y
+                "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT_CLASS.x, STUDENT_CLASS.y, STUDENT.sID
                 FROM STUDENT
                 JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
                 JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
@@ -175,7 +126,7 @@
                                 echo '
                                 <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
                                     <button value="'.$row['studentID'].'" type="submit" name="studentID" formmethod="post" id="btn'.$count.'"><i class="ion-android-person"></i><br>
-                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['studentID'].'</button>
+                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['sID'].'</button>
                                 </div>
                                 ';
                                 $fetch = true;
@@ -210,7 +161,7 @@
                                 echo '
                                 <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
                                     <button value="'.$row['studentID'].'" type="submit" name="studentID" formmethod="post" id="btn'.$count.'"><i class="ion-android-person"></i><br>
-                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['studentID'].'</button>
+                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['sID'].'</button>
                                 </div>
                                 ';
                                 $fetch = true;
@@ -263,7 +214,7 @@
                             echo '
                             <div id="div2Cell'.$count.'" data-value="-1:-1" class="divCellNone divCell2" ondrop="drop(event)" ondragover="allowDrop(event)">
                                 <button value="'.$currentRow['studentID'].'" type="submit" name="studentID" formmethod="post" id="btn'.$count.'"><i class="ion-android-person"></i><br>
-                                '.$currentRow['firstName'].'<br>'.$currentRow['lastName'].'<br>ID: '.$currentRow['studentID'].'</button>
+                                '.$currentRow['firstName'].'<br>'.$currentRow['lastName'].'<br>ID: '.$currentRow['sID'].'</button>
                             </div>
                             ';
                         }
@@ -311,6 +262,9 @@
             <br>
             <form action="excelInput.php" method="post" enctype="multipart/form-data">
                 <tr>
+                    <td><a href="../resources/files/roster.csv" download>
+                        <button type="button">Download Roster Template</button>
+                    </a></td>
                     <td colspan="0.5">
                         <input type="hidden" name="classroomID" value="<?php echo $classroomID; ?>">
                         <input type="hidden" name="title" value="<?php echo $title; ?>">

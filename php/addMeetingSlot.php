@@ -5,6 +5,7 @@
     <?php
         require_once('../common/connection.php');
         include_once('../model/User.php');
+        include_once('sidebar.php');
 
         // Initialize the session
         session_start();
@@ -13,6 +14,9 @@
             header("location: ../view/loginPage.php");
             exit;
         }
+        // If user is a parent he/she will be redirected to the parent homepage
+        if($_SESSION['isTeacher'] == 0)
+            header("location: parentHome.php");
         $nConn = new Connection();
         // Create a $user and store it for session 
         if(!isset($_SESSION['user']) || empty($_SESSION['user']))

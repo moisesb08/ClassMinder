@@ -9,6 +9,9 @@ else
 {
     header("location: ../view/loginPage.php");
 }
+// If user is a parent he/she will be redirected to the parent homepage
+if($_SESSION['isTeacher'] == 0)
+    header("location: parentHome.php");
 require_once('../common/connection.php');
 include("../model/Student.php");
 include_once('../model/Classroom.php');
@@ -49,16 +52,18 @@ if(isset($_POST["submit"])) {
         $i = 0;
         while(($file_row = fgetcsv($handle, 1000, ",")) !== false)
         {
-            if ($i < 2)
+            if ($i < 2)//changed by Moises
             {
                 $i++;
                 continue;
             }
-            $name = $file_row[2];
+            // student ID will be column 0 and name (last, first) will be column 1
+            $sID = $file_row[0];//changed by Moises
+            $name = $file_row[1];//changed by Moises
             $parts = explode(",", $name);
             $firstName = rtrim(array_pop($parts));
             $lastName = rtrim(implode(" ", $parts));
-            $student = new Student($firstName, $lastName);
+            $student = new Student($firstName, $lastName, $sID);
             $studentCreated = $student->save()!=0;
             $studentID = $student->getStudentID();
             $str = "INSERT INTO STUDENT_CLASS (studentID, classroomID)
