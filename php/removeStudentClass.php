@@ -16,7 +16,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ClassMinder - Remove Student</title>
+    <title>ClassMinder - Unenroll Student</title>
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/teacherHome.js"></script>
     <link rel="stylesheet" href="../css/studentList.css">
@@ -159,7 +159,7 @@
                                 $userID = $_SESSION["userID"];
                                 $classroomID = $_POST['classroomID'];
                                 $nQuery =
-                                "SELECT DISTINCT firstName, lastName, sc.studentID
+                                "SELECT DISTINCT firstName, lastName, sc.studentID, s.sID
                                 FROM STUDENT_CLASS sc, STUDENT s, CLASSROOM c
                                 WHERE EXISTS(
                                     SELECT * FROM STUDENT_CLASS sc2
@@ -173,7 +173,7 @@
                                     $lName = $row["lastName"];
                                     $studentID = $row['studentID'];
                                     echo "<option name='studentClass' value='$studentID'\>";
-                                    echo $row["firstName"] . " " . $row["lastName"]." [ID: ".$row['studentID']."]";
+                                    echo $row["firstName"] . " " . $row["lastName"]." [ID: ".$row['sID']."]";
                                     echo "</option>";
                                 }
                                 ?>

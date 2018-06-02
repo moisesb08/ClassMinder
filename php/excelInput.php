@@ -52,7 +52,7 @@ if(isset($_POST["submit"])) {
         $i = 0;
         while(($file_row = fgetcsv($handle, 1000, ",")) !== false)
         {
-            if ($i < 1)//changed by Moises
+            if ($i < 2)//changed by Moises
             {
                 $i++;
                 continue;

@@ -95,7 +95,7 @@
                         break;
                 }
                 $nQuery =
-                "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT_CLASS.x, STUDENT_CLASS.y
+                "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT_CLASS.x, STUDENT_CLASS.y, STUDENT.sID
                 FROM STUDENT
                 JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
                 JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
@@ -126,7 +126,7 @@
                                 echo '
                                 <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
                                     <button value="'.$row['studentID'].'" type="submit" name="studentID" formmethod="post" id="btn'.$count.'"><i class="ion-android-person"></i><br>
-                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['studentID'].'</button>
+                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['sID'].'</button>
                                 </div>
                                 ';
                                 $fetch = true;
@@ -161,7 +161,7 @@
                                 echo '
                                 <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">
                                     <button value="'.$row['studentID'].'" type="submit" name="studentID" formmethod="post" id="btn'.$count.'"><i class="ion-android-person"></i><br>
-                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['studentID'].'</button>
+                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['sID'].'</button>
                                 </div>
                                 ';
                                 $fetch = true;
@@ -214,7 +214,7 @@
                             echo '
                             <div id="div2Cell'.$count.'" data-value="-1:-1" class="divCellNone divCell2" ondrop="drop(event)" ondragover="allowDrop(event)">
                                 <button value="'.$currentRow['studentID'].'" type="submit" name="studentID" formmethod="post" id="btn'.$count.'"><i class="ion-android-person"></i><br>
-                                '.$currentRow['firstName'].'<br>'.$currentRow['lastName'].'<br>ID: '.$currentRow['studentID'].'</button>
+                                '.$currentRow['firstName'].'<br>'.$currentRow['lastName'].'<br>ID: '.$currentRow['sID'].'</button>
                             </div>
                             ';
                         }
@@ -262,6 +262,9 @@
             <br>
             <form action="excelInput.php" method="post" enctype="multipart/form-data">
                 <tr>
+                    <td><a href="../resources/files/roster.csv" download>
+                        <button type="button">Download Roster Template</button>
+                    </a></td>
                     <td colspan="0.5">
                         <input type="hidden" name="classroomID" value="<?php echo $classroomID; ?>">
                         <input type="hidden" name="title" value="<?php echo $title; ?>">
