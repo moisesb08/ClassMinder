@@ -147,7 +147,7 @@
                         break;
                 }
                 $nQuery =
-                "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT_CLASS.x, STUDENT_CLASS.y
+                "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT_CLASS.x, STUDENT_CLASS.y, STUDENT.sID
                 FROM STUDENT
                 JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
                 JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
@@ -177,7 +177,7 @@
                                 echo '
                                 <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCell" ondrop="drop(event)" ondragover="allowDrop(event)">
                                     <button value="'.$row['studentID'].'" type="button" ondragstart="drag(event)" draggable="true" id="btn'.$count.'"><i class="ion-android-person"></i><br>
-                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['studentID'].'</button>
+                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['sID'].'</button>
                                 </div>
                                 ';
                                 $fetch = true;
@@ -211,7 +211,7 @@
                                 echo '
                                 <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCell" ondrop="drop(event)" ondragover="allowDrop(event)">
                                     <button value="'.$row['studentID'].'" type="button" ondragstart="drag(event)" draggable="true" id="btn'.$count.'"><i class="ion-android-person"></i><br>
-                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['studentID'].'</button>
+                                    '.$row['firstName'].'<br>'.$row['lastName'].'<br>ID: '.$row['sID'].'</button>
                                 </div>
                                 ';
                                 $fetch = true;
@@ -262,7 +262,7 @@
                             echo '
                             <div id="div2Cell'.$count.'" data-value="-1:-1" class="divCell divCell2" ondrop="drop(event)" ondragover="allowDrop(event)">
                                 <button value="'.$currentRow['studentID'].'" type="button" ondragstart="drag(event)" draggable="true" id="btnB'.$count.'"><i class="ion-android-person"></i><br>
-                                '.$currentRow['firstName'].'<br>'.$currentRow['lastName'].'<br>ID: '.$currentRow['studentID'].'</button>
+                                '.$currentRow['firstName'].'<br>'.$currentRow['lastName'].'<br>ID: '.$currentRow['sID'].'</button>
                             </div>
                             ';
                         }

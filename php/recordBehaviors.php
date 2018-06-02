@@ -222,7 +222,7 @@
 
                 // Display students
                 $nQuery =
-                "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT_CLASS.x, STUDENT_CLASS.y
+                "SELECT STUDENT.firstName, STUDENT.lastName, STUDENT.studentID, STUDENT_CLASS.x, STUDENT_CLASS.y, STUDENT.sID
                 FROM STUDENT
                 JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
                 JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
@@ -253,7 +253,7 @@
                                     "<input type='checkbox' name='students[]' value='". $row['studentID'] ."'>
                                     <br><span class='checkmark checkmarkStudent'></span>
                                     </label><div class='textCheck'><span class='checkmark2 checkmarkStudent2'>"
-                                    .$row["firstName"] . "<br>" . $row["lastName"]."<br>ID: ".$row['studentID'].
+                                    .$row["firstName"] . "<br>" . $row["lastName"]."<br>ID: ".$row['sID'].
                                 "</span></div></div>
                                 ";
                                 $fetch = true;
@@ -290,7 +290,7 @@
                                     "<input type='checkbox' name='students[]' value='". $row['studentID'] ."'>
                                     <br><span class='checkmark checkmarkStudent'></span>
                                     </label><div class='textCheck'><span class='checkmark2 checkmarkStudent2'>"
-                                    .$row["firstName"] . "<br>" . $row["lastName"]."<br>ID: ".$row['studentID'].
+                                    .$row["firstName"] . "<br>" . $row["lastName"]."<br>ID: ".$row['sID'].
                                 "</span></div></div>
                                 ";
                                 $fetch = true;
@@ -352,7 +352,7 @@
                                 "<input type='checkbox' name='students[]' value='". $currentRow['studentID'] ."'>
                                 <br><span class='checkmark checkmarkStudent'></span>
                                 </label><div class='textCheck'><span class='checkmark2 checkmarkStudent2'>"
-                                .$currentRow["firstName"] . "<br>" . $currentRow["lastName"]."<br>ID: ".$currentRow['studentID'].
+                                .$currentRow["firstName"] . "<br>" . $currentRow["lastName"]."<br>ID: ".$currentRow['sID'].
                             "</span></div></div>
                             ";
                         }
