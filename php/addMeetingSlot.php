@@ -2,6 +2,8 @@
 <head>
     <title>Create Meeting Slot</title>
     <link href="../css/register.css" text="text/css" rel="stylesheet"/>
+    <link href="../css/teacherHome.css" text="text/css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../resources/ionicons-2.0.1/css/ionicons.min.css">
     <?php
         require_once('../common/connection.php');
         include_once('../model/User.php');
@@ -120,13 +122,17 @@
         {   
             header("location:./meetings.php");
             die;
-        }  
+        }
+        if($_SESSION["isTeacher"])
+            echo teacherSidebar();
+        else
+            echo parentSidebar();  
     ?>
 <div class="div1">
         <div class="midContainer">
     <table>
         <tr>
-            <td class="imageCell" colspan="2"><img src="../resources/images/templogoWhiteTransparent.png" width="360px"></td>
+            <td colspan="2"><h4>Please enter the date and time you want to create a meeting slot for.</h4></td>
         </tr>
         <?php
             if(!empty($msgs))
@@ -135,9 +141,6 @@
                     echo "<tr><td class='msgs' colspan='2'>*". $msg ."</td></tr>";
             }
         ?>
-        <tr>
-            <td colspan="2"><h4>Please enter the date and time you want to create a meeting slot for.</h4></td>
-        </tr>
             <form action="" method="post">
             <tr>
                 <td class="leftAlign">

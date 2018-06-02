@@ -62,6 +62,10 @@ class Connection
     } else {
       //echo "Error: " . $str . "\n" . $this->_conn->error;
     }
+    if(mysqli_affected_rows( $this->_conn ) >0 )
+      return true;
+    else
+      return false;
   }
 
   /**
