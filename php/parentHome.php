@@ -37,22 +37,25 @@
         <table>
         <tr><td class="item1" colspan='1'><span><i class="ion-person"></i></span></td></tr>
         <tr><td class="item5" colspan='1'><span>Welcome, <?php echo $_SESSION['firstName']." ".$_SESSION['lastName'];?>.</span></td></tr>
-        <tr><td class="btnCell" width="100px" colspan="1">
         <?php
             $userID = $_SESSION["userID"];
             $nQuery =
-            "SELECT COUNT(DATE(meetingTime)) todayMeeting
+            "SELECT COUNT(*) meetingCount
             FROM MEETING
-            WHERE parentID = $userID AND DATE(meetingTime) = CURDATE()
+            WHERE parentID = $userID AND DATE(meetingTime) >= CURDATE()
             GROUP BY DATE(meetingTime);";
             $records = $nConn->getQuery($nQuery);
             if (mysqli_num_rows($records)!=0)
             {
                 $row = $records->fetch_array();
-                $todayMeeting = $row['todayMeeting'];
-                echo "<tr><td class='item5' colspan='1'><span>You have a meeting today!</span></td></tr>";
+                $meetingCount = $row['meetingCount'];
+                echo "<tr><td class=\"item5\" colspan=\'1\'><span>You have $meetingCount upcoming meeting";
+                if ($meetingCount > 1)
+                    echo "s";
+                echo ".</span></td></tr>";
             }
         ?>
+        <tr><td class="btnCell" width="100px" colspan="1">
         <button type="button" class="button" onclick="window.location.href='studentList.php'">
         <span class="item5"><i class="ion-ios-people-outline"></i></span><span>&nbsp;Students</span></button></td></tr>
         <tr><td class="btnCell" colspan="1">

@@ -18,7 +18,9 @@
       height: 100%;
       width: 100%;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-image: url("https://i.pinimg.com/originals/08/fa/02/08fa0275674fee050c47e3b1abd86b6b.jpg");
+      background-image: url("../resources/images/the-interior-of-the-254577_1920.jpg");
+      background-attachment: fixed;
+      background-position: center;
   }
   
   .leftMenu ul {
