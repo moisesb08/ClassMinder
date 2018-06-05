@@ -500,3 +500,7 @@
     background-color: #a488f6;
     color: white;
 }
+.noPadding{
+    padding-left: 0px;
+    margin-bottom: 0px;
+}

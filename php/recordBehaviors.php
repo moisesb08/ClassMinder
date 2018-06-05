@@ -52,7 +52,11 @@
             $_SESSION['userID'] = $_SESSION['user']->getUserID();
         }
         $userID=$_SESSION['userID'];
-        if(isset($_POST["submitted"])&&(isset($_POST["posBehaviors"])
+        if(empty($_POST["students"])&&isset($_POST["submitted"]))
+        {
+            echo "<script>alert('Please select a student.');</script>";
+        }
+        if(!empty($_POST["students"])&&isset($_POST["submitted"])&&(isset($_POST["posBehaviors"])
             ||isset($_POST["negBehaviors"])||isset($_POST["addPositive"])
             ||isset($_POST["addNegative"])))
         {
@@ -198,14 +202,14 @@
                         {
                             if($x == $row["x"] && $y == $row["y"])
                             {
-                                echo '
+                                echo '<label class="container noPadding" for="student'.$row['studentID'].'">
                                 <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">'.
                                     "<label class='container'>".
-                                    "<input type='checkbox' name='students[]' value='". $row['studentID'] ."'>
+                                    "<input type='checkbox' id='student".$row['studentID']."' name='students[]' value='". $row['studentID'] ."'>
                                     <br><span class='checkmark checkmarkStudent'></span>
                                     </label><div class='textCheck'><span class='checkmark2 checkmarkStudent2'>"
                                     .$row["firstName"] . "<br>" . $row["lastName"]."<br>ID: ".$row['sID'].
-                                "</span></div></div>
+                                "</span></div></div></label>
                                 ";
                                 $fetch = true;
                             }
@@ -235,10 +239,10 @@
                         {              
                             if($x == $row["x"] && $y == $row["y"])
                             {
-                                echo '
+                                echo '<label class="container noPadding" for="student'.$row['studentID'].'">
                                 <div id="divCell'.$count.'" data-value="'.$x.':'.$y.'" class="divCellNone" ondrop="drop(event)" ondragover="allowDrop(event)">'.
                                     "<label class='container'>".
-                                    "<input type='checkbox' name='students[]' value='". $row['studentID'] ."'>
+                                    "<input type='checkbox' id='student".$row['studentID']."' name='students[]' value='". $row['studentID'] ."'>
                                     <br><span class='checkmark checkmarkStudent'></span>
                                     </label><div class='textCheck'><span class='checkmark2 checkmarkStudent2'>"
                                     .$row["firstName"] . "<br>" . $row["lastName"]."<br>ID: ".$row['sID'].
@@ -297,10 +301,10 @@
                         if($count <= count($notSeatedArr))
                         {
                             $currentRow = $notSeatedArr[$count-1];
-                            echo '
+                            echo '<label class="container noPadding" for="student'.$row['studentID'].'">
                             <div id="div2Cell'.$count.'" data-value="-1:-1" class="divCellNone divCell2" ondrop="drop(event)" ondragover="allowDrop(event)">'.
                                 "<label class='container studentContainer'>".
-                                "<input type='checkbox' name='students[]' value='". $currentRow['studentID'] ."'>
+                                "<input type='checkbox' id='student".$row['studentID']."' name='students[]' value='". $currentRow['studentID'] ."'>
                                 <br><span class='checkmark checkmarkStudent'></span>
                                 </label><div class='textCheck'><span class='checkmark2 checkmarkStudent2'>"
                                 .$currentRow["firstName"] . "<br>" . $currentRow["lastName"]."<br>ID: ".$currentRow['sID'].
@@ -371,7 +375,7 @@
                     <label class='container'>Description:<br><textarea  id='negativeDescription' name='negativeDescription' rows='4' cols='50' placeholder='Enter Description Here'></textarea></label>";
                 echo "<input type='hidden' name='submitted' value='1'>";
                 echo "<input type='hidden' name='title' value='$title'>";
-                echo "<tr><td class='btnCell'><div class='btnBehaviors'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
+                echo "<tr><td class='btnCell'><div class='btnBehaviors'><button onclick='checkStudent()' type='submit' name='classroomID' formmethod='post' class='button' value=" . $classroomID . ">";
                 echo "<span>Submit</span></td></button></div></tr>";
                 echo "</form><br>";
                 echo "<form action='classroom.php' method='post'>";

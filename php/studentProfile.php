@@ -258,7 +258,7 @@
                         <form action="delete.php" method="post">
                                 <td class="btnCell" colspan="1">';
                     echo "<input type='hidden' name='studentID' value='$studentID'>";
-                    echo '<div><input STYLE="background-color: red;" type="submit" id="cancelBtn" value="Delete Student"/></div>
+                    echo '<div onclick="return confirm(\'Are you sure you want to delete this student?\')"><input STYLE="background-color: red;" type="submit" id="cancelBtn" value="Delete Student"/></div>
                                 </td>
                         </form>
                         </tr>';

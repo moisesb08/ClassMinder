@@ -52,17 +52,15 @@ if(isset($_POST["submit"])) {
         $i = 0;
         while(($file_row = fgetcsv($handle, 1000, ",")) !== false)
         {
-            if ($i < 2)//changed by Moises
+            if ($i < 2)
             {
                 $i++;
                 continue;
             }
-            // student ID will be column 0 and name (last, first) will be column 1
-            $sID = $file_row[0];//changed by Moises
-            $name = $file_row[1];//changed by Moises
-            $parts = explode(",", $name);
-            $firstName = rtrim(array_pop($parts));
-            $lastName = rtrim(implode(" ", $parts));
+            // student ID will be column 0 and name (last, first) will be columns 1 and 2
+            $sID = $file_row[0];
+            $lastName = $file_row[1];
+            $firstName = $file_row[2];
             $student = new Student($firstName, $lastName, $sID);
             $studentCreated = $student->save()!=0;
             $studentID = $student->getStudentID();

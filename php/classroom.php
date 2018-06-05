@@ -271,7 +271,7 @@
                         <input type="file" name="excelFile" id="excelFile">
                     </td>
                     <td class="btnCell" colspan="0.5">
-                        <input type="submit" class="submitBtn" name="submit" value="Add Class By Excel"/>
+                        <input type="submit" class="submitBtn" name="submit" value="Add Class By CSV"/>
                     </td>
                 </tr>
             </form>
@@ -280,7 +280,7 @@
                         <?php
                             echo "<input type='hidden' name='classroomID' value='$classroomID'>";
                         ?>
-                        <div>
+                        <div onclick="return confirm('Are you sure you want to delete this class?')">
                             <input STYLE="background-color: red;" type="submit" id="cancelBtn" value="Delete Class"/>
                         </div>
                     </td>
