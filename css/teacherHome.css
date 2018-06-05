@@ -18,7 +18,9 @@ body, html {
     height: 100%;
     width: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-image: url("https://i.pinimg.com/originals/08/fa/02/08fa0275674fee050c47e3b1abd86b6b.jpg");
+    background-image: url("../resources/images/the-interior-of-the-254577_1920.jpg");
+    background-attachment: fixed;
+    background-position: center;
 }
 
 .leftMenu ul {
@@ -235,4 +237,27 @@ menuitem {
 .logout a:hover {
     color:red;
     font-weight: 100;
+}
+
+.selectBtn {
+	width: 8rem;
+    height: 3rem;
+    font-size: 1rem;
+    color: black;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    background-color: #dbd0fb;
+    border: none;
+}
+
+.selectBtn:hover {
+	
+    color: white;
+    background-color: #00cc00;
+}
+
+#slotsDiv th{
+	padding:1rem;
 }
