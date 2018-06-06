@@ -7,7 +7,7 @@
         $data = "";
         $nQuery =
         "SELECT meetingSlotID, meetingTime, minutes, teacherID, location FROM MEETING_SLOT WHERE MEETING_SLOT.teacherID
-        IN (SELECT DISTINCT userID FROM student_class JOIN classroom on STUDENT_CLASS.classroomID=classroom.classroomID AND STUDENT_CLASS.studentID
+        IN (SELECT DISTINCT userID FROM STUDENT_CLASS JOIN CLASSROOM on STUDENT_CLASS.classroomID=CLASSROOM.classroomID AND STUDENT_CLASS.studentID
         IN (SELECT studentID FROM STUDENT_PARENT WHERE parentID = $parentID)
         GROUP BY STUDENT_CLASS.classroomID)
         AND date(meetingTime) BETWEEN '$startDate' AND '$endDate' AND isAvailable = 1;";
