@@ -187,7 +187,7 @@
       background-color: #6d41f1;
   }
   .center {
-      background: gray;
+      text-align: center;
   }
   
   .div1{
@@ -360,7 +360,7 @@
 }
 
 .btnPlus button {
-    width: 15rem;
+    width: 10rem;
     height: 3rem;
     font-size: 1rem;
     color: white;

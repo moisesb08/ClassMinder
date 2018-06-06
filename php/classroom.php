@@ -68,15 +68,40 @@
                 $classroomID = $_POST["classroomID"];
                 $title = $_POST["title"];
                 $nQuery =
-                "SELECT max(STUDENT_CLASS.x) AS xMax, max(STUDENT_CLASS.y) AS yMax, count(STUDENT_CLASS.studentID) AS totalStudents
+                "SELECT min(STUDENT_CLASS.x) AS xMin,
+                min(STUDENT_CLASS.y) AS yMin,
+                max(STUDENT_CLASS.x) AS xMax,
+                max(STUDENT_CLASS.y) AS yMax,
+                count(STUDENT_CLASS.studentID) AS totalStudents
                 FROM STUDENT
                 JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
                 JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
-                WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID";
+                WHERE CLASSROOM.userID = $userID AND CLASSROOM.classroomID = $classroomID
+                AND x >=0 AND y >=0;";
+                //echo $nQuery;
                 $result = $nConn->getQuery($nQuery);
-                $row = $result->fetch_row();
-                $xMax = (int)$row[0];
-                $yMax = (int)$row[1];
+                $row = $result->fetch_assoc();
+                if($row['xMin']=="-1"||$row['xMin']==NULL||$row['xMin']=="")
+                    $xMin = 0;
+                else
+                    $xMin = (int)$row['xMin'];
+                
+                if($row['xMax']=='-1'||$row['xMax']==NULL||$row['xMax']=="")
+                    $xMax = 0;
+                else
+                    $xMax = (int)$row['xMax'];
+                
+                if($row['yMin']=='-1'||$row['yMin']==NULL||$row['yMin']=="")
+                    $yMin = 0;
+                else
+                    $yMin = (int)$row['yMin'];
+                
+                if($row['yMax']=='-1'||$row['yMax']==NULL||$row['yMax']=="")
+                    $yMax = 0;
+                else
+                    $yMax = (int)$row['yMax'];
+                //echo " xMin: " . $xMin . " xMax:" . $xMax;
+                //echo " yMin: " . $yMin . " yMax:" . $yMax;
                 $newX = max(1, $xMax);
                 $newY = max(1, $yMax);
                 $totalStudents = max(1, $row["totalStudents"]);
@@ -110,7 +135,7 @@
                 $rowVal = $newY+1+$_POST["extraRows"];
                 $columnVal = $newX+1+$_POST["extraColumns"];
                 echo"<tr><td class='divCell2' colspan='".$columnVal."'><h1>".$_POST['title']."</h1></td></tr>";
-                for($y=1; $y<$rowVal; $y++)
+                for($y=$yMin; $y<=$yMax; $y++)
                 {
                     echo "<tr>";
                     for($x=1; $x<$columnVal; $x++)
@@ -196,7 +221,12 @@
                     echo "</tr>";
                 }
                 echo "</table>";
-                //not seated
+                // push remaining students to not seated array
+                while($row = $records->fetch_array())
+                {
+                    array_push($notSeatedArr, $row);
+                }
+                // not seated
                 echo '<table><tr><td colspan="'.$columnVal.'">Students not assigned seats:</td></tr>';
                 $count=0;
                 $breakRow = false;
