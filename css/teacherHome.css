@@ -190,12 +190,12 @@ menuitem {
 
 .div1{
 	height: 100vh;
-    display:flex;
+    display:grid;
   	flex-direction:column;
   	align-items:center;
     justify-content:center;
   	opacity:.95;
-    overflow: hidden;
+    overflow:auto;
     /* This section calls the fadeIn animation we defined above */
     animation: .7s ease-out 0s 1 fadeIn;
 }
