@@ -115,26 +115,12 @@
                         JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
                         JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
                         WHERE CLASSROOM.userID = $userID AND CLASSROOM.title <> 'Unassigned Class' AND STUDENT_CLASS.studentID = $studentID;";
-                }
-                else
-                {
-                    $classesTitle = 'ANALYSIS BY CLASS';
-                    $formAction = 'studentBehaviorAnalysis.php';
-                    $nQuery =
-                        "SELECT DISTINCT CLASSROOM.classroomID, CLASSROOM.title
-                        FROM STUDENT
-                        JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
-                        JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
-                        WHERE CLASSROOM.title <> 'Unassigned Class' AND STUDENT_CLASS.studentID = $studentID;";
-                }
-                $records = $nConn->getQuery($nQuery);
-                echo "<tr><td class='heading'><h1>$classesTitle</h1></td></tr>";
-                while($row = $records->fetch_array())
-                {
-                    $classID = $row['classroomID'];
-                    $title = $row['title'];
-                    if($isTeacher)
+                    $records = $nConn->getQuery($nQuery);
+                    echo "<tr><td class='heading'><h1>$classesTitle</h1></td></tr>";
+                    while($row = $records->fetch_array())
                     {
+                        $classID = $row['classroomID'];
+                        $title = $row['title'];
                         echo "<form method='post' action='classroom.php'>";
                         echo "<input type='hidden' name='title' value='$title'>";
                         echo "<tr><td class='btnCell'><button type='submit' name='classroomID' formmethod='post' class='button' value=" . $classID . ">";
@@ -142,18 +128,30 @@
                         echo "</td></button></tr>";
                         echo "</form>";
                     }
-                    else
-                    {
-                        echo "<form method='post' action='studentBehaviorAnalysis.php'>";
-                        echo "<input type='hidden' name='startDate' value='$startDate'>";
-                        echo "<input type='hidden' name='teacherID' value='$teacherID'>";
-                        echo "<input type='hidden' name='endDate' value='$endDate'>";
-                        echo "<input type='hidden' name='classroomID' value='$classID'>";
-                        echo "<tr><td class='btnCell'><button type='submit' name='studentID' formmethod='post' class='button' value=" . $studentID . ">";
-                        echo "$title<br>";
-                        echo "</td></button></tr>";
-                        echo "</form>";
-                    }
+                }
+                $classesTitle = 'ANALYSIS BY CLASS';
+                $formAction = 'studentBehaviorAnalysis.php';
+                $nQuery =
+                    "SELECT DISTINCT CLASSROOM.classroomID, CLASSROOM.title
+                    FROM STUDENT
+                    JOIN STUDENT_CLASS ON STUDENT_CLASS.studentID = STUDENT.studentID
+                    JOIN CLASSROOM ON CLASSROOM.classroomID = STUDENT_CLASS.classroomID
+                    WHERE CLASSROOM.title <> 'Unassigned Class' AND STUDENT_CLASS.studentID = $studentID;";
+                $records = $nConn->getQuery($nQuery);
+                echo "<tr><td class='heading'><h1>$classesTitle</h1></td></tr>";
+                while($row = $records->fetch_array())
+                {
+                    $classID = $row['classroomID'];
+                    $title = $row['title'];
+                    echo "<form method='post' action='studentBehaviorAnalysis.php'>";
+                    echo "<input type='hidden' name='startDate' value='$startDate'>";
+                    echo "<input type='hidden' name='teacherID' value='$teacherID'>";
+                    echo "<input type='hidden' name='endDate' value='$endDate'>";
+                    echo "<input type='hidden' name='classroomID' value='$classID'>";
+                    echo "<tr><td class='btnCell'><button type='submit' name='studentID' formmethod='post' class='button' value=" . $studentID . ">";
+                    echo "$title<br>";
+                    echo "</td></button></tr>";
+                    echo "</form>";
                 }
             ?>
             <tr><td class="heading">
