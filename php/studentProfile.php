@@ -201,7 +201,7 @@
                 if(isset($_POST["classroomID"])&&$isTeacher)
                 {
                     $nQuery =
-                        "SELECT BEHAVIOR.title
+                        "SELECT DISTINCT BEHAVIOR.title
                         FROM BEHAVIOR
                         JOIN STUDENT_BEHAVIOR ON BEHAVIOR.behaviorID=STUDENT_BEHAVIOR.behaviorID
                         AND STUDENT_BEHAVIOR.studentID=$studentID
