@@ -89,8 +89,7 @@
                 ?>
                 </td>
             </tr>
-        </table>
-                    </td>
+            </table>
                     <td colspan='2' class='rightCol'><div class="graph">
                             <canvas id="chart1" height="140" width="140" style="margin: 15px 10px 10px 0"></canvas>
                         </div>
@@ -98,7 +97,7 @@
                 </tr>
                 <tr>
                     <td>
-<table>
+            <table>
             <?php
                 $userID = $_SESSION["userID"];
                 $studentID = $_POST["studentID"];
@@ -191,17 +190,6 @@
                 echo "See Full Analysis<br>";
                 echo "</td></button></tr>";
                 echo "</form>";
-                if(isset($_POST["classroomID"])&&$isTeacher)
-                {
-                    echo "<form method='post' action='studentBehaviorAnalysis.php'>";
-                    echo "<input type='hidden' name='startDate' value='$startDate'>";
-                    echo "<input type='hidden' name='endDate' value='$endDate'>";
-                    echo "<input type='hidden' name='classroomID' value='$classroomID'>";
-                    echo "<tr><td class='btnCell'><button type='submit' name='studentID' formmethod='post' class='button' value=" . $studentID . ">";
-                    echo "Student Class Analysis<br>";
-                    echo "</td></button></tr>";
-                    echo "</form>";
-                }
             ?>
             <tr>
             <td class="heading rightCol">
