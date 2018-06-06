@@ -206,6 +206,7 @@
                         JOIN STUDENT_BEHAVIOR ON BEHAVIOR.behaviorID=STUDENT_BEHAVIOR.behaviorID
                         AND STUDENT_BEHAVIOR.studentID=$studentID
                         AND STUDENT_BEHAVIOR.classroomID=$classroomID
+                        GROUP BY title
                         ORDER BY recordedTime DESC
                         LIMIT 4;";
                 }
