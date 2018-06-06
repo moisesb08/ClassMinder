@@ -403,3 +403,9 @@
     background-color: #a488f6;
     color: white;
 }
+
+.frontCell {
+    background-color:white;
+    color:#6d41f1;
+    font-weight:600;
+}

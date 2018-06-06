@@ -106,7 +106,7 @@
                 $newX = max(1, $xMax);
                 $newY = max(1, $yMax);
                 $totalStudents = max(1, $row["totalStudents"]);
-                while($newX*$newY < max(36, $totalStudents))
+                while($newX*$newY < max(49, $totalStudents))
                 {
                     if(min($newX, $newY)==$newX)
                     {
@@ -134,6 +134,7 @@
                 $rowVal = $newY+1+$_POST["extraRows"];
                 $columnVal = $newX+1+$_POST["extraColumns"];
                 $seatingChart .= '<table><tr><td class="center" colspan="'.$columnVal.'"><h4>Seating chart (Drag & Drop) <i class="ion-android-arrow-down"></i></h4></td></tr>';
+                $seatingChart .= '<tr><td class="frontCell" colspan="'.$columnVal.'">Front of Class</td></tr>';
                 for($y=1; $y<$rowVal; $y++)
                 {
                     $seatingChart .= "<tr>";
