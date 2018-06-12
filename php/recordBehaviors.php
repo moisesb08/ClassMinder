@@ -78,8 +78,8 @@
             
             if(isset($_POST["addPositive"]))
             {
-                $behavTitle = $_POST["positiveTitle"];
-                $behavDescription = $_POST["positiveDescription"];
+                $behavTitle = $nConn->sanitize($_POST["positiveTitle"]);
+                $behavDescription = $nConn->sanitize($_POST["positiveDescription"]);
                 $arr = array('title'=>$behavTitle, 'description'=>$behavDescription,'userID'=>$userID, 'isPositive'=>'1');
                 $behaviorID = $nConn->save("BEHAVIOR", $arr);
                 array_push($behaviors, $behaviorID);
@@ -109,7 +109,10 @@
                     //echo $str;
                     $results = $nConn->getQuery($str);
                     $record = $results->fetch_assoc();
-                    $message .= '\nAdded behavior \"'.$record["title"].'\" to '.$record["firstName"].' '.$record["lastName"]; 
+                    $rTitle = $nConn->sanitize($record["title"]);
+                    $rFName = $nConn->sanitize($record["firstName"]);
+                    $rLName = $nConn->sanitize($record["lastName"]);
+                    $message .= '\nAdded behavior \"'.$rTitle.'\" to '.$rFName.' '.$rLName; 
                 }
             }
             //testing dialog
@@ -377,10 +380,10 @@
                     <span class='checkmark'></span>
                     </label>
                     <label class='container others'>Good Behavior:<br>".
-                    "<input type='text' placeholder='Title' id='positiveTitle' name='positiveTitle'>
+                    "<input type='text' placeholder='Title' id='positiveTitle' name='positiveTitle' maxlength='45'>
                     </label>
                     <br>
-                    <label class='container'>Description:<br><textarea  id='positiveDescription' name='positiveDescription' rows='4' cols='50' placeholder='Enter Description Here'></textarea></label>";
+                    <label class='container'>Description:<br><textarea  id='positiveDescription' name='positiveDescription' rows='4' cols='50' placeholder='Enter Description Here' maxlength='200'></textarea></label>";
                 // Display Negative Behaviors
                 $nQuery =
                 "SELECT * FROM BEHAVIOR WHERE userID=$userID OR userID=0 HAVING isPositive=0";

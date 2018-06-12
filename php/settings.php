@@ -24,7 +24,6 @@
             || isset($_POST["newConfirmPass"]))
         {
             $password_sha1 = sha1($_POST['password']);
-            echo "<script>alert('".$_SESSION["email"].$password_sha1."')</script>";
             $usr = new User($_SESSION["email"], "","", $password_sha1, "");
             $res = $usr->checkUser();
 
